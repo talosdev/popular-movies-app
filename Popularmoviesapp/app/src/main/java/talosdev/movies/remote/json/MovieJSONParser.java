@@ -8,13 +8,10 @@ import com.google.gson.Gson;
 public class MovieJSONParser {
 
 
-
-    public Movie parse(String json) {
-
+    public Movie parseMovie(String json) {
         Gson gson = new Gson();
         Movie movie = gson.fromJson(json, Movie.class);
         return movie;
-
     }
 
 

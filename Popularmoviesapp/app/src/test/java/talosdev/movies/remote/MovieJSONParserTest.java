@@ -1,5 +1,6 @@
 package talosdev.movies.remote;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -19,13 +20,42 @@ public class MovieJSONParserTest {
 
     private String json="{\"adult\":false,\"backdrop_path\":\"/wVTYlkKPKrljJfugXN7UlLNjtuJ.jpg\",\"genre_ids\":[28,12,80],\"id\":206647,\"original_language\":\"en\",\"original_title\":\"Spectre\",\"overview\":\"A cryptic message from Bond’s past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.\",\"release_date\":\"2015-11-06\",\"poster_path\":\"/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg\",\"popularity\":57.231904,\"title\":\"Spectre\",\"video\":false,\"vote_average\":6.7,\"vote_count\":453}";
     private String OVERVIEW = "A cryptic message from Bond’s past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.";
+    private static MovieJSONParser parser;
+
     @Test
     public void testParseMovie() throws Exception {
-        MovieJSONParser parser = new MovieJSONParser();
-        Movie parsedMovie = parser.parse(json);
-
+        Movie parsedMovie = parser.parseMovie(json);
         verifyMovie(parsedMovie);
     }
+
+    @BeforeClass
+    public static void setUp() {
+        parser = new MovieJSONParser();
+    }
+
+    @Test
+    public void testParseMovieList() throws Exception {
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("res/movie-list.json");
+        String s = TestUtils.convertStreamToString(resourceAsStream);
+
+        MovieList movieList = parser.parseMovieList(s);
+
+        assertNotNull(movieList);
+        assertEquals(1, movieList.page);
+        assertEquals(12520, movieList.totalPages);
+        assertEquals(250384, movieList.totalResults);
+        assertEquals(20, movieList.movies.size());
+
+        // Verify all fields of the first movie
+        Movie firstMovie = movieList.movies.get(0);
+        verifyMovie(firstMovie);
+
+        // Verify some fields from the other movies
+        assertEquals("Jurassic World", movieList.movies.get(1).title);
+        assertEquals(1162, movieList.movies.get(19).voteCount);
+
+    }
+
 
     private void verifyMovie(Movie movie) {
         assertNotNull(movie);
@@ -37,28 +67,5 @@ public class MovieJSONParserTest {
         assertEquals(57.231904f, movie.popularity, TestUtils.EPSILON);
         assertEquals("/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg", movie.posterPath);
         assertEquals(OVERVIEW, movie.overview);
-    }
-
-    @Test
-    public void testParseMovieList() throws Exception {
-        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("res/movie-list.json");
-        String s = TestUtils.convertStreamToString(resourceAsStream);
-
-        MovieJSONParser parser = new MovieJSONParser();
-        MovieList movieList = parser.parseMovieList(s);
-
-        assertNotNull(movieList);
-        assertEquals(1, movieList.page);
-        assertEquals(12520, movieList.totalPages);
-        assertEquals(250384, movieList.totalResults);
-        assertEquals(20, movieList.movies.size());
-
-        Movie firstMovie = movieList.movies.get(0);
-        verifyMovie(firstMovie);
-
-        assertEquals("Jurassic World", movieList.movies.get(1).title);
-
-        assertEquals(1162, movieList.movies.get(19).voteCount);
-
     }
 }
