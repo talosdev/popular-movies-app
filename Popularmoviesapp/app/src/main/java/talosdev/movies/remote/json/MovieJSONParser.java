@@ -1,4 +1,4 @@
-package talosdev.movies.remote;
+package talosdev.movies.remote.json;
 
 import com.google.gson.Gson;
 
@@ -15,6 +15,13 @@ public class MovieJSONParser {
         Movie movie = gson.fromJson(json, Movie.class);
         return movie;
 
+    }
+
+
+    public MovieList parseMovieList(String json) {
+        Gson gson = new Gson();
+        MovieList list = gson.fromJson(json, MovieList.class);
+        return list;
     }
 
 }

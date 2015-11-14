@@ -1,4 +1,4 @@
-package talosdev.movies.remote;
+package talosdev.movies.remote.json;
 
 import com.google.gson.annotations.SerializedName;
 

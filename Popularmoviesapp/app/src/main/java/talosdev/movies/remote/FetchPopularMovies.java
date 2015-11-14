@@ -13,22 +13,34 @@ import java.net.URL;
 import java.util.List;
 
 import talosdev.movies.BuildConfig;
+import talosdev.movies.data.SortByCriterion;
+import talosdev.movies.remote.json.Movie;
 
 /**
  * Created by apapad on 13/11/15.
  */
-public class FetchPopularMovies  extends AsyncTask<String, Void, List<Movie>> {
+public class FetchPopularMovies  extends AsyncTask<SortByCriterion, Void, List<Movie>> {
 
     private static String API_KEY = BuildConfig.TMDB_API_KEY;
     private static String BASE_URL = "https://api.themoviedb.org/3";
     private String LOG_TAG = "REMOTE";
 
 
+
+
+    public FetchPopularMovies() {
+        super();
+
+    }
+
     @Override
-    protected List<Movie> doInBackground(String... params) {
+    protected List<Movie> doInBackground(SortByCriterion... params) {
 
+        SortByCriterion sortBy = null;
         if (params.length == 0) {
-
+            sortBy = SortByCriterion.POPULARITY;
+        } else {
+            sortBy = params[0];
         }
 
         String jsonString = null;
@@ -39,6 +51,7 @@ public class FetchPopularMovies  extends AsyncTask<String, Void, List<Movie>> {
 
             Uri uri = Uri.parse(BASE_URL).buildUpon().
                     appendPath("/discovery/movies").
+                    appendQueryParameter("sort_by", convertSortByCriterionToStringParameter(sortBy)).
                     appendQueryParameter("api_key", API_KEY).build();
 
             URL url = new URL(uri.toString());
@@ -88,5 +101,16 @@ public class FetchPopularMovies  extends AsyncTask<String, Void, List<Movie>> {
         }
 
         return null;
+    }
+
+    private String convertSortByCriterionToStringParameter (SortByCriterion sortBy) {
+        switch (sortBy) {
+            case POPULARITY:
+                return "popularity.desc";
+            case VOTE:
+                return "vote_count.desc";
+            default:
+                return "";
+        }
     }
 }
