@@ -16,6 +16,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+//        debug {
+//            buildConfigField 'String', 'TMDB_API_KEY', "\"$System.env.TMDB_API_KEY\""
+//        }
         buildTypes.each {
             it.buildConfigField 'String', 'TMDB_API_KEY', "\"$System.env.TMDB_API_KEY\""
         }
@@ -36,6 +39,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.2.4'
 
+    androidTestCompile 'junit:junit:4.12'
 }
 
 
