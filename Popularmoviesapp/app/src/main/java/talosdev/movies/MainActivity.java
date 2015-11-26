@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import talosdev.movies.data.MoviePoster;
 import talosdev.movies.remote.json.Movie;
 import talosdev.movies.remote.json.MovieJSONParser;
 import talosdev.movies.remote.json.MovieList;
@@ -66,12 +67,12 @@ public class MainActivity extends AppCompatActivity {
 //            ],
 
 
-    public List<String> getPosterURLs() {
-        List<String> urls = new ArrayList<>(movieList.movies.size());
+    public List<MoviePoster> getPosterURLs() {
+        List<MoviePoster> urls = new ArrayList<>(movieList.movies.size());
         for (Movie movie:movieList.movies) {
             String poster = movie.posterPath;
             String basePath = "http://image.tmdb.org/t/p/w154";
-            urls.add(basePath + poster);
+            urls.add(new MoviePoster(movie.id, basePath + poster));
         }
         return urls;
     }
