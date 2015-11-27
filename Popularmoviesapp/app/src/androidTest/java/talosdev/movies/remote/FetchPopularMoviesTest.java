@@ -1,4 +1,4 @@
-package talosdev.movies;
+package talosdev.movies.remote;
 
 import android.test.AndroidTestCase;
 
@@ -7,7 +7,6 @@ import org.junit.Before;
 import java.util.List;
 
 import talosdev.movies.data.SortByCriterion;
-import talosdev.movies.remote.PopularMoviesFetcher;
 import talosdev.movies.remote.json.Movie;
 
 /**

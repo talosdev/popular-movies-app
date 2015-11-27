@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import talosdev.movies.constants.TMDB;
 import talosdev.movies.data.MoviePoster;
 import talosdev.movies.remote.json.Movie;
 import talosdev.movies.remote.json.MovieJSONParser;
@@ -71,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
         List<MoviePoster> urls = new ArrayList<>(movieList.movies.size());
         for (Movie movie:movieList.movies) {
             String poster = movie.posterPath;
-            String basePath = "http://image.tmdb.org/t/p/w154";
-            urls.add(new MoviePoster(movie.id, basePath + poster));
+
+            urls.add(new MoviePoster(movie.id, TMDB.buildPosterUrl(poster)));
         }
         return urls;
     }
