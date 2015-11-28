@@ -1,13 +1,13 @@
-package talosdev.movies.remote;
+package com.talosdev.movies.remote;
 
 import android.test.AndroidTestCase;
+
+import com.talosdev.movies.data.SortByCriterion;
+import com.talosdev.movies.remote.json.Movie;
 
 import org.junit.Before;
 
 import java.util.List;
-
-import talosdev.movies.data.SortByCriterion;
-import talosdev.movies.remote.json.Movie;
 
 /**
  * Created by apapad on 14/11/15.

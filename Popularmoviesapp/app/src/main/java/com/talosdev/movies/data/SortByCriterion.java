@@ -1,4 +1,4 @@
-package talosdev.movies.data;
+package com.talosdev.movies.data;
 
 /**
  * Enum that offers various sorting options

@@ -1,10 +1,10 @@
-package talosdev.movies.remote;
+package com.talosdev.movies.remote;
 
 import android.test.AndroidTestCase;
 
-import org.junit.Before;
+import com.talosdev.movies.remote.json.Movie;
 
-import talosdev.movies.remote.json.Movie;
+import org.junit.Before;
 
 /**
  * Created by apapad on 26/11/15.

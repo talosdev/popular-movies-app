@@ -1,4 +1,4 @@
-package talosdev.movies.remote;
+package com.talosdev.movies.remote;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,12 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.talosdev.movies.R;
+import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.remote.json.Movie;
 
 import java.io.IOException;
-
-import talosdev.movies.R;
-import talosdev.movies.constants.TMDB;
-import talosdev.movies.remote.json.Movie;
 
 /**
  * Created by apapad on 13/11/15.

@@ -1,4 +1,4 @@
-package talosdev.movies.constants;
+package com.talosdev.movies.constants;
 
 /**
  * Created by apapad on 26/11/15.

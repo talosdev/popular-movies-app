@@ -1,4 +1,4 @@
-package talosdev.movies.remote;
+package com.talosdev.movies.remote;
 
 import android.net.Uri;
 import android.util.Log;
@@ -10,10 +10,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import talosdev.movies.constants.TMDB;
-import talosdev.movies.data.SortByCriterion;
-import talosdev.movies.remote.json.MovieJSONParser;
-import talosdev.movies.remote.json.MovieList;
+import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.data.SortByCriterion;
+import com.talosdev.movies.remote.json.MovieJSONParser;
+import com.talosdev.movies.remote.json.MovieList;
 
 /**
  * Class that encapsulates the code for fetching the movies from TMDB API

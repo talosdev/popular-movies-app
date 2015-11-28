@@ -1,8 +1,8 @@
-package talosdev.movies.config;
+package com.talosdev.movies.config;
 
 import android.test.AndroidTestCase;
 
-import talosdev.movies.BuildConfig;
+import com.talosdev.movies.BuildConfig;
 
 import static org.junit.Assert.assertNotEquals;
 

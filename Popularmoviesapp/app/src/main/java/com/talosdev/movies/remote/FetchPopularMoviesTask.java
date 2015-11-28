@@ -1,4 +1,4 @@
-package talosdev.movies.remote;
+package com.talosdev.movies.remote;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -6,9 +6,9 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 
-import talosdev.movies.data.SortByCriterion;
-import talosdev.movies.remote.json.Movie;
-import talosdev.movies.remote.json.MovieList;
+import com.talosdev.movies.data.SortByCriterion;
+import com.talosdev.movies.remote.json.Movie;
+import com.talosdev.movies.remote.json.MovieList;
 
 /**
  * Created by apapad on 13/11/15.

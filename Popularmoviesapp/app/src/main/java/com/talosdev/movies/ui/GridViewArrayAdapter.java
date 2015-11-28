@@ -1,4 +1,4 @@
-package talosdev.movies;
+package com.talosdev.movies.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import talosdev.movies.data.MoviePoster;
+import com.talosdev.movies.data.MoviePoster;
 
 /**
  * Created by apapad on 19/11/15.

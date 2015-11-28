@@ -1,10 +1,11 @@
-package talosdev.movies;
+package com.talosdev.movies.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import talosdev.movies.constants.Intents;
-import talosdev.movies.remote.FetchMovieDetailsTask;
+import com.talosdev.movies.R;
+import com.talosdev.movies.constants.Intents;
+import com.talosdev.movies.remote.FetchMovieDetailsTask;
 
 public class MovieDetailActivity extends AppCompatActivity {
 

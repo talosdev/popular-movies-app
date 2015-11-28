@@ -1,4 +1,4 @@
-package talosdev.movies;
+package com.talosdev.movies;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

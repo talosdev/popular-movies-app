@@ -1,4 +1,4 @@
-package talosdev.movies.data;
+package com.talosdev.movies.data;
 
 /**
  * Tuple that groups the movieId with the poster url.

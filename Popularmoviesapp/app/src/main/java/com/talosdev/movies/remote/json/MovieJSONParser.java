@@ -1,4 +1,4 @@
-package talosdev.movies.remote.json;
+package com.talosdev.movies.remote.json;
 
 import com.google.gson.Gson;
 

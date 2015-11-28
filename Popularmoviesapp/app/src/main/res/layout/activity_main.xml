@@ -6,5 +6,5 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/grid_frag"
-    class="talosdev.movies.GridFragment"
+    class="com.talosdev.movies.ui.GridFragment"
     tools:layout="@layout/grid_fragment" />

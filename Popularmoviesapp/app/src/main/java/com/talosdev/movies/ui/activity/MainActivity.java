@@ -1,8 +1,15 @@
-package talosdev.movies;
+package com.talosdev.movies.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import com.talosdev.movies.R;
+import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.data.MoviePoster;
+import com.talosdev.movies.remote.json.Movie;
+import com.talosdev.movies.remote.json.MovieJSONParser;
+import com.talosdev.movies.remote.json.MovieList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,12 +17,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import talosdev.movies.constants.TMDB;
-import talosdev.movies.data.MoviePoster;
-import talosdev.movies.remote.json.Movie;
-import talosdev.movies.remote.json.MovieJSONParser;
-import talosdev.movies.remote.json.MovieList;
 
 public class MainActivity extends AppCompatActivity {
 

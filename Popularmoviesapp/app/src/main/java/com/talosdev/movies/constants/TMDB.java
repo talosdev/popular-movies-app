@@ -1,6 +1,6 @@
-package talosdev.movies.constants;
+package com.talosdev.movies.constants;
 
-import talosdev.movies.BuildConfig;
+import com.talosdev.movies.BuildConfig;
 
 /**
  * Created by apapad on 26/11/15.
