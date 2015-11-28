@@ -12,18 +12,20 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import talosdev.movies.data.MoviePoster;
+
 /**
  * Created by apapad on 19/11/15.
  */
-public class GridViewArrayAdapter extends ArrayAdapter<String> {
+public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
 
     private final Context context;
     private final LayoutInflater inflater;
-    private final List<String> objects;
+    private final List<MoviePoster> objects;
     private final int resource;
 
 
-    public GridViewArrayAdapter(Context context, int resource, List<String> objects) {
+    public GridViewArrayAdapter(Context context, int resource, List<MoviePoster> objects) {
         super(context, resource, objects);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -41,7 +43,7 @@ public class GridViewArrayAdapter extends ArrayAdapter<String> {
         
         Picasso.
                 with(context).
-                load(objects.get(position)).
+                load(objects.get(position).getPosterUrl()).
                 fit().
                 into((ImageView) convertView);
 

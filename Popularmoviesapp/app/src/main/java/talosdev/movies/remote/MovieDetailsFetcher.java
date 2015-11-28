@@ -11,28 +11,26 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import talosdev.movies.constants.TMDB;
-import talosdev.movies.data.SortByCriterion;
+import talosdev.movies.remote.json.Movie;
 import talosdev.movies.remote.json.MovieJSONParser;
-import talosdev.movies.remote.json.MovieList;
 
 /**
- * Class that encapsulates the code for fetching the movies from TMDB API
- * Created by apapad on 15/11/15.
+ * Class that encapsulates the code for fetching the details for a movie from TMDB API
+ * Created by apapad on 26/11/15.
  */
-public class PopularMoviesFetcher {
+public class MovieDetailsFetcher {
     private final static String LOG_TAG = "REMOTE";
     private MovieJSONParser parser = new MovieJSONParser();
 
 
 
 
-    public MovieList fetch(SortByCriterion sortBy) throws IOException {
-
+    public Movie fetch(String id) throws IOException {
 
         String jsonString;
 
-        Uri uri = Uri.parse(TMDB.URL_MOVIES).buildUpon().
-                appendQueryParameter("sort_by", convertSortByCriterionToStringParameter(sortBy)).
+        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
+                appendEncodedPath(id).
                 appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
 
         URL url = new URL(uri.toString());
@@ -64,22 +62,7 @@ public class PopularMoviesFetcher {
             return null;
         }
         jsonString = buffer.toString();
-        return parser.parseMovieList(jsonString);
+        return parser.parseMovie(jsonString);
     }
 
-    /**
-     * Convert the enum value to the parameter value that the API expects
-     * @param sortBy
-     * @return
-     */
-    private String convertSortByCriterionToStringParameter (SortByCriterion sortBy) {
-        switch (sortBy) {
-            case POPULARITY:
-                return "popularity.desc";
-            case VOTE:
-                return "vote_average.desc";
-            default:
-                return "";
-        }
-    }
 }
