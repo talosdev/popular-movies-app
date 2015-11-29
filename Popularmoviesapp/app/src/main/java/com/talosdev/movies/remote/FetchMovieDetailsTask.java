@@ -41,7 +41,7 @@ public class FetchMovieDetailsTask extends AsyncTask<String, Void, Movie> {
 
             return movie;
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
+            Log.e(LOG_TAG, "Error when contacting the server to get the movie details", e);
             return null;
         }
 
