@@ -51,7 +51,10 @@ public class FetchMovieDetailsTask extends AsyncTask<String, Void, Movie> {
     // TODO check if this thing that I am doing with casting the context to activity is the best way.
     @Override
     protected void onPostExecute(Movie movie) {
-        super.onPostExecute(movie);
+        if (movie == null) {
+            return;
+        }
+
         TextView titleView = (TextView) ((Activity) context).findViewById(R.id.movieTitle);
         TextView descriptionView = (TextView) ((Activity) context).findViewById(R.id.movieDescription);
         TextView releaseDateView = (TextView) ((Activity) context).findViewById(R.id.releaseDate);
@@ -76,4 +79,6 @@ public class FetchMovieDetailsTask extends AsyncTask<String, Void, Movie> {
                 fit().
                 into(imageView);
     }
+
+
 }
