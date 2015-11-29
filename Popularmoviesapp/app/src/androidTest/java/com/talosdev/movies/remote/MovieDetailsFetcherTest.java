@@ -18,13 +18,15 @@ public class MovieDetailsFetcherTest extends AndroidTestCase {
         fetcher = new MovieDetailsFetcher();
     }
 
-    public void testFetchMovie() throws Exception {
-       // assertEquals("https://api.themoviedb.org/3/movie/", TMDB.URL_MOVIE_DETAILS);
 
+    /**
+     * Contacts the API, and gets the details for a specific movie
+     * @throws Exception
+     */
+    public void testFetchMovie() throws Exception {
         Movie movie = fetcher.fetch("206647");
         assertEquals("Spectre", movie.title);
         assertEquals(206647, movie.id);
-
     }
 }
 

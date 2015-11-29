@@ -3,6 +3,7 @@ package com.talosdev.movies.remote.json;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ * Java object to which the json response with details about a movie is deserialized.
  * Created by apapad on 13/11/15.
  */
 public class Movie {
@@ -16,7 +17,7 @@ public class Movie {
     @SerializedName("overview")
     public String overview;
 
-    //TODO
+    //TODO read it as a date if necessary
     @SerializedName("release_date")
     public String releaseDate;
 

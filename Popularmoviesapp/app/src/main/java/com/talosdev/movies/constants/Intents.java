@@ -5,6 +5,6 @@ package com.talosdev.movies.constants;
  */
 public class Intents {
 
-
     public static final String EXTRA_MOVIE_ID = "movieId";
+
 }

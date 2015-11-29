@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO access real data
         movieList = loadDummyData();
 
         setContentView(R.layout.activity_main);
@@ -32,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MAIN", movieList.movies.size() + "");
     }
 
+    /**
+     * Temp method that populates reads data to populate the gridview from a file with
+     * dummy data instead of calling the api.
+     * @return
+     */
     private MovieList loadDummyData() {
         MovieJSONParser parser = new MovieJSONParser();
 
@@ -52,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String s = sb.toString();
-
 
         return parser.parseMovieList(s);
     }

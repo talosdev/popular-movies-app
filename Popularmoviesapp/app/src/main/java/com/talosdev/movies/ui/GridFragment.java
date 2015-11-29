@@ -1,11 +1,10 @@
 package com.talosdev.movies.ui;
 
-//TODO in order to use normal fragment class, need to raise minSupportedSDK to 13?
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
-import com.talosdev.movies.ui.activity.MainActivity;
-import com.talosdev.movies.ui.activity.MovieDetailActivity;
 import com.talosdev.movies.R;
 import com.talosdev.movies.constants.Intents;
 import com.talosdev.movies.data.MoviePoster;
+import com.talosdev.movies.ui.activity.MainActivity;
+import com.talosdev.movies.ui.activity.MovieDetailActivity;
 
 import java.util.List;
 
