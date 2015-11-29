@@ -1,14 +1,14 @@
 package com.talosdev.movies.remote;
 
+import com.talosdev.movies.TestUtils;
+import com.talosdev.movies.remote.json.Movie;
+import com.talosdev.movies.remote.json.MovieJSONParser;
+import com.talosdev.movies.remote.json.MovieList;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.InputStream;
-
-import talosdev.movies.TestUtils;
-import com.talosdev.movies.remote.json.Movie;
-import com.talosdev.movies.remote.json.MovieJSONParser;
-import com.talosdev.movies.remote.json.MovieList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

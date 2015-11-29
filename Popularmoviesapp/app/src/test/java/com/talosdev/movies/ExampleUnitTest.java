@@ -1,4 +1,4 @@
-package talosdev.movies;
+package com.talosdev.movies;
 
 import org.junit.Test;
 
