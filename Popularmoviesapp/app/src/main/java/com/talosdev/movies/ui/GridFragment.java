@@ -2,6 +2,7 @@ package com.talosdev.movies.ui;
 
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,8 +52,22 @@ public class GridFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         long movieId = ((GridViewArrayAdapter) adapter).getItem(position).getMovieId();
-        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-        intent.putExtra(Intents.EXTRA_MOVIE_ID, movieId);
-        startActivity(intent);
+
+        View detailFrame = getActivity().findViewById(R.id.detail_frame);
+        if (detailFrame != null) {
+            MovieDetailsFragment details = new MovieDetailsFragment();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            details.setMovieId("" + movieId);
+            ft.replace(R.id.detail_frame, details);
+            ft.addToBackStack(null);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+
+
+        }  else {
+            Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+            intent.putExtra(Intents.EXTRA_MOVIE_ID, movieId);
+            startActivity(intent);
+        }
     }
 }
