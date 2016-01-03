@@ -2,7 +2,7 @@
 
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/image"
-        android:layout_width="@dimen/img_small_w"
-        android:layout_height="@dimen/img_small_h"
+        android:layout_width="@dimen/poster_width_grid"
+        android:layout_height="@dimen/poster_height_grid"
     android:paddingTop="2dp"
     android:paddingBottom="2dp"/>

@@ -32,16 +32,14 @@ public class GridFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // No need to call super because Fragment.onCreateView() return null
-
-     //   GridView gridView= (GridView) inflater.inflate(R.layout.grid_fragment, container, false);
-        View view= inflater.inflate(R.layout.grid_fragment, container, false);
-        GridView gridView = (GridView) view.findViewById(R.id.moviesGrid);
+        GridView gridView = (GridView) inflater.inflate(R.layout.grid_fragment, container, false);;
         gridView.setOnItemClickListener(this);
+
         List<MoviePoster> list = ((MainActivity) getActivity()).getPosterURLs();
         adapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, list);
         gridView.setAdapter(adapter);
 
-        return view;
+        return gridView;
     }
 
     @Override
