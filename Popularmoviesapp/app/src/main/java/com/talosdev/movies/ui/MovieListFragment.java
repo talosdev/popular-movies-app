@@ -2,6 +2,7 @@ package com.talosdev.movies.ui;
 
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * Created by apapad on 19/11/15.
  */
-public class GridFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MovieListFragment extends Fragment implements AdapterView.OnItemClickListener {
 
 
     private ArrayAdapter adapter;
@@ -32,7 +33,7 @@ public class GridFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // No need to call super because Fragment.onCreateView() return null
-        GridView gridView = (GridView) inflater.inflate(R.layout.grid_fragment, container, false);;
+        GridView gridView = (GridView) inflater.inflate(R.layout.movie_list_fragment, container, false);;
         gridView.setOnItemClickListener(this);
 
         List<MoviePoster> list = ((MainActivity) getActivity()).getPosterURLs();
@@ -51,8 +52,24 @@ public class GridFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         long movieId = ((GridViewArrayAdapter) adapter).getItem(position).getMovieId();
-        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-        intent.putExtra(Intents.EXTRA_MOVIE_ID, movieId);
-        startActivity(intent);
+
+        // The existence of the detail frame in the activity will tell us if we are on
+        // mobile or on tablet
+        View detailFrame = getActivity().findViewById(R.id.detail_frame);
+        if (detailFrame != null) {
+            // TABLET
+            MovieDetailsFragment details = new MovieDetailsFragment();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            details.setMovieId("" + movieId);
+            ft.replace(R.id.detail_frame, details);
+            ft.addToBackStack(null);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+        }  else {
+            // MOBILE
+            Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+            intent.putExtra(Intents.EXTRA_MOVIE_ID, movieId);
+            startActivity(intent);
+        }
     }
 }
