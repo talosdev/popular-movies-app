@@ -14,7 +14,7 @@
         tools:layout="@layout/movie_list_fragment" />
 
     <View style="@style/Divider"
-        android:layout_weight="0"/>
+        />
 
     <FrameLayout
         android:id="@+id/detail_frame"

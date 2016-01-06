@@ -60,7 +60,7 @@ public class MovieListFragment extends Fragment implements AdapterView.OnItemCli
             // TABLET
             MovieDetailsFragment details = new MovieDetailsFragment();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            details.setMovieId("" + movieId);
+            details.setMovieId(movieId);
             ft.replace(R.id.detail_frame, details);
             ft.addToBackStack(null);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

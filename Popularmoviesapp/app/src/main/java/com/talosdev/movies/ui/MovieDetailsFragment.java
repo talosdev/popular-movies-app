@@ -14,27 +14,27 @@ import com.talosdev.movies.remote.FetchMovieDetailsTask;
  */
 public class MovieDetailsFragment extends Fragment {
 
-    private String movieId;
+    private long movieId;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
     }
 
-    public void setMovieId(String movieId) {
+    public void setMovieId(long movieId) {
         this.movieId = movieId;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("selected", movieId);
+        outState.putLong("selected", movieId);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            movieId = savedInstanceState.getString("selected");
+            movieId = savedInstanceState.getLong("selected");
         }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.movie_details_fragment, container, false);

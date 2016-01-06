@@ -14,7 +14,7 @@ public class MovieDetailsFetcher extends JSONFetcher {
     private MovieJSONParser parser = new MovieJSONParser();
 
 
-    public Movie fetch(String id) throws IOException {
+    public Movie fetch(long id) throws IOException {
 
         URL url = getMovieDetailsUrl(id);
         String jsonString = getJSON(url);

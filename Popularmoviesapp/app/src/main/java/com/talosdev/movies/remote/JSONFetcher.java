@@ -57,9 +57,9 @@ public abstract class JSONFetcher {
     }
 
     @NonNull
-    protected URL getMovieDetailsUrl(String id) throws MalformedURLException {
+    protected URL getMovieDetailsUrl(long id) throws MalformedURLException {
         Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
-                appendEncodedPath(id).
+                appendEncodedPath(id+"").
                 appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
 
         return new URL(uri.toString());

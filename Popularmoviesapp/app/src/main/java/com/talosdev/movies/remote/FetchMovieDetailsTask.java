@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Created by apapad on 13/11/15.
  */
-public class FetchMovieDetailsTask extends AsyncTask<String, Void, Movie> {
+public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
 
     private final Context context;
@@ -31,7 +31,7 @@ public class FetchMovieDetailsTask extends AsyncTask<String, Void, Movie> {
     }
 
     @Override
-    protected Movie doInBackground(String... params) {
+    protected Movie doInBackground(Long... params) {
 
 
         try {

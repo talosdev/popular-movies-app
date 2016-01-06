@@ -24,7 +24,7 @@ public class MovieDetailsFetcherTest extends AndroidTestCase {
      * @throws Exception
      */
     public void testFetchMovie() throws Exception {
-        Movie movie = fetcher.fetch("206647");
+        Movie movie = fetcher.fetch(206647);
         assertEquals("Spectre", movie.title);
         assertEquals(206647, movie.id);
     }

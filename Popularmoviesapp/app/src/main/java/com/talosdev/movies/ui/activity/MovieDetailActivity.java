@@ -17,7 +17,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         MovieDetailsFragment fragment = (MovieDetailsFragment) getFragmentManager().findFragmentById(R.id.movie_details_fragment);
 
-        String movieId = getIntent().getLongExtra(Intents.EXTRA_MOVIE_ID, 0L) + "";
+        long movieId = getIntent().getLongExtra(Intents.EXTRA_MOVIE_ID, 0L);
 
         fragment.setMovieId(movieId);
 
