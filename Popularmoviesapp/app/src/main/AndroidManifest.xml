@@ -23,7 +23,7 @@
 
         <provider
             android:authorities="com.talosdev.movies"
-            android:name=".contract.MovieProvider"/>
+            android:name=".contract.MoviesProvider"/>
 
     </application>
 

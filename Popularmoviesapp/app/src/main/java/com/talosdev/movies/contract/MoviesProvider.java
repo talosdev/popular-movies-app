@@ -7,17 +7,19 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import com.talosdev.movies.db.MovieDbHelper;
+
 /**
  * Created by apapad on 6/01/16.
  */
-public class MovieProvider extends ContentProvider {
+public class MoviesProvider extends ContentProvider {
 
     public static UriMatcher uriMatcher = buildUriMatcher();
 
 
     private static final int MOVIES_LIST = 100;
     private static final int MOVIE_DETAILS = 200;
-
+    private MovieDbHelper movieDbHelper;
 
 
     static UriMatcher buildUriMatcher() {
@@ -36,14 +38,11 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        return false;
+        movieDbHelper = new MovieDbHelper(getContext());
+        return true;
     }
 
-    @Nullable
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;
-    }
+
 
     @Nullable
     @Override
@@ -56,11 +55,40 @@ public class MovieProvider extends ContentProvider {
             case MOVIES_LIST:
                 return MoviesContract.MoviesListEntry.CONTENT_TYPE;
             case MOVIE_DETAILS:
-                return MoviesContract.MovieDetailsEntry.CONTENT_TYPE;
+                return MoviesContract.MovieEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
     }
+
+
+    @Nullable
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        Cursor cursor;
+        switch(uriMatcher.match(uri)) {
+            case MOVIES_LIST:
+                cursor = getMovieList();
+                break;
+            case MOVIE_DETAILS:
+                cursor = getMovieDetails();
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
+    }
+
+    private Cursor getMovieDetails() {
+        return null;
+    }
+
+    private Cursor getMovieList() {
+        return null;
+    }
+
 
     @Nullable
     @Override
