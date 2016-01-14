@@ -5,8 +5,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.talosdev.movies.util.StringUtils;
 
+import org.junit.Test;
+
 import java.util.Map;
 import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * TODO move to personal testing library
@@ -31,6 +35,7 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
      * Test that the tables are created correctly
      * @throws Exception
      */
+    @Test
     public void testTablesExist() throws Exception {
 
         // Get cursor with all table names in the database
@@ -61,6 +66,7 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
      * Tests that all tables have the required columns.
      * @throws Exception
      */
+    @Test
     public void testTableColumns() throws Exception {
         
         Set<String> tables = getTablesSet();

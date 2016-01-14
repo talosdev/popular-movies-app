@@ -1,15 +1,20 @@
 package com.talosdev.movies.remote;
 
-import android.test.AndroidTestCase;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.talosdev.movies.remote.json.Movie;
 
 import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static junit.framework.TestCase.assertEquals;
 
 /**
  * Created by apapad on 26/11/15.
  */
-public class MovieDetailsFetcherTest extends AndroidTestCase {
+@RunWith(value = AndroidJUnit4.class)
+public class MovieDetailsFetcherTest  {
 
     private MovieDetailsFetcher fetcher;
 
@@ -23,6 +28,7 @@ public class MovieDetailsFetcherTest extends AndroidTestCase {
      * Contacts the API, and gets the details for a specific movie
      * @throws Exception
      */
+    @Test
     public void testFetchMovie() throws Exception {
         Movie movie = fetcher.fetch(206647);
         assertEquals("Spectre", movie.title);
