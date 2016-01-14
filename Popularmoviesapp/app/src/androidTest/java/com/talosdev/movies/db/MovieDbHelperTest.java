@@ -11,17 +11,9 @@ import java.util.Set;
 /**
  * Created by apapad on 2016-01-14.
  */
-public class MovieDbHelperTest extends BaseDbHelperAndroidTestCase<MovieDbHelper> {
+public class MovieDbHelperTest extends AbstractSchemaValidatorATC<MovieDbHelper> {
 
     private  final String TAG = "TEST";
-
-
-
-
-    
-    
-
-
 
 
     @Override
@@ -36,7 +28,7 @@ public class MovieDbHelperTest extends BaseDbHelperAndroidTestCase<MovieDbHelper
 
 
     @Override
-    protected Map<String, Set<String>> getSchemaHashSet() {
+    protected Map<String, Set<String>> getSchemaHashMap() {
         Map<String, Set<String>> map = new HashMap<>();
 
         Set<String> movieColumnsSet = new HashSet<>();

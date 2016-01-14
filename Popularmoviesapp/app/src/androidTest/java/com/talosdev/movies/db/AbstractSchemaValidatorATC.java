@@ -1,68 +1,31 @@
 package com.talosdev.movies.db;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.test.AndroidTestCase;
 
 import com.talosdev.movies.util.StringUtils;
 
-import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * TODO move to personal testing library
+ * Abstract test class that can be used to validate the creation of database schemas
+ * (table names and columns). The concrete implementations only need to implement
+ * a set of methods that return basic info on the database (eg database name, table names,
+ * columns per table etc).
  * Created by apapad on 2016-01-14.
  */
-public abstract class BaseDbHelperAndroidTestCase<T extends SQLiteOpenHelper> extends AndroidTestCase {
-
-    protected SQLiteDatabase db;
-
+public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
+        extends AbstractDatabaseATC<T> {
 
     /**
-     * Returns the name of the database
-     * @return
-     */
-    public abstract String getDatabaseName();
-
-    /**
-     * Returns the {@link Class} of the database helper (implementation of
-     * {@link SQLiteOpenHelper}
-     * @return
-     */
-    public abstract Class<T> getDbHelperClass();
-
-
-    /**
-     * Returns a {@link Map} that defines the schema of the database.
+     * Method to be implemented by concrete subclasses.
+     * @return a {@link Map} that defines the schema of the database.
      * The keys of the map are the table names, and the values are
      * sets of strings with the names of the columns.
-     * @return
      */
-    protected abstract Map<String, Set<String>> getSchemaHashSet();
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        mContext.deleteDatabase(getDatabaseName());
-
-        Class<?> clazz = Class.forName(getDbHelperClass().getName());
-        Constructor<?> constructor = clazz.getConstructor(Context.class);
-        T dbHelper = (T) constructor.newInstance(new Object[]{mContext});
-        db = dbHelper.getWritableDatabase();
-        assertTrue(db.isOpen());
-    }
-
-    @Override
-    public void tearDown() throws Exception {
-        super.tearDown();
-        db.close();
-        mContext.deleteDatabase(MovieDbHelper.DATABASE_NAME);
-    }
-
+    protected abstract Map<String, Set<String>> getSchemaHashMap();
 
     /**
      * Test that the tables are created correctly
@@ -90,6 +53,7 @@ public abstract class BaseDbHelperAndroidTestCase<T extends SQLiteOpenHelper> ex
                         StringUtils.convertSetToMultilineString(tablesSet),
                 tablesSet.isEmpty());
 
+        c.close();
     }
 
 
@@ -101,7 +65,7 @@ public abstract class BaseDbHelperAndroidTestCase<T extends SQLiteOpenHelper> ex
         
         Set<String> tables = getTablesSet();
 
-        HashMap<String, Set<String>> schema = getSchemaHashSet();
+        Map<String, Set<String>> schema = getSchemaHashMap();
 
 
         for(String table: tables) {
@@ -126,16 +90,19 @@ public abstract class BaseDbHelperAndroidTestCase<T extends SQLiteOpenHelper> ex
             assertTrue("Error: The table " + table + " does not contain the required columns: " +
                             StringUtils.convertSetToMultilineString(columns),
                     columns.isEmpty());
+
+            c.close();
         }
     }
 
     /**
      * Utility method that returns a {@link Set} with the table names
      * from the schema map.
-     * @return
+     * @return the keyset of the schema hash map.
+     *
      */
     private Set<String> getTablesSet() {
-        return getSchemaHashSet().keySet();
+        return getSchemaHashMap().keySet();
     }
 
 }
