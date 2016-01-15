@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import com.talosdev.movies.contract.MoviesContract.MovieEntry;
 import com.talosdev.movies.util.DatabaseTestUtils;
+import com.talosdev.movies.util.TestDataHelper;
 
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class MovieCrudATC extends AbstractDatabaseATC<MovieDbHelper> {
     @Test
     public void testInsertAndQuery() {
 
-        ContentValues testValues = createValues();
+        ContentValues testValues = TestDataHelper.createMovieValues();
 
         long rowId = db.insert(MovieEntry.TABLE_ΝΑΜΕ, null, testValues);
 
@@ -64,18 +65,6 @@ public class MovieCrudATC extends AbstractDatabaseATC<MovieDbHelper> {
 
         cursor.close();
         db.close();
-    }
-
-    private ContentValues createValues() {
-        ContentValues cv = new ContentValues();
-        cv.put(MovieEntry._ID, 3123L);
-        cv.put(MovieEntry.COLUMN_TITLE, "Test movie title !");
-        cv.put(MovieEntry.COLUMN_OVERVIEW, "Test movie overview. A boy suddenly realizes that....");
-        cv.put(MovieEntry.COLUMN_RELEASE_DATE, "2013/01/01");
-        cv.put(MovieEntry.COLUMN_VOTE_AVERAGE, 7.6);
-        cv.put(MovieEntry.COLUMN_VOTE_COUNT, 1000);
-
-        return cv;
     }
 
 

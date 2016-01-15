@@ -1,4 +1,4 @@
-package com.talosdev.movies.contract;
+package com.talosdev.movies.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import com.talosdev.movies.contract.MoviesContract;
 import com.talosdev.movies.db.MovieDbHelper;
 
 /**
@@ -17,8 +18,8 @@ public class MoviesProvider extends ContentProvider {
     public static UriMatcher uriMatcher = buildUriMatcher();
 
 
-    private static final int MOVIES_LIST = 100;
-    private static final int MOVIE_DETAILS = 200;
+    public static final int MOVIES_LIST = 100;
+    public static final int MOVIE_DETAILS = 200;
     private MovieDbHelper movieDbHelper;
 
 
@@ -71,7 +72,7 @@ public class MoviesProvider extends ContentProvider {
                 cursor = getMovieList();
                 break;
             case MOVIE_DETAILS:
-                cursor = getMovieDetails();
+                cursor = getMovieDetails(uri, projection, sortOrder);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -81,8 +82,15 @@ public class MoviesProvider extends ContentProvider {
         return cursor;
     }
 
-    private Cursor getMovieDetails() {
-        return null;
+    private Cursor getMovieDetails(Uri uri, String[] projection, String sortOrder) {
+        return  movieDbHelper.getReadableDatabase().query(
+                MoviesContract.MovieEntry.TABLE_ΝΑΜΕ,
+                projection,
+                MoviesContract.MovieEntry._ID + " = ?",
+                new String[]{MoviesContract.MovieEntry.getMovieIdFromUri(uri) + ""},
+                sortOrder,
+                null,
+                null);
     }
 
     private Cursor getMovieList() {
