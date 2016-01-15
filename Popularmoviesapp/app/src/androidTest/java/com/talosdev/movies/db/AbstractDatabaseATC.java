@@ -10,7 +10,7 @@ import org.junit.Before;
 
 import java.lang.reflect.Constructor;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * TODO move to personal testing library
@@ -50,7 +50,7 @@ public abstract class AbstractDatabaseATC<T extends SQLiteOpenHelper> {
         Constructor<?> constructor = clazz.getConstructor(Context.class);
         SQLiteOpenHelper dbHelper = (SQLiteOpenHelper) constructor.newInstance(ctx);
         db = dbHelper.getWritableDatabase();
-        assertTrue(db.isOpen());
+        assertThat(db.isOpen()).isTrue();
     }
 
     @After

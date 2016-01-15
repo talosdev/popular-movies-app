@@ -3,6 +3,8 @@ package com.talosdev.movies.db;
 import com.talosdev.movies.contract.MoviesContract.MovieEntry;
 import com.talosdev.movies.contract.MoviesContract.PopularityRankingEntry;
 
+import org.junit.Test;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -51,5 +53,15 @@ public class MovieDbHelperTest extends AbstractSchemaValidatorATC<MovieDbHelper>
         return map;
     }
 
+    @Override
+    @Test
+    public void testTablesExist() throws Exception {
+        super.testTablesExist();
+    }
 
+    @Override
+    @Test
+    public void testTableColumns() throws Exception {
+        super.testTableColumns();
+    }
 }

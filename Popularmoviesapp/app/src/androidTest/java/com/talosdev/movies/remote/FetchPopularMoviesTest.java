@@ -11,8 +11,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by apapad on 14/11/15.
@@ -37,13 +36,13 @@ public class FetchPopularMoviesTest {
     public void testFetchMoviesPopularity() throws Exception {
         List<Movie> movies = fetcher.fetch(SortByCriterion.POPULARITY).movies;
 
-        assertEquals(20, movies.size());
+        assertThat(movies).hasSize(20);
         for (int i=0; i<19; i++) {
-            assertTrue(movies.get(i).popularity > 0);
+            assertThat(movies.get(i).popularity).isGreaterThan(0);
 
             // There seems to be a bug in the TMDB api
             // TODO: enable this when the api is fixed, currently doesn't return ordered results
-            //assertTrue(movies.get(i).popularity >= movies.get(i+1).popularity);
+            //assertThat(movies.get(i).popularity).isGreaterThan(movies.get(i+1).popularity);
         }
     }
 
@@ -55,9 +54,10 @@ public class FetchPopularMoviesTest {
     public void testFetchMoviesVote() throws Exception {
         List<Movie> movies = fetcher.fetch(SortByCriterion.VOTE).movies;
 
-        assertEquals(20, movies.size());
+        assertThat(movies).hasSize(20);
         for (int i=0; i<19; i++) {
-            assertTrue(movies.get(i).voteAverage >= movies.get(i+1).voteAverage);
+            assertThat(movies.get(i).voteAverage).
+                    isGreaterThanOrEqualTo(movies.get(i + 1).voteAverage);
         }
     }
 

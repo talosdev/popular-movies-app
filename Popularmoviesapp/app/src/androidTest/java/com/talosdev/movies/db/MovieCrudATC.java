@@ -8,8 +8,7 @@ import com.talosdev.movies.util.DatabaseTestUtils;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by apapad on 2016-01-14.
@@ -33,11 +32,10 @@ public class MovieCrudATC extends AbstractDatabaseATC<MovieDbHelper> {
 
         ContentValues testValues = createValues();
 
-
         long rowId = db.insert(MovieEntry.TABLE_ΝΑΜΕ, null, testValues);
 
         // Verify we got a row back.
-        assertTrue(rowId != -1);
+        assertThat(rowId).isNotEqualTo(-1);
 
         Cursor cursor = db.query(
                 MovieEntry.TABLE_ΝΑΜΕ,  // Table to Query
@@ -50,16 +48,18 @@ public class MovieCrudATC extends AbstractDatabaseATC<MovieDbHelper> {
         );
 
 
-        assertTrue("Error: No Records returned from location query", cursor.moveToFirst());
-
+        assertThat(cursor.moveToFirst()).
+                as("Error: No Records returned from location query").
+                isTrue();
 
         DatabaseTestUtils.validateCurrentRecord("Error: The values retrieved from the db " +
                         "are not the same as the ones inserted",
                 cursor, testValues);
 
         // Move the cursor to demonstrate that there is only one record in the database
-        assertFalse( "Error: More than one record returned from location query",
-                cursor.moveToNext() );
+        assertThat(cursor.moveToNext()).
+                as("Error: More than one record returned from location query").
+                isFalse();
 
 
         cursor.close();
