@@ -39,7 +39,7 @@ public abstract class AbstractDatabaseATC<T extends SQLiteOpenHelper> {
 
 
 
-
+    // TODO make this BeforeClass? If not possible, add a comment.
     @Before
     public void setUp() throws Exception {
         ctx = InstrumentationRegistry.getInstrumentation().getTargetContext();

@@ -53,6 +53,10 @@ public class MovieDbHelperTest extends AbstractSchemaValidatorATC<MovieDbHelper>
         return map;
     }
 
+    // Need to override the tests from the parent class, because
+    // otherwise I cannot run this test case individually from
+    // within Android Studio.
+
     @Override
     @Test
     public void testTablesExist() throws Exception {
