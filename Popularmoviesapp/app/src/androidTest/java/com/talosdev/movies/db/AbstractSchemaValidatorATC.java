@@ -3,13 +3,13 @@ package com.talosdev.movies.db;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.talosdev.movies.util.StringUtils;
-
 import org.junit.Test;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -44,19 +44,18 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
         assertTrue("Error: The database contains no tables at all",
                 c.moveToFirst());
 
-        Set<String> tablesSet = getTablesSet();
+        Set<String> expectedTablesSet = getTablesSet();
+
+        Set<String> observedTablesSet = new HashSet<>();
         // Iterate through the cursor and remove from the set as we go
         do {
-            // The database contains more internal tables than the ones that
-            // we want to check that exist, so we cannot assert that the
-            // remove operation has removed a set element
-            tablesSet.remove(c.getString(0));
+            String tableName = c.getString(0);
+            if (! tableName.equals("android_metadata")) {
+                observedTablesSet.add(tableName);
+            }
         } while (c.moveToNext());
 
-        // The set should now be empty
-        assertTrue("Error: The database does not contain the required tables: " +
-                        StringUtils.convertSetToMultilineString(tablesSet),
-                tablesSet.isEmpty());
+        assertThat(observedTablesSet).hasSameElementsAs(expectedTablesSet);
 
         c.close();
     }
@@ -80,22 +79,21 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
                     null);
             int columnNameIndex = c.getColumnIndex("name");
 
-            Set<String> columns = schema.get(table);
+            Set<String> expectedColumns = schema.get(table);
 
-            assertTrue("Error: Could not get column information for table " + table,
+            assertTrue("Error: Could not get column information for table",
                     c.moveToFirst());
 
+            Set<String> observedColumns = new HashSet<>();
 
             // Iterate through the cursor and remove from the set as we go
             do {
                 String columnName = c.getString(columnNameIndex);
-                columns.remove(columnName);
+                observedColumns.add(columnName);
             } while(c.moveToNext());
 
-            // The columns set must now be empty
-            assertTrue("Error: The table " + table + " does not contain the required columns: " +
-                            StringUtils.convertSetToMultilineString(columns),
-                    columns.isEmpty());
+
+            assertThat(observedColumns).hasSameElementsAs(expectedColumns);
 
             c.close();
         }

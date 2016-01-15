@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by apapad on 26/11/15.
@@ -31,8 +31,9 @@ public class MovieDetailsFetcherTest  {
     @Test
     public void testFetchMovie() throws Exception {
         Movie movie = fetcher.fetch(206647);
-        assertEquals("Spectre", movie.title);
-        assertEquals(206647, movie.id);
+
+        assertThat(movie.title).isEqualTo("Spectre");
+        assertThat(movie.id).isEqualTo(206647);
     }
 }
 

@@ -7,9 +7,7 @@ import com.talosdev.movies.BuildConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by apapad on 12/11/15.
@@ -25,9 +23,16 @@ public class ApiKeyTest  {
     @Test
     public void testApiKey() {
         String apiKey = BuildConfig.TMDB_API_KEY;
-        assertNotEquals("apikey is equals to the \"null\" string. Make sure the env variable is configured", "null", apiKey);
-        assertNotNull(apiKey);
-        assertTrue(apiKey.length() > 0);
+        assertThat(apiKey).
+                as("apikey is equals to the \"null\" string. Make sure the env variable is configured").
+                isNotEqualTo("null");
+
+        assertThat(apiKey).
+                as("apikey is null").
+                isNotNull().
+                as("apikey is empty").
+                isNotEmpty();
+
     }
 
 }
