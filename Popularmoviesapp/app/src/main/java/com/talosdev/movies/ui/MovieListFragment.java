@@ -16,15 +16,19 @@ import android.widget.GridView;
 import com.talosdev.movies.R;
 import com.talosdev.movies.constants.Intents;
 import com.talosdev.movies.data.MoviePoster;
+import com.talosdev.movies.data.SortByCriterion;
+import com.talosdev.movies.remote.FetchPopularMoviesTask;
 import com.talosdev.movies.ui.activity.MainActivity;
 import com.talosdev.movies.ui.activity.MovieDetailActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by apapad on 19/11/15.
  */
-public class MovieListFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MovieListFragment extends Fragment
+        implements AdapterView.OnItemClickListener {
 
 
     private ArrayAdapter adapter;
@@ -36,9 +40,15 @@ public class MovieListFragment extends Fragment implements AdapterView.OnItemCli
         GridView gridView = (GridView) inflater.inflate(R.layout.movie_list_fragment, container, false);;
         gridView.setOnItemClickListener(this);
 
-        List<MoviePoster> list = ((MainActivity) getActivity()).getPosterURLs();
-        adapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, list);
+        adapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item);
         gridView.setAdapter(adapter);
+
+        // TODO when rotating, do not fetch from API, but use the bundle instead
+
+        FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
+        // TODO get this from SharedPreferences
+        fetchMovies.execute(SortByCriterion.POPULARITY);
+
 
         return gridView;
     }

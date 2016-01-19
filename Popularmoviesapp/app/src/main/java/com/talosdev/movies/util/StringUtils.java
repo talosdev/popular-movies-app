@@ -1,5 +1,15 @@
 package com.talosdev.movies.util;
 
+import android.content.Context;
+
+import com.talosdev.movies.R;
+import com.talosdev.movies.remote.json.MovieJSONParser;
+import com.talosdev.movies.remote.json.MovieList;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Set;
 
 /**
@@ -20,4 +30,29 @@ public class StringUtils {
         }
         return sb.toString();
     }
+
+
+    /**
+     * TODO: test this, I have just copied it from loadDummyData.
+     * @param resourceId
+     * @return
+     */
+    public static String readResourceToString(Context context, int resourceId) {
+        InputStream is = context.getResources().openRawResource(resourceId);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String readLine = null;
+        StringBuffer sb = new StringBuffer();
+
+        try {
+            while ((readLine = br.readLine()) != null) {
+                sb.append(readLine);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace(); //create exception output
+        }
+
+        return sb.toString();
+    }
+
 }
