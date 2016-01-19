@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
+ * TODO This is WiP, I should modify it: database access and content provider
+ * will only be used to support the favorite movies feature.
  * Created by apapad on 6/01/16.
  */
 public class MoviesContract {

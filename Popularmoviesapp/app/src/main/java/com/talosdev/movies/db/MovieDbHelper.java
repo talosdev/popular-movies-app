@@ -8,7 +8,9 @@ import com.talosdev.movies.contract.MoviesContract.MovieEntry;
 import com.talosdev.movies.contract.MoviesContract.PopularityRankingEntry;
 
 /**
- * Created by apapad on 2016-01-{DAY}.
+ * TODO This is WiP, I should modify it: database access and content provider
+ * will only be used to support the favorite movies feature.
+ * Created by apapad on 2016-01-??.
  */
 public class MovieDbHelper extends SQLiteOpenHelper {
 

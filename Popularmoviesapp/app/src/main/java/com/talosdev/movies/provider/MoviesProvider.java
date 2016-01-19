@@ -11,6 +11,8 @@ import com.talosdev.movies.contract.MoviesContract;
 import com.talosdev.movies.db.MovieDbHelper;
 
 /**
+ *  TODO This is WiP, I should modify it: database access and content provider
+ * will only be used to support the favorite movies feature.
  * Created by apapad on 6/01/16.
  */
 public class MoviesProvider extends ContentProvider {
@@ -101,7 +103,18 @@ public class MoviesProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        switch(uriMatcher.match(uri)) {
+            case MOVIES_LIST:
+                return null;
+            case MOVIE_DETAILS:
+                long rowId = movieDbHelper.getWritableDatabase().insert(
+                        MoviesContract.MovieEntry.TABLE_ΝΑΜΕ,
+                        null,
+                        values);
+                return MoviesContract.MovieEntry.buildDetailsUri(rowId);
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
     }
 
     @Override
