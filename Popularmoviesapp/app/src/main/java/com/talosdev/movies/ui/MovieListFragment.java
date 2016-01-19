@@ -16,11 +16,11 @@ import android.widget.GridView;
 
 import com.talosdev.movies.R;
 import com.talosdev.movies.constants.Intents;
+import com.talosdev.movies.constants.TMDB;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
 import com.talosdev.movies.remote.FetchPopularMoviesTask;
 import com.talosdev.movies.remote.FetchPopularMoviesTask.FetchPopularMoviesParams;
-import com.talosdev.movies.ui.activity.MainActivity;
 import com.talosdev.movies.ui.activity.MovieDetailActivity;
 import com.talosdev.movies.ui.util.EndlessScrollListener;
 
@@ -34,27 +34,45 @@ public class MovieListFragment extends Fragment
         implements AdapterView.OnItemClickListener {
 
 
+    private static final String BUNDLE_MOVIE_POSTER = "BUNDLE_KEY_MOVIE_POSTER";
+    public static final String TAG_BUNDLE = "BUNDLE";
+    public static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
+    /**
+     * The threshold required by {@link EndlessScrollListener}. Not really very important for UX.
+     */
+    private static final int SCROLL_THRESHOLD = 5;
     private ArrayAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // No need to call super because Fragment.onCreateView() return null
-        GridView gridView = (GridView) inflater.inflate(R.layout.movie_list_fragment, container, false);;
+        GridView gridView = (GridView) inflater.inflate(R.layout.movie_list_fragment, container, false);
         gridView.setOnItemClickListener(this);
 
-        adapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item);
+        List<MoviePoster> movies = new ArrayList<>();
+        int page = 0;
+        if (savedInstanceState != null) {
+            Log.d(TAG_BUNDLE, "Trying to retrieve list from the saved instance state bundle");
+            movies = (List<MoviePoster>) savedInstanceState.getSerializable(BUNDLE_MOVIE_POSTER);
+            Log.d(TAG_BUNDLE, String.format("Found %d elements in the saved state bundle", movies.size()));
+            page = savedInstanceState.getInt(BUNDLE_CURRENT_PAGE, 0);
+            Log.d(TAG_BUNDLE, String.format("Found current page: %d", page));
+        }
+
+        adapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
         gridView.setAdapter(adapter);
 
-        gridView.setOnScrollListener(new MovieEndlessScrollListener());
+        gridView.setOnScrollListener(new MovieEndlessScrollListener(SCROLL_THRESHOLD, page));
 
-        // TODO when rotating, do not fetch from API, but use the bundle instead
-
-        FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
-        // TODO get this from SharedPreferences
-        FetchPopularMoviesParams params =
-                new FetchPopularMoviesParams(SortByCriterion.POPULARITY, 1);
-        fetchMovies.execute(params);
+        // If nothing was found in the Bundle, fetch from the API
+        if (movies.size() == 0) {
+            FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
+            // TODO get this from SharedPreferences
+            FetchPopularMoviesParams params =
+                    new FetchPopularMoviesParams(SortByCriterion.POPULARITY, 1);
+            fetchMovies.execute(params);
+        }
 
 
 
@@ -66,6 +84,20 @@ public class MovieListFragment extends Fragment
         super.onStart();
     }
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (adapter != null) {
+            int n = adapter.getCount();
+            List<MoviePoster> movies = new ArrayList<>();
+            for (int i=0; i<n; i++) {
+                movies.add((MoviePoster) adapter.getItem(i));
+            }
+            outState.putSerializable(BUNDLE_MOVIE_POSTER, (ArrayList) movies);
+            outState.putInt(BUNDLE_CURRENT_PAGE, movies.size() / TMDB.MOVIES_PER_PAGE - 1);
+        }
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -94,6 +126,10 @@ public class MovieListFragment extends Fragment
 
 
     class MovieEndlessScrollListener extends EndlessScrollListener {
+
+        public MovieEndlessScrollListener(int visibleThreshold, int startPage) {
+            super(visibleThreshold, startPage);
+        }
 
         @Override
         public boolean onLoadMore(int page, int totalItemsCount) {

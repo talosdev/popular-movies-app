@@ -22,12 +22,11 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
 
     private final Context context;
     private final LayoutInflater inflater;
-    private List<MoviePoster> objects;
     private final int resource;
 
 
-    public GridViewArrayAdapter(Context context, int resource) {
-        super(context, resource);
+    public GridViewArrayAdapter(Context context, int resource, List<MoviePoster> movies) {
+        super(context, resource, movies);
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.resource = resource;
