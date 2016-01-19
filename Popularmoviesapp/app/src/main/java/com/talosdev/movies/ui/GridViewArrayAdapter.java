@@ -2,6 +2,7 @@ package com.talosdev.movies.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,29 +22,29 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
 
     private final Context context;
     private final LayoutInflater inflater;
-    private final List<MoviePoster> objects;
     private final int resource;
 
 
-    public GridViewArrayAdapter(Context context, int resource, List<MoviePoster> objects) {
-        super(context, resource, objects);
+    public GridViewArrayAdapter(Context context, int resource, List<MoviePoster> movies) {
+        super(context, resource, movies);
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.resource = resource;
-        this.objects = objects;
 
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
+            // TODO use the field?
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(resource, parent, false);
         }
-        
+
+
         Picasso.
                 with(context).
-                load(objects.get(position).getPosterUrl()).
+                load(getItem(position).getPosterUrl()).
                 fit().
                 into((ImageView) convertView);
 

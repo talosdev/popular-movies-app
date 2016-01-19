@@ -13,9 +13,14 @@ import java.net.URL;
  */
 public class URLBuilder {
 
-    public static URL buildPopularMoviesURL(SortByCriterion sortBy) throws MalformedURLException {
+    private static final String PARAM_SORT_BY = "sort_by";
+    private static final String PARAM_PAGE = "page";
+
+
+    public static URL buildPopularMoviesURL(SortByCriterion sortBy, int page) throws MalformedURLException {
         Uri uri = Uri.parse(TMDB.URL_MOVIES).buildUpon().
-                appendQueryParameter("sort_by", convertSortByCriterionToStringParameter(sortBy)).
+                appendQueryParameter(PARAM_SORT_BY, convertSortByCriterionToStringParameter(sortBy)).
+                appendQueryParameter(PARAM_PAGE, page + "").
                 appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
 
         URL url = new URL(uri.toString());

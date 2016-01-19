@@ -1,18 +1,24 @@
 package com.talosdev.movies.remote;
 
-import android.test.AndroidTestCase;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.talosdev.movies.data.SortByCriterion;
+import com.talosdev.movies.remote.FetchPopularMoviesTask.FetchPopularMoviesParams;
 import com.talosdev.movies.remote.json.Movie;
 
 import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by apapad on 14/11/15.
  */
-public class FetchPopularMoviesTest extends AndroidTestCase{
+@RunWith(AndroidJUnit4.class)
+public class FetchPopularMoviesTest {
 
     private PopularMoviesFetcher fetcher;
 
@@ -27,16 +33,17 @@ public class FetchPopularMoviesTest extends AndroidTestCase{
      * that they are ordered as expected
      * @throws Exception
      */
+    @Test
     public void testFetchMoviesPopularity() throws Exception {
-        List<Movie> movies = fetcher.fetch(SortByCriterion.POPULARITY).movies;
+        List<Movie> movies = fetcher.fetch(SortByCriterion.POPULARITY, 1).movies;
 
-        assertEquals(20, movies.size());
+        assertThat(movies).hasSize(20);
         for (int i=0; i<19; i++) {
-            assertTrue(movies.get(i).popularity > 0);
+            assertThat(movies.get(i).popularity).isGreaterThan(0);
 
             // There seems to be a bug in the TMDB api
             // TODO: enable this when the api is fixed, currently doesn't return ordered results
-            //assertTrue(movies.get(i).popularity >= movies.get(i+1).popularity);
+            //assertThat(movies.get(i).popularity).isGreaterThan(movies.get(i+1).popularity);
         }
     }
 
@@ -45,14 +52,32 @@ public class FetchPopularMoviesTest extends AndroidTestCase{
      * that they are ordered as expected
      * @throws Exception
      */
+    @Test
     public void testFetchMoviesVote() throws Exception {
-        List<Movie> movies = fetcher.fetch(SortByCriterion.VOTE).movies;
+        List<Movie> movies = fetcher.fetch(SortByCriterion.VOTE, 1).movies;
 
-        assertEquals(20, movies.size());
+        assertThat(movies).hasSize(20);
         for (int i=0; i<19; i++) {
-            assertTrue(movies.get(i).voteAverage >= movies.get(i+1).voteAverage);
+            assertThat(movies.get(i).voteAverage).
+                    isGreaterThanOrEqualTo(movies.get(i + 1).voteAverage);
         }
     }
 
 
+    /**
+     * Gets two different pages and makes sure they are distinct
+     * @throws Exception
+     */
+    @Test
+    public void testFetchWithPaging() throws Exception {
+        List<Movie> movies1 = fetcher.fetch(SortByCriterion.POPULARITY, 1).movies;
+        assertThat(movies1).hasSize(20);
+
+        List<Movie> movies2 = fetcher.fetch(SortByCriterion.POPULARITY, 2).movies;
+        assertThat(movies2).hasSize(20);
+
+        assertThat(movies1).doesNotContainAnyElementsOf(movies2);
+
+
+    }
 }

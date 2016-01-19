@@ -37,6 +37,12 @@ public class TMDB {
      */
     public static final String IMAGE_BASE_URL_154 = "http://image.tmdb.org/t/p/w154/";
 
+    /**
+     * The number of movies that are included in each page of results returned by the
+     * discover queries.
+     */
+    public static final int MOVIES_PER_PAGE = 20;
+
 
     public static String buildPosterUrl(String poster) {
         return IMAGE_BASE_URL_154 + poster;

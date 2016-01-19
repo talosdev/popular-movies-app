@@ -15,9 +15,8 @@ public class PopularMoviesFetcher extends JSONFetcher {
     private MovieJSONParser parser = new MovieJSONParser();
 
 
-    public MovieList fetch(SortByCriterion sortBy) throws IOException {
-
-        URL url = URLBuilder.buildPopularMoviesURL(sortBy);
+    public MovieList fetch(final SortByCriterion sortBy, final int page) throws IOException {
+        URL url = URLBuilder.buildPopularMoviesURL(sortBy, page);
         String jsonString = getJSON(url);
         return parser.parseMovieList(jsonString);
     }
