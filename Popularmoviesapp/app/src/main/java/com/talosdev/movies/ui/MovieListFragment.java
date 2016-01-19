@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,10 @@ import com.talosdev.movies.constants.Intents;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
 import com.talosdev.movies.remote.FetchPopularMoviesTask;
+import com.talosdev.movies.remote.FetchPopularMoviesTask.FetchPopularMoviesParams;
 import com.talosdev.movies.ui.activity.MainActivity;
 import com.talosdev.movies.ui.activity.MovieDetailActivity;
+import com.talosdev.movies.ui.util.EndlessScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +46,16 @@ public class MovieListFragment extends Fragment
         adapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item);
         gridView.setAdapter(adapter);
 
+        gridView.setOnScrollListener(new MovieEndlessScrollListener());
+
         // TODO when rotating, do not fetch from API, but use the bundle instead
 
         FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
         // TODO get this from SharedPreferences
-        fetchMovies.execute(SortByCriterion.POPULARITY);
+        FetchPopularMoviesParams params =
+                new FetchPopularMoviesParams(SortByCriterion.POPULARITY, 1);
+        fetchMovies.execute(params);
+
 
 
         return gridView;
@@ -80,6 +88,25 @@ public class MovieListFragment extends Fragment
             Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
             intent.putExtra(Intents.EXTRA_MOVIE_ID, movieId);
             startActivity(intent);
+        }
+    }
+
+
+
+    class MovieEndlessScrollListener extends EndlessScrollListener {
+
+        @Override
+        public boolean onLoadMore(int page, int totalItemsCount) {
+            Log.i(SCROLL_TAG, String.format("Scroll listener will load more items, " +
+                            "currently we are at page %d, with %d total items",
+                    page, totalItemsCount));
+
+            FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
+            // TODO get this from SharedPreferences
+            FetchPopularMoviesParams params =
+                    new FetchPopularMoviesParams(SortByCriterion.POPULARITY, page);
+            fetchMovies.execute(params);
+            return true;
         }
     }
 }

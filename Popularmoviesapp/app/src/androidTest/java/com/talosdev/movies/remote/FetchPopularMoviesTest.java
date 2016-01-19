@@ -3,6 +3,7 @@ package com.talosdev.movies.remote;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.talosdev.movies.data.SortByCriterion;
+import com.talosdev.movies.remote.FetchPopularMoviesTask.FetchPopularMoviesParams;
 import com.talosdev.movies.remote.json.Movie;
 
 import org.junit.Before;
@@ -34,7 +35,7 @@ public class FetchPopularMoviesTest {
      */
     @Test
     public void testFetchMoviesPopularity() throws Exception {
-        List<Movie> movies = fetcher.fetch(SortByCriterion.POPULARITY).movies;
+        List<Movie> movies = fetcher.fetch(SortByCriterion.POPULARITY, 1).movies;
 
         assertThat(movies).hasSize(20);
         for (int i=0; i<19; i++) {
@@ -51,8 +52,9 @@ public class FetchPopularMoviesTest {
      * that they are ordered as expected
      * @throws Exception
      */
+    @Test
     public void testFetchMoviesVote() throws Exception {
-        List<Movie> movies = fetcher.fetch(SortByCriterion.VOTE).movies;
+        List<Movie> movies = fetcher.fetch(SortByCriterion.VOTE, 1).movies;
 
         assertThat(movies).hasSize(20);
         for (int i=0; i<19; i++) {
@@ -62,4 +64,20 @@ public class FetchPopularMoviesTest {
     }
 
 
+    /**
+     * Gets two different pages and makes sure they are distinct
+     * @throws Exception
+     */
+    @Test
+    public void testFetchWithPaging() throws Exception {
+        List<Movie> movies1 = fetcher.fetch(SortByCriterion.POPULARITY, 1).movies;
+        assertThat(movies1).hasSize(20);
+
+        List<Movie> movies2 = fetcher.fetch(SortByCriterion.POPULARITY, 2).movies;
+        assertThat(movies2).hasSize(20);
+
+        assertThat(movies1).doesNotContainAnyElementsOf(movies2);
+
+
+    }
 }
