@@ -33,15 +33,22 @@ import java.util.List;
 public class MovieListFragment extends Fragment
         implements AdapterView.OnItemClickListener {
 
+    public static final String TAG_BUNDLE = "BUNDLE";
 
     private static final String BUNDLE_MOVIE_POSTER = "BUNDLE_KEY_MOVIE_POSTER";
-    public static final String TAG_BUNDLE = "BUNDLE";
-    public static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
+    private static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
+
     /**
      * The threshold required by {@link EndlessScrollListener}. Not really very important for UX.
      */
     private static final int SCROLL_THRESHOLD = 5;
+
     private ArrayAdapter adapter;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
     @Nullable
     @Override
@@ -67,24 +74,30 @@ public class MovieListFragment extends Fragment
 
         // If nothing was found in the Bundle, fetch from the API
         if (movies.size() == 0) {
-            FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
-            // TODO get this from SharedPreferences
-            FetchPopularMoviesParams params =
-                    new FetchPopularMoviesParams(SortByCriterion.POPULARITY, 1);
-            fetchMovies.execute(params);
+            fetchMovies(1);
         }
-
-
-
         return gridView;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    /**
+     *
+     * @param page
+     *  the page to request from the API (starting from index 1)
+     */
+    private void fetchMovies(int page) {
+        FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
+        // TODO get sort by option from SharedPreferences
+        FetchPopularMoviesParams params =
+                new FetchPopularMoviesParams(SortByCriterion.POPULARITY, page);
+        fetchMovies.execute(params);
     }
 
 
+    /**
+     * Note that we need to save the current page that we are at, so that when loading back the bundle,
+     * we can correctly initialize the {@link com.talosdev.movies.ui.MovieListFragment.MovieEndlessScrollListener}
+     * @param outState
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -124,7 +137,9 @@ public class MovieListFragment extends Fragment
     }
 
 
-
+    /**
+     * Scroll listener that handles loading new elements when user is scrolling down.
+     */
     class MovieEndlessScrollListener extends EndlessScrollListener {
 
         public MovieEndlessScrollListener(int visibleThreshold, int startPage) {
@@ -137,11 +152,7 @@ public class MovieListFragment extends Fragment
                             "currently we are at page %d, with %d total items",
                     page, totalItemsCount));
 
-            FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
-            // TODO get this from SharedPreferences
-            FetchPopularMoviesParams params =
-                    new FetchPopularMoviesParams(SortByCriterion.POPULARITY, page);
-            fetchMovies.execute(params);
+            fetchMovies(page);
             return true;
         }
     }
