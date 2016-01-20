@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply from: 'build.workaround-missing-resource.gradle'
 
 android {
     compileSdkVersion 23
@@ -24,6 +25,7 @@ android {
         }
     }
 }
+
 
 repositories {
     mavenCentral()

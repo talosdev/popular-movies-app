@@ -35,7 +35,7 @@ public class MovieJSONParserTest {
 
     @Test
     public void testParseMovieList() throws Exception {
-        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("res/movie-list.json");
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("movie-list.json");
         String s = TestUtils.convertStreamToString(resourceAsStream);
 
         MovieList movieList = parser.parseMovieList(s);
