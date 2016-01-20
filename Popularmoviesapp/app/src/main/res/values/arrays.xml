@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sortOptions">
+        <item>@string/sort_by_popularity</item>
+        <item>@string/sort_by_vote</item>
+        <item>@string/favorites</item>
+    </string-array>
+    <string name="sort_by_popularity">Most popular movies</string>
+    <string name="sort_by_vote">Best voted movies</string>
+    <string name="favorites">Favorite movies</string>
+</resources>

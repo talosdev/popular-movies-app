@@ -1,6 +1,7 @@
 package com.talosdev.movies.ui;
 
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.SpinnerAdapter;
 
 import com.talosdev.movies.R;
 import com.talosdev.movies.constants.Intents;
@@ -31,7 +33,7 @@ import java.util.List;
  * Created by apapad on 19/11/15.
  */
 public class MovieListFragment extends Fragment
-        implements AdapterView.OnItemClickListener {
+        implements AdapterView.OnItemClickListener, ActionBar.OnNavigationListener {
 
     public static final String TAG_BUNDLE = "BUNDLE";
 
@@ -50,9 +52,23 @@ public class MovieListFragment extends Fragment
         super.onStart();
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().getActionBar().setDisplayShowTitleEnabled(false);
+        getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.sortOptions,
+                android.R.layout.simple_spinner_dropdown_item);
+
+        getActivity().getActionBar().setListNavigationCallbacks(mSpinnerAdapter, this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO What's the difference between onCreate and onCreateView
+
+
         // No need to call super because Fragment.onCreateView() return null
         GridView gridView = (GridView) inflater.inflate(R.layout.movie_list_fragment, container, false);
         gridView.setOnItemClickListener(this);
@@ -134,6 +150,12 @@ public class MovieListFragment extends Fragment
             intent.putExtra(Intents.EXTRA_MOVIE_ID, movieId);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        Log.d("NAV", String.format("Navigation item selected: itemPosition=%d, itemId=%d", itemPosition, itemId));
+        return false;
     }
 
 
