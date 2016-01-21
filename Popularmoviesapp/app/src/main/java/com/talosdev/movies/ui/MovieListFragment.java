@@ -49,6 +49,7 @@ public class MovieListFragment extends Fragment
     private static final int SCROLL_THRESHOLD = 5;
 
     private ArrayAdapter adapter;
+    private GridView gridView;
 
     @Override
     public void onStart() {
@@ -76,11 +77,9 @@ public class MovieListFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO What's the difference between onCreate and onCreateView
-
-
         // No need to call super because Fragment.onCreateView() return null
-        GridView gridView = (GridView) inflater.inflate(R.layout.movie_list_fragment, container, false);
+
+        gridView = (GridView) inflater.inflate(R.layout.movie_list_fragment, container, false);
         gridView.setOnItemClickListener(this);
 
         List<MoviePoster> movies = new ArrayList<>();
@@ -177,6 +176,7 @@ public class MovieListFragment extends Fragment
                 throw new IllegalArgumentException(String.format("Item position %d is not matched to any SortByCriterion"));
         }
         fetchMovies(1, true);
+        gridView.smoothScrollToPosition(0);
         return false;
     }
 
