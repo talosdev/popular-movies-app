@@ -4,7 +4,9 @@ package com.talosdev.movies.ui;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -29,6 +31,7 @@ import com.talosdev.movies.ui.util.EndlessScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by apapad on 19/11/15.
@@ -39,10 +42,11 @@ public class MovieListFragment extends Fragment
     private static final String BUNDLE_MOVIE_POSTER = "BUNDLE_KEY_MOVIE_POSTER";
     private static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
     private static final String BUNDLE_CURRENT_CRITERION = "BUNDLE_KEY_CURRENT_CRITERION";
+    public static final String SHARED_PREF_CRITERION = "SHARED_PREF_CRITERION";
 
     //   private static final String BUNDLE_CURRENT_PREVIOUS_CRITERION = "BUNDLE_KEY_CURRENT_PREVIOUS_CRITERION";
 
-    private SortByCriterion currentSortBy = SortByCriterion.POPULARITY;
+    private SortByCriterion currentSortBy;// = SortByCriterion.POPULARITY;
  //   private SortByCriterion previousSortBy;
 
     /**
@@ -63,11 +67,6 @@ public class MovieListFragment extends Fragment
         super.onCreate(savedInstanceState);
 
 
-        if(savedInstanceState != null) {
-            currentSortBy = (SortByCriterion) savedInstanceState.getSerializable(BUNDLE_CURRENT_CRITERION);
-            //previousSortBy = (SortByCriterion) savedInstanceState.getSerializable(BUNDLE_CURRENT_PREVIOUS_CRITERION);
-        }
-
         getActivity().getActionBar().setDisplayShowTitleEnabled(false);
         // TODO check this deprecation stuff
         getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -75,6 +74,23 @@ public class MovieListFragment extends Fragment
                 android.R.layout.simple_spinner_dropdown_item);
 
         getActivity().getActionBar().setListNavigationCallbacks(mSpinnerAdapter, this);
+
+        if(savedInstanceState != null) {
+            currentSortBy = (SortByCriterion) savedInstanceState.getSerializable(BUNDLE_CURRENT_CRITERION);
+            //previousSortBy = (SortByCriterion) savedInstanceState.getSerializable(BUNDLE_CURRENT_PREVIOUS_CRITERION);
+        }
+
+        // If not found in bundle state, try shared preferences
+        if (currentSortBy == null) {
+            SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+            String criterion = preferences.getString(SHARED_PREF_CRITERION, SortByCriterion.POPULARITY.toString());
+            Log.d(Tags.PREF, String.format("Loaded criterion %s from shared preferences", criterion));
+            currentSortBy = SortByCriterion.valueOf(criterion);
+            //TODO I don't like that I have to notify like that
+            getActivity().getActionBar().setSelectedNavigationItem(currentSortBy==SortByCriterion.POPULARITY?0:1);
+        }
+
+
     }
 
     @Nullable
@@ -200,6 +216,18 @@ public class MovieListFragment extends Fragment
         }
         return true;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        String criterion = currentSortBy.toString();
+        Log.d(Tags.PREF, String.format("Storing current criterion %s to shared preferences", criterion));
+        editor.putString(SHARED_PREF_CRITERION, criterion);
+        editor.commit();
+    }
+
 
 
     /**

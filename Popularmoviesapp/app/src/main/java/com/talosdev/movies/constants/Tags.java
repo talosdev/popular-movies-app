@@ -7,4 +7,5 @@ public class Tags {
     public static final String NAVBAR = "TAG_NVBR";
     public static final String BUNDLE = "TAG_BNDL";
     public static final String REMOTE = "TAG_RMT";
+    public static final String PREF =  "TAG_SH_PREF";
 }
