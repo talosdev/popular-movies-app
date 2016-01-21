@@ -18,10 +18,10 @@ import com.talosdev.movies.remote.json.MovieList;
  * Created by apapad on 13/11/15.
  */
 public class FetchPopularMoviesTask extends
-        AsyncTask<FetchPopularMoviesTask.FetchPopularMoviesParams, Void, MovieList> {
+        AsyncTask<FetchPopularMoviesTask.FetchPopularMoviesParams, Void, FetchPopularMoviesTask.FetchPopularMoviesResult> {
 
 
-    private final ArrayAdapter adapter;
+    private final ArrayAdapter         adapter;
     private String LOG_TAG = "REMOTE";
 
 
@@ -31,7 +31,7 @@ public class FetchPopularMoviesTask extends
     }
 
     @Override
-    protected MovieList doInBackground(FetchPopularMoviesParams... params) {
+    protected FetchPopularMoviesResult doInBackground(FetchPopularMoviesParams... params) {
 
         // Default sorting option is by popularity
         SortByCriterion sortBy = null;
@@ -48,8 +48,9 @@ public class FetchPopularMoviesTask extends
 
             PopularMoviesFetcher popularMoviesFetcher = new PopularMoviesFetcher();
             MovieList movieList = popularMoviesFetcher.fetch(sortBy, page);
-            //TODO do something
-            return movieList;
+            FetchPopularMoviesResult result = new FetchPopularMoviesResult(movieList, params[0].isReplace());
+
+            return result;
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
@@ -60,10 +61,13 @@ public class FetchPopularMoviesTask extends
 
 
     @Override
-    protected void onPostExecute(MovieList movieList) {
-        super.onPostExecute(movieList);
-        adapter.addAll(getPosterURLs(movieList));
-        Log.d("UI", "Received posterList with " + movieList.movies.size() + " items. Notifying the adapter...");
+    protected void onPostExecute(FetchPopularMoviesResult result) {
+        super.onPostExecute(result);
+        if (result.isReplace()) {
+            adapter.clear();
+        }
+        adapter.addAll(getPosterURLs(result.getMovieList()));
+        Log.d("UI", "Received posterList with " + result.getMovieList().movies.size() + " items. Notifying the adapter...");
         adapter.notifyDataSetChanged();
 
     }
@@ -82,10 +86,12 @@ public class FetchPopularMoviesTask extends
     public static class FetchPopularMoviesParams {
         private SortByCriterion sortBy;
         private int page;
+        private boolean replace;
 
-        public FetchPopularMoviesParams(SortByCriterion sortBy, int page) {
+        public FetchPopularMoviesParams(SortByCriterion sortBy, int page, boolean replace) {
             this.sortBy = sortBy;
             this.page = page;
+            this.replace = replace;
         }
 
         public SortByCriterion getSortBy() {
@@ -94,6 +100,28 @@ public class FetchPopularMoviesTask extends
 
         public int getPage() {
             return page;
+        }
+
+        public boolean isReplace() {
+            return replace;
+        }
+    }
+
+    public static class FetchPopularMoviesResult {
+        private MovieList movieList;
+        private boolean replace;
+
+        public FetchPopularMoviesResult(MovieList movieList, boolean replace) {
+            this.movieList = movieList;
+            this.replace = replace;
+        }
+
+        public MovieList getMovieList() {
+            return movieList;
+        }
+
+        public boolean isReplace() {
+            return replace;
         }
     }
 }

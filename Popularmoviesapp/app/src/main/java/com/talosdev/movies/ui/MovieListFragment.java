@@ -39,6 +39,9 @@ public class MovieListFragment extends Fragment
 
     private static final String BUNDLE_MOVIE_POSTER = "BUNDLE_KEY_MOVIE_POSTER";
     private static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
+    private static final String BUNDLE_CURRENT_CRITERION = "BUNDLE_KEY_CURRENT_CRITERION";
+
+    private SortByCriterion currentSortBy = SortByCriterion.POPULARITY;
 
     /**
      * The threshold required by {@link EndlessScrollListener}. Not really very important for UX.
@@ -55,7 +58,14 @@ public class MovieListFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        if(savedInstanceState != null) {
+            currentSortBy = (SortByCriterion) savedInstanceState.getSerializable(BUNDLE_CURRENT_CRITERION);
+        }
+
         getActivity().getActionBar().setDisplayShowTitleEnabled(false);
+        // TODO check this deprecation stuff
         getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.sortOptions,
                 android.R.layout.simple_spinner_dropdown_item);
@@ -90,7 +100,7 @@ public class MovieListFragment extends Fragment
 
         // If nothing was found in the Bundle, fetch from the API
         if (movies.size() == 0) {
-            fetchMovies(1);
+            fetchMovies(1, true);
         }
         return gridView;
     }
@@ -99,12 +109,12 @@ public class MovieListFragment extends Fragment
      *
      * @param page
      *  the page to request from the API (starting from index 1)
+     * @param replace
      */
-    private void fetchMovies(int page) {
+    private void fetchMovies(int page, boolean replace) {
         FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
-        // TODO get sort by option from SharedPreferences
         FetchPopularMoviesParams params =
-                new FetchPopularMoviesParams(SortByCriterion.POPULARITY, page);
+                new FetchPopularMoviesParams(currentSortBy, page, replace);
         fetchMovies.execute(params);
     }
 
@@ -125,6 +135,7 @@ public class MovieListFragment extends Fragment
             }
             outState.putSerializable(BUNDLE_MOVIE_POSTER, (ArrayList) movies);
             outState.putInt(BUNDLE_CURRENT_PAGE, movies.size() / TMDB.MOVIES_PER_PAGE - 1);
+            outState.putSerializable(BUNDLE_CURRENT_CRITERION, currentSortBy);
         }
     }
 
@@ -155,6 +166,17 @@ public class MovieListFragment extends Fragment
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         Log.d("NAV", String.format("Navigation item selected: itemPosition=%d, itemId=%d", itemPosition, itemId));
+        switch (itemPosition) {
+            case 0:
+                currentSortBy = SortByCriterion.POPULARITY;
+                break;
+            case 1:
+                currentSortBy = SortByCriterion.VOTE;
+                break;
+            default:
+                throw new IllegalArgumentException(String.format("Item position %d is not matched to any SortByCriterion"));
+        }
+        fetchMovies(1, true);
         return false;
     }
 
@@ -174,7 +196,7 @@ public class MovieListFragment extends Fragment
                             "currently we are at page %d, with %d total items",
                     page, totalItemsCount));
 
-            fetchMovies(page);
+            fetchMovies(page, false);
             return true;
         }
     }
