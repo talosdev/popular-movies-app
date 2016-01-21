@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
 import com.talosdev.movies.remote.json.Movie;
@@ -22,7 +23,6 @@ public class FetchPopularMoviesTask extends
 
 
     private final ArrayAdapter         adapter;
-    private String LOG_TAG = "REMOTE";
 
 
     public FetchPopularMoviesTask(ArrayAdapter adapter) {
@@ -53,7 +53,7 @@ public class FetchPopularMoviesTask extends
             return result;
 
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
+            Log.e(Tags.REMOTE, "Error ", e);
             return null;
         }
 

@@ -9,7 +9,7 @@ import android.widget.AbsListView;
  * https://github.com/codepath/android_guides/wiki/Endless-Scrolling-with-AdapterViews-and-RecyclerView
  */
 public abstract class EndlessScrollListener implements AbsListView.OnScrollListener {
-    protected static final String SCROLL_TAG = "SCROLL";
+    protected static final String TAG_SCROLL = "SCROLL";
 
     // The minimum amount of items to have below your current scroll position
     // before loading more.
@@ -42,7 +42,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
     {
-//        Log.d(SCROLL_TAG, String.format("firstVisibleItem: %s, visibleItemCount: %s, totalItemCound: %s",
+//        Log.d(TAG_SCROLL, String.format("firstVisibleItem: %s, visibleItemCount: %s, totalItemCound: %s",
 //                firstVisibleItem, visibleItemCount, totalItemCount));
 
         // If the total item count is zero and the previous isn't, assume the

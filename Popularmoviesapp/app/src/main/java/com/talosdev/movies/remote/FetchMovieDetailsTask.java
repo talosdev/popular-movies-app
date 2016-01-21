@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.talosdev.movies.R;
 import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.remote.json.Movie;
 
 import java.io.IOException;
@@ -21,7 +22,6 @@ public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
 
     private final Context context;
-    private String LOG_TAG = "REMOTE";
 
 
     public FetchMovieDetailsTask(Context context) {
@@ -41,7 +41,7 @@ public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
             return movie;
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error when contacting the server to get the movie details", e);
+            Log.e(Tags.REMOTE, "Error when contacting the server to get the movie details", e);
             return null;
         }
 

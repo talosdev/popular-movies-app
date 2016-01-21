@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.constants.Tags;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public abstract class JSONFetcher {
     @Nullable
     protected String getJSON(URL url) throws IOException {
         String jsonString;
-        Log.d(LOG_TAG, "Contacting url: " + url.toString());
+        Log.d(Tags.REMOTE, "Contacting url: " + url.toString());
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");

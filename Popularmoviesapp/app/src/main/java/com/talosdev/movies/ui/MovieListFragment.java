@@ -18,6 +18,7 @@ import android.widget.SpinnerAdapter;
 
 import com.talosdev.movies.R;
 import com.talosdev.movies.constants.Intents;
+import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.constants.TMDB;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
@@ -35,13 +36,14 @@ import java.util.List;
 public class MovieListFragment extends Fragment
         implements AdapterView.OnItemClickListener, ActionBar.OnNavigationListener {
 
-    public static final String TAG_BUNDLE = "BUNDLE";
-
     private static final String BUNDLE_MOVIE_POSTER = "BUNDLE_KEY_MOVIE_POSTER";
     private static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
     private static final String BUNDLE_CURRENT_CRITERION = "BUNDLE_KEY_CURRENT_CRITERION";
 
+    //   private static final String BUNDLE_CURRENT_PREVIOUS_CRITERION = "BUNDLE_KEY_CURRENT_PREVIOUS_CRITERION";
+
     private SortByCriterion currentSortBy = SortByCriterion.POPULARITY;
+ //   private SortByCriterion previousSortBy;
 
     /**
      * The threshold required by {@link EndlessScrollListener}. Not really very important for UX.
@@ -63,6 +65,7 @@ public class MovieListFragment extends Fragment
 
         if(savedInstanceState != null) {
             currentSortBy = (SortByCriterion) savedInstanceState.getSerializable(BUNDLE_CURRENT_CRITERION);
+            //previousSortBy = (SortByCriterion) savedInstanceState.getSerializable(BUNDLE_CURRENT_PREVIOUS_CRITERION);
         }
 
         getActivity().getActionBar().setDisplayShowTitleEnabled(false);
@@ -85,11 +88,11 @@ public class MovieListFragment extends Fragment
         List<MoviePoster> movies = new ArrayList<>();
         int page = 0;
         if (savedInstanceState != null) {
-            Log.d(TAG_BUNDLE, "Trying to retrieve list from the saved instance state bundle");
+            Log.d(Tags.BUNDLE, "Trying to retrieve list from the saved instance state bundle");
             movies = (List<MoviePoster>) savedInstanceState.getSerializable(BUNDLE_MOVIE_POSTER);
-            Log.d(TAG_BUNDLE, String.format("Found %d elements in the saved state bundle", movies.size()));
+            Log.d(Tags.BUNDLE, String.format("Found %d elements in the saved state bundle", movies.size()));
             page = savedInstanceState.getInt(BUNDLE_CURRENT_PAGE, 0);
-            Log.d(TAG_BUNDLE, String.format("Found current page: %d", page));
+            Log.d(Tags.BUNDLE, String.format("Found current page: %d", page));
         }
 
         adapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
@@ -162,22 +165,40 @@ public class MovieListFragment extends Fragment
         }
     }
 
+    /**
+     * Note that this method is called not only when the user actually selects an option in the navbar,
+     * but also after onCreate (eg after orientation changes). We don't want to take any action in
+     * this second scenario. We do this by comparing the option that the itemPosition point to, to the
+     * currently selected sorting option.
+     * @param itemPosition
+     * @param itemId
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        Log.d("NAV", String.format("Navigation item selected: itemPosition=%d, itemId=%d", itemPosition, itemId));
+        Log.d(Tags.NAVBAR, String.format("Navigation item selected: itemPosition=%d, itemId=%d", itemPosition, itemId));
+        SortByCriterion newSortBy;
         switch (itemPosition) {
             case 0:
-                currentSortBy = SortByCriterion.POPULARITY;
+                newSortBy = SortByCriterion.POPULARITY;
                 break;
             case 1:
-                currentSortBy = SortByCriterion.VOTE;
+                newSortBy = SortByCriterion.VOTE;
                 break;
             default:
-                throw new IllegalArgumentException(String.format("Item position %d is not matched to any SortByCriterion"));
+                Log.e(Tags.NAVBAR, String.format("Item position %d is not matched to any SortByCriterion"));
+                return false;
         }
-        fetchMovies(1, true);
-        gridView.smoothScrollToPosition(0);
-        return false;
+        // Only fetch new movies if the user has changed the selection
+        boolean isUserAction = (newSortBy != currentSortBy);
+        currentSortBy = newSortBy;
+        if (isUserAction) {
+            Log.d(Tags.NAVBAR, "Scrolling to top, because the criterion has changed");
+            fetchMovies(1, true);
+            // TODO check how this works with slow connections, maybe clear the adapter here?
+            gridView.smoothScrollToPosition(0);
+        }
+        return true;
     }
 
 
@@ -192,7 +213,7 @@ public class MovieListFragment extends Fragment
 
         @Override
         public boolean onLoadMore(int page, int totalItemsCount) {
-            Log.i(SCROLL_TAG, String.format("Scroll listener will load more items, " +
+            Log.i(TAG_SCROLL, String.format("Scroll listener will load more items, " +
                             "currently we are at page %d, with %d total items",
                     page, totalItemsCount));
 
