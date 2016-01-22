@@ -1,7 +1,6 @@
 package com.talosdev.movies.remote;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
@@ -21,12 +20,12 @@ import java.io.IOException;
 public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
 
-    private final Context context;
+    private final Activity activity;
 
 
-    public FetchMovieDetailsTask(Context context) {
+    public FetchMovieDetailsTask(Activity activity) {
         super();
-        this.context = context;
+        this.activity = activity;
 
     }
 
@@ -48,33 +47,33 @@ public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
     }
 
 
-    // TODO check if this thing that I am doing with casting the context to activity is the best way.
+    // TODO check if this thing that I am doing with casting the activity to activity is the best way.
     @Override
     protected void onPostExecute(Movie movie) {
         if (movie == null) {
             return;
         }
 
-        TextView titleView = (TextView) ((Activity) context).findViewById(R.id.movieTitle);
-        TextView descriptionView = (TextView) ((Activity) context).findViewById(R.id.movieDescription);
-        TextView releaseDateView = (TextView) ((Activity) context).findViewById(R.id.releaseDate);
-        TextView voteView = (TextView) ((Activity) context).findViewById(R.id.votes);
-        ImageView imageView = (ImageView) ((Activity) context).findViewById(R.id.imageView);
+        TextView titleView = (TextView) activity.findViewById(R.id.movieTitle);
+        TextView descriptionView = (TextView) activity.findViewById(R.id.movieDescription);
+        TextView releaseDateView = (TextView) activity.findViewById(R.id.releaseDate);
+        TextView voteView = (TextView) activity.findViewById(R.id.votes);
+        ImageView imageView = (ImageView) activity.findViewById(R.id.imageView);
 
         titleView.setText(movie.title);
         descriptionView.setText(movie.overview);
         releaseDateView.setText(movie.releaseDate);
         voteView.setText(movie.voteAverage
                 + " "
-                + context.getString(R.string.based_on)
+                + activity.getString(R.string.based_on)
                 + " "
                 + movie.voteCount + " "
-                + context.getString(R.string.votes)
+                + activity.getString(R.string.votes)
         );
 
 
         Picasso.
-                with(context).
+                with(activity).
                 load(TMDB.buildPosterUrl(movie.posterPath)).
                 fit().
                 into(imageView);

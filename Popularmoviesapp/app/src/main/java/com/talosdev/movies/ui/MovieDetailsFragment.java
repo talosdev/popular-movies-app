@@ -45,7 +45,7 @@ public class MovieDetailsFragment extends Fragment {
         super.onStart();
         View view = getView();
 
-        FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(view.getContext());
+        FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(getActivity() );
         fetcher.execute(movieId);
     }
 
