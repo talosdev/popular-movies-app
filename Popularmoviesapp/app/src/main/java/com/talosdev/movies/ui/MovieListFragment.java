@@ -41,13 +41,12 @@ public class MovieListFragment extends Fragment
 
     private static final String BUNDLE_MOVIE_POSTER = "BUNDLE_KEY_MOVIE_POSTER";
     private static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
-    private static final String BUNDLE_CURRENT_CRITERION = "BUNDLE_KEY_CURRENT_CRITERION";
+
+    // Currently selected sort by criterion is stored in SharedPReferences and not in the bundle
+    // so that is can persist across app shutdowns and phone reboots etc
     public static final String SHARED_PREF_CRITERION = "SHARED_PREF_CRITERION";
 
-    //   private static final String BUNDLE_CURRENT_PREVIOUS_CRITERION = "BUNDLE_KEY_CURRENT_PREVIOUS_CRITERION";
-
-    private SortByCriterion currentSortBy;// = SortByCriterion.POPULARITY;
- //   private SortByCriterion previousSortBy;
+    private SortByCriterion currentSortBy;
 
     /**
      * The threshold required by {@link EndlessScrollListener}. Not really very important for UX.
@@ -75,18 +74,12 @@ public class MovieListFragment extends Fragment
 
         getActivity().getActionBar().setListNavigationCallbacks(mSpinnerAdapter, this);
 
-        if(savedInstanceState != null) {
-            currentSortBy = (SortByCriterion) savedInstanceState.getSerializable(BUNDLE_CURRENT_CRITERION);
-            //previousSortBy = (SortByCriterion) savedInstanceState.getSerializable(BUNDLE_CURRENT_PREVIOUS_CRITERION);
-        }
-
-        // If not found in bundle state, try shared preferences
         if (currentSortBy == null) {
             SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
             String criterion = preferences.getString(SHARED_PREF_CRITERION, SortByCriterion.POPULARITY.toString());
             Log.d(Tags.PREF, String.format("Loaded criterion %s from shared preferences", criterion));
             currentSortBy = SortByCriterion.valueOf(criterion);
-            //TODO I don't like that I have to notify like that
+            //TODO find a better way to get the index
             getActivity().getActionBar().setSelectedNavigationItem(currentSortBy==SortByCriterion.POPULARITY?0:1);
         }
 
@@ -153,7 +146,6 @@ public class MovieListFragment extends Fragment
             }
             outState.putSerializable(BUNDLE_MOVIE_POSTER, (ArrayList) movies);
             outState.putInt(BUNDLE_CURRENT_PAGE, movies.size() / TMDB.MOVIES_PER_PAGE - 1);
-            outState.putSerializable(BUNDLE_CURRENT_CRITERION, currentSortBy);
         }
     }
 
