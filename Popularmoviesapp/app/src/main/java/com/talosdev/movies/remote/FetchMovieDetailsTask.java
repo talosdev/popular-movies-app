@@ -54,29 +54,24 @@ public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
             return;
         }
 
-        TextView titleView = (TextView) activity.findViewById(R.id.movieTitle);
+//        TextView titleView = (TextView) activity.findViewById(R.id.movieTitle);
         TextView descriptionView = (TextView) activity.findViewById(R.id.movieDescription);
         TextView releaseDateView = (TextView) activity.findViewById(R.id.releaseDate);
-        TextView voteView = (TextView) activity.findViewById(R.id.votes);
-        ImageView imageView = (ImageView) activity.findViewById(R.id.imageView);
+        TextView voteAverageView = (TextView) activity.findViewById(R.id.vote_average);
+        TextView voteCountView = (TextView) activity.findViewById(R.id.vote_count);
+//        ImageView imageView = (ImageView) activity.findViewById(R.id.imageView);
 
-        titleView.setText(movie.title);
+//        titleView.setText(movie.title);
         descriptionView.setText(movie.overview);
         releaseDateView.setText(movie.releaseDate);
-        voteView.setText(movie.voteAverage
-                + " "
-                + activity.getString(R.string.based_on)
-                + " "
-                + movie.voteCount + " "
-                + activity.getString(R.string.votes)
-        );
+        voteAverageView.setText(movie.voteAverage + "");
+        voteCountView.setText("based on " + movie.voteCount + " votes");
 
-
-        Picasso.
-                with(activity).
-                load(TMDB.buildPosterUrl(movie.posterPath)).
-                fit().
-                into(imageView);
+//        Picasso.
+//                with(activity).
+//                load(TMDB.buildPosterUrl(movie.posterPath)).
+//                fit().
+//                into(imageView);
     }
 
 

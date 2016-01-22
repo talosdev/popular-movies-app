@@ -7,4 +7,9 @@
 
     <dimen name="poster_width_grid">154dp</dimen>
     <dimen name="poster_height_grid">231dp</dimen>
+
+    <dimen name="card_padding">5dp</dimen>
+    <dimen name="card_vertical_spacing">20dp</dimen>
+    <dimen name="card_radius">0dp</dimen>
+    <dimen name="card_horizontal_spacing">10dp</dimen>
 </resources>

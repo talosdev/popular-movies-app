@@ -2,5 +2,7 @@
     <string name="app_name">Popular movies app</string>
     <string name="based_on">based on</string>
     <string name="votes">votes</string>
+    <string name="synopsis">Synopsis</string>
 
+    <string name="release_date">Release date</string>
 </resources>
