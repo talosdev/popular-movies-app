@@ -31,7 +31,6 @@ import com.talosdev.movies.ui.util.EndlessScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by apapad on 19/11/15.
@@ -80,7 +79,7 @@ public class MovieListFragment extends Fragment
             Log.d(Tags.PREF, String.format("Loaded criterion %s from shared preferences", criterion));
             currentSortBy = SortByCriterion.valueOf(criterion);
             //TODO find a better way to get the index
-            getActivity().getActionBar().setSelectedNavigationItem(currentSortBy==SortByCriterion.POPULARITY?0:1);
+            getActivity().getActionBar().setSelectedNavigationItem(currentSortBy.getIndex());
         }
 
 
@@ -185,17 +184,10 @@ public class MovieListFragment extends Fragment
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         Log.d(Tags.NAVBAR, String.format("Navigation item selected: itemPosition=%d, itemId=%d", itemPosition, itemId));
-        SortByCriterion newSortBy;
-        switch (itemPosition) {
-            case 0:
-                newSortBy = SortByCriterion.POPULARITY;
-                break;
-            case 1:
-                newSortBy = SortByCriterion.VOTE;
-                break;
-            default:
-                Log.e(Tags.NAVBAR, String.format("Item position %d is not matched to any SortByCriterion"));
-                return false;
+        SortByCriterion newSortBy = SortByCriterion.byIndex(itemPosition);
+        if (newSortBy == null) {
+            Log.e(Tags.NAVBAR, String.format("Item position %d is not matched to any SortByCriterion"));
+            return false;
         }
         // Only fetch new movies if the user has changed the selection
         boolean isUserAction = (newSortBy != currentSortBy);
