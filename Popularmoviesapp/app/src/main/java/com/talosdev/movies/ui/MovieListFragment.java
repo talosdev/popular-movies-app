@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,6 +30,7 @@ import com.talosdev.movies.data.SortByCriterion;
 import com.talosdev.movies.remote.FetchPopularMoviesTask;
 import com.talosdev.movies.remote.FetchPopularMoviesTask.FetchPopularMoviesParams;
 import com.talosdev.movies.ui.activity.MovieDetailActivity;
+import com.talosdev.movies.ui.activity.PreferencesActivity;
 import com.talosdev.movies.ui.util.EndlessScrollListener;
 
 import java.util.ArrayList;
@@ -63,7 +67,7 @@ public class MovieListFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
 
         getActivity().getActionBar().setDisplayShowTitleEnabled(false);
         // TODO check this deprecation stuff
@@ -116,9 +120,7 @@ public class MovieListFragment extends Fragment
     }
 
     /**
-     *
-     * @param page
-     *  the page to request from the API (starting from index 1)
+     * @param page    the page to request from the API (starting from index 1)
      * @param replace
      */
     private void fetchMovies(int page, boolean replace) {
@@ -132,6 +134,7 @@ public class MovieListFragment extends Fragment
     /**
      * Note that we need to save the current page that we are at, so that when loading back the bundle,
      * we can correctly initialize the {@link com.talosdev.movies.ui.MovieListFragment.MovieEndlessScrollListener}
+     *
      * @param outState
      */
     @Override
@@ -140,7 +143,7 @@ public class MovieListFragment extends Fragment
         if (adapter != null) {
             int n = adapter.getCount();
             List<MoviePoster> movies = new ArrayList<>();
-            for (int i=0; i<n; i++) {
+            for (int i = 0; i < n; i++) {
                 movies.add((MoviePoster) adapter.getItem(i));
             }
             outState.putSerializable(BUNDLE_MOVIE_POSTER, (ArrayList) movies);
@@ -164,7 +167,7 @@ public class MovieListFragment extends Fragment
             ft.addToBackStack(null);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
-        }  else {
+        } else {
             // MOBILE
             Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
             intent.putExtra(Intents.EXTRA_MOVIE_ID, movieId);
@@ -177,6 +180,7 @@ public class MovieListFragment extends Fragment
      * but also after onCreate (eg after orientation changes). We don't want to take any action in
      * this second scenario. We do this by comparing the option that the itemPosition point to, to the
      * currently selected sorting option.
+     *
      * @param itemPosition
      * @param itemId
      * @return
@@ -213,6 +217,23 @@ public class MovieListFragment extends Fragment
     }
 
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_settings:
+                Intent intent = new Intent(getActivity(), PreferencesActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     /**
      * Scroll listener that handles loading new elements when user is scrolling down.
