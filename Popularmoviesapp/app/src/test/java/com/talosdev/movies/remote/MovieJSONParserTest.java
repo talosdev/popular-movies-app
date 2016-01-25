@@ -9,7 +9,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -57,10 +60,13 @@ public class MovieJSONParserTest {
     }
 
 
-    private void verifyMovie(Movie movie) {
+    private void verifyMovie(Movie movie) throws ParseException {
         assertNotNull(movie);
         assertEquals("Spectre", movie.title);
-        assertEquals("2015-11-06", movie.releaseDate);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        assertThat(movie.releaseDate).isInSameDayAs(sdf.parse("2015-11-06"));
+
         assertEquals(206647, movie.id);
         assertEquals(6.7f, movie.voteAverage, TestUtils.EPSILON);
         assertEquals(453, movie.voteCount);

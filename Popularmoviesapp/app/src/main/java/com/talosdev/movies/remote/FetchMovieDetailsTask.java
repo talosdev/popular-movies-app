@@ -63,7 +63,8 @@ public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
         titleView.setText(movie.title);
         descriptionView.setText(movie.overview);
-        releaseDateView.setText(movie.releaseDate);
+        //TODO
+        releaseDateView.setText(movie.releaseDate.toString());
         voteAverageView.setText(movie.voteAverage + "");
         voteCountView.setText("based on " + movie.voteCount + " votes");
 
