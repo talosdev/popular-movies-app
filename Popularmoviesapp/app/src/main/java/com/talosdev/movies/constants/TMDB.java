@@ -31,6 +31,7 @@ public class TMDB {
      * The URL for getting the details of a movie
      */
     public static final String URL_MOVIE_DETAILS = BASE_URL + "/3/movie/";
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
 
     /**
      * The URL for getting the poster image

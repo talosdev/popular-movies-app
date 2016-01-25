@@ -6,7 +6,7 @@
         android:dialogTitle="@string/pref_dateFormat"
         android:entries="@array/pref_dateFormat_entries"
         android:entryValues="@array/pref_dateFormat_values"
-        android:key="pref_dateFormat"
+        android:key="@string/pref_dateFormat_key"
         android:summary="%s"
         android:title="@string/pref_dateFormat" />
 

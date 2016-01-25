@@ -1,7 +1,9 @@
 package com.talosdev.movies.remote;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.remote.json.Movie;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by apapad on 13/11/15.
@@ -63,8 +66,14 @@ public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
         titleView.setText(movie.title);
         descriptionView.setText(movie.overview);
-        //TODO
-        releaseDateView.setText(movie.releaseDate.toString());
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        String dateFormat = sharedPreferences.getString(
+                activity.getResources().getString(R.string.pref_dateFormat_key),
+                activity.getResources().getString(R.string.pref_dateFormat_value_a));
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+
+        releaseDateView.setText(sdf.format(movie.releaseDate));
         voteAverageView.setText(movie.voteAverage + "");
         voteCountView.setText("based on " + movie.voteCount + " votes");
 

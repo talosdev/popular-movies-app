@@ -1,6 +1,7 @@
 package com.talosdev.movies.remote;
 
 import com.talosdev.movies.TestUtils;
+import com.talosdev.movies.constants.TMDB;
 import com.talosdev.movies.remote.json.Movie;
 import com.talosdev.movies.remote.json.MovieJSONParser;
 import com.talosdev.movies.remote.json.MovieList;
@@ -64,7 +65,7 @@ public class MovieJSONParserTest {
         assertNotNull(movie);
         assertEquals("Spectre", movie.title);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat(TMDB.DATE_FORMAT);
         assertThat(movie.releaseDate).isInSameDayAs(sdf.parse("2015-11-06"));
 
         assertEquals(206647, movie.id);
