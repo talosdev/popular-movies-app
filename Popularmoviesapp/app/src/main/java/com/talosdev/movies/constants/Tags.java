@@ -1,6 +1,7 @@
 package com.talosdev.movies.constants;
 
 /**
+ * TODO move to personal library
  * Created by apapad on 21/01/16.
  */
 public class Tags {

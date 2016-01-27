@@ -36,6 +36,8 @@ import com.talosdev.movies.ui.util.EndlessScrollListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import hugo.weaving.DebugLog;
+
 /**
  * Created by apapad on 19/11/15.
  */
@@ -59,11 +61,13 @@ public class MovieListFragment extends Fragment
     private ArrayAdapter adapter;
     private GridView gridView;
 
+    @DebugLog
     @Override
     public void onStart() {
         super.onStart();
     }
 
+    @DebugLog
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +93,7 @@ public class MovieListFragment extends Fragment
 
     }
 
+    @DebugLog
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,6 +123,13 @@ public class MovieListFragment extends Fragment
         }
         return gridView;
     }
+
+    @DebugLog
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
 
     /**
      * @param page    the page to request from the API (starting from index 1)
@@ -155,24 +167,8 @@ public class MovieListFragment extends Fragment
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         long movieId = ((GridViewArrayAdapter) adapter).getItem(position).getMovieId();
 
-        // The existence of the detail frame in the activity will tell us if we are on
-        // mobile or on tablet
-        View detailFrame = getActivity().findViewById(R.id.detail_frame);
-        if (detailFrame != null) {
-            // TABLET
-            MovieDetailsFragment details = new MovieDetailsFragment();
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            details.setMovieId(movieId);
-            ft.replace(R.id.detail_frame, details);
-            ft.addToBackStack(null);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.commit();
-        } else {
-            // MOBILE
-            Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-            intent.putExtra(Intents.EXTRA_MOVIE_ID, movieId);
-            startActivity(intent);
-        }
+        ((MovieListCallback) getActivity()).onMovieSelected(movieId);
+
     }
 
     /**
@@ -253,5 +249,10 @@ public class MovieListFragment extends Fragment
             fetchMovies(page, false);
             return true;
         }
+    }
+
+
+    public interface MovieListCallback {
+        void onMovieSelected(long movieId);
     }
 }
