@@ -62,7 +62,10 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // persist the current movie
-        outState.putParcelable(BUNDLE_MOVIE, currentMovie);
+        if (currentMovie != null) {
+            Log.d(Tags.BUNDLE, String.format("Storing current movie %d to bundle", currentMovie.id));
+            outState.putParcelable(BUNDLE_MOVIE, currentMovie);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -70,8 +73,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("SS_NULL", "" + (savedInstanceState == null));
-        Log.d("ARG_NULL", "" + (getArguments() == null));
 
         // container might be null when there is a configuration change from
         // two-pane to one-pane, and this fragment is reloaded, but without container
@@ -81,7 +82,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
         // Do not inflate the layout, if there are no arguments, for example
         // when the application is opened in two-pane mode, and so there is no
-        // current movie to show details for
+        // current movie selected to show in the details pane.
         if (getArguments() != null) {
             View rootView = inflater.inflate(R.layout.movie_details_fragment, container, false);
             titleView = (TextView) rootView.findViewById(R.id.movieTitle);
@@ -112,8 +113,9 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         super.onStart();
         // TODO
         // This is a hack for the problem I was facing with configuration changes from
-        // two-pane landscape to one-pane portrait. If getView is null, do not
-        // execute the logic of the fragment.
+        // two-pane landscape to one-pane portrait. If getView is null, we skip all
+        // the logic of the fragment. For this to work correctly, the onCreateView method
+        // must return a null view in the cases that this is happening.
         if (getView() != null) {
             if (getArguments() != null) {
                 long argMovieId = getArguments().getLong(ARG_MOVIE_ID);
@@ -121,7 +123,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
                     FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(this);
                     fetcher.execute(argMovieId);
                 } else {
-                    onMovieDetailsReceived(currentMovie);
+                    updateUI(currentMovie);
                 }
             }
         }
@@ -130,9 +132,13 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
     @Override
     public void onMovieDetailsReceived(Movie movie) {
-
         currentMovie = movie;
 
+        updateUI(movie);
+    }
+
+
+    private void updateUI(Movie movie) {
         titleView.setText(movie.title);
         descriptionView.setText(movie.overview);
 

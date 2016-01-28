@@ -6,14 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.talosdev.movies.R;
+import com.talosdev.movies.callbacks.MovieSelectedCallback;
 import com.talosdev.movies.constants.Fragments;
 import com.talosdev.movies.constants.Intents;
 import com.talosdev.movies.ui.MovieDetailsFragment;
-import com.talosdev.movies.ui.MovieListFragment;
 
 import hugo.weaving.DebugLog;
 
-public class MainActivity extends Activity implements MovieListFragment.MovieListCallback {
+public class MainActivity extends Activity implements MovieSelectedCallback {
 
     private boolean twoPane;
 
@@ -86,15 +86,5 @@ public class MainActivity extends Activity implements MovieListFragment.MovieLis
             startActivity(intent);
         }
     }
-//    "poster_sizes": [
-//            "w92",
-//            "w154",
-//            "w185",
-//            "w342",
-//            "w500",
-//            "w780",
-//            "original"
-//            ],
-
 
 }

@@ -3,7 +3,6 @@ package com.talosdev.movies.ui;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,14 +21,13 @@ import android.widget.GridView;
 import android.widget.SpinnerAdapter;
 
 import com.talosdev.movies.R;
-import com.talosdev.movies.constants.Intents;
+import com.talosdev.movies.callbacks.MovieSelectedCallback;
 import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.constants.TMDB;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
 import com.talosdev.movies.remote.FetchPopularMoviesTask;
 import com.talosdev.movies.remote.FetchPopularMoviesTask.FetchPopularMoviesParams;
-import com.talosdev.movies.ui.activity.MovieDetailActivity;
 import com.talosdev.movies.ui.activity.PreferencesActivity;
 import com.talosdev.movies.ui.util.EndlessScrollListener;
 
@@ -167,7 +165,7 @@ public class MovieListFragment extends Fragment
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         long movieId = ((GridViewArrayAdapter) adapter).getItem(position).getMovieId();
 
-        ((MovieListCallback) getActivity()).onMovieSelected(movieId);
+        ((MovieSelectedCallback) getActivity()).onMovieSelected(movieId);
 
     }
 
@@ -252,7 +250,4 @@ public class MovieListFragment extends Fragment
     }
 
 
-    public interface MovieListCallback {
-        void onMovieSelected(long movieId);
-    }
 }
