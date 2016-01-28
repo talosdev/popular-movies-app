@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.hugo'
-apply plugin: 'com.neenbedankt.android-apt'
+//apply plugin: 'com.neenbedankt.android-apt'
 apply from: 'build.workaround-missing-resource.gradle'
 
 
@@ -47,14 +47,14 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'org.parceler:parceler-api:1.0.4'
+ //   compile 'org.parceler:parceler-api:1.0.4'
     androidTestCompile 'com.android.support:support-v4:23.1.0'
     androidTestCompile 'com.android.support.test:runner:0.4'
     androidTestCompile 'com.squareup.assertj:assertj-android:1.1.1'
     testCompile('com.squareup.assertj:assertj-android:1.1.1') {
         exclude module: 'support-annotations'
     }
-    apt 'org.parceler:parceler:1.0.4'
+ //   apt 'org.parceler:parceler:1.0.4'
 }
 
 

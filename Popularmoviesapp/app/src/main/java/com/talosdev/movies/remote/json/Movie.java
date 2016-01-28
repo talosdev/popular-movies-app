@@ -2,15 +2,12 @@ package com.talosdev.movies.remote.json;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.parceler.Parcel;
-
 import java.util.Date;
 
 /**
  * Java object to which the json response with details about a movie is deserialized.
  * Created by apapad on 13/11/15.
  */
-@Parcel
 public class Movie {
 
     public Movie() {

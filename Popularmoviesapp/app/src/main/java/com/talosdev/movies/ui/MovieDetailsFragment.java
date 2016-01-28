@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,8 @@ import com.squareup.picasso.Picasso;
 import com.talosdev.movies.R;
 import com.talosdev.movies.callbacks.MovieDetailsCallback;
 import com.talosdev.movies.constants.TMDB;
-import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.remote.FetchMovieDetailsTask;
 import com.talosdev.movies.remote.json.Movie;
-
-import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
 
@@ -63,10 +59,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // persist the current movie
-        if (currentMovie != null) {
-            Log.d(Tags.BUNDLE, String.format("Storing current movie %d to bundle", currentMovie.id));
-            outState.putParcelable(BUNDLE_MOVIE, Parcels.wrap(currentMovie));
-        }
         super.onSaveInstanceState(outState);
     }
 
@@ -94,13 +86,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
             imageView = (ImageView) rootView.findViewById(R.id.imageView);
             imageView.forceLayout();
 
-
-            if (savedInstanceState != null) {
-                currentMovie = Parcels.unwrap(savedInstanceState.getParcelable(BUNDLE_MOVIE));
-                if (currentMovie != null) {
-                    Log.d(Tags.BUNDLE, String.format("Restoring movie from bundle: %d", currentMovie.id));
-                }
-            }
             return rootView;
         } else {
             return null;

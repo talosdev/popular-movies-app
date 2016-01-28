@@ -37,7 +37,7 @@
     <string name="pref_dateFormat_entry_e">dd-MM-yyyy (eg. 25-12-2016)</string>
     <string name="pref_dateFormat_entry_f">dd/MM/yyyy (eg. 25/12/2016)</string>
     <string name="pref_dateFormat_entry_g">MM-dd-yyyy (eg. 12-25-2016)</string>
-    <string name="pref_dateFormat_entry_h">MM/dd/yyyy (eg. 25/12/2016)</string>
+    <string name="pref_dateFormat_entry_h">MM/dd/yyyy (eg. 12/25/2016)</string>
 
     <string name="pref_dateFormat_value_a">yyyy-MM-dd</string>
     <string name="pref_dateFormat_value_b">yyyy/MM/dd</string>
