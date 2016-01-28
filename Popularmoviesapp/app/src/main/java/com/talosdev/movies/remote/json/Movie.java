@@ -1,10 +1,8 @@
 package com.talosdev.movies.remote.json;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.Nullable;
-
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
 
 import java.util.Date;
 
@@ -12,7 +10,11 @@ import java.util.Date;
  * Java object to which the json response with details about a movie is deserialized.
  * Created by apapad on 13/11/15.
  */
-public class Movie implements Parcelable {
+@Parcel
+public class Movie {
+
+    public Movie() {
+    }
 
     @SerializedName("id")
     public long id;
@@ -42,46 +44,46 @@ public class Movie implements Parcelable {
     public long voteCount;
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(title);
-        dest.writeString(overview);
-        dest.writeLong(releaseDate.getTime());
-        dest.writeString(posterPath);
-        dest.writeString(backdropPath);
-        dest.writeFloat(popularity);
-        dest.writeFloat(voteAverage);
-        dest.writeLong(voteCount);
-    }
-
-    public static final Parcelable.Creator<Movie> CREATOR
-            = new Parcelable.Creator<Movie>() {
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
-
-    private Movie(Parcel in) {
-        id = in.readInt();
-        title = in.readString();
-        overview = in.readString();
-        releaseDate = new Date(in.readLong());
-        posterPath = in.readString();
-        backdropPath= in.readString();
-        popularity = in.readFloat();
-        voteAverage = in.readFloat();
-        voteCount = in.readLong();
-    }
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeLong(id);
+//        dest.writeString(title);
+//        dest.writeString(overview);
+//        dest.writeLong(releaseDate.getTime());
+//        dest.writeString(posterPath);
+//        dest.writeString(backdropPath);
+//        dest.writeFloat(popularity);
+//        dest.writeFloat(voteAverage);
+//        dest.writeLong(voteCount);
+//    }
+//
+//    public static final Parcelable.Creator<Movie> CREATOR
+//            = new Parcelable.Creator<Movie>() {
+//        public Movie createFromParcel(Parcel in) {
+//            return new Movie(in);
+//        }
+//
+//        public Movie[] newArray(int size) {
+//            return new Movie[size];
+//        }
+//    };
+//
+//    private Movie(Parcel in) {
+//        id = in.readInt();
+//        title = in.readString();
+//        overview = in.readString();
+//        releaseDate = new Date(in.readLong());
+//        posterPath = in.readString();
+//        backdropPath= in.readString();
+//        popularity = in.readFloat();
+//        voteAverage = in.readFloat();
+//        voteCount = in.readLong();
+//    }
 
 
 }

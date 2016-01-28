@@ -1,7 +1,6 @@
 package com.talosdev.movies.ui;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -21,6 +20,8 @@ import com.talosdev.movies.constants.TMDB;
 import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.remote.FetchMovieDetailsTask;
 import com.talosdev.movies.remote.json.Movie;
+
+import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
 
@@ -64,7 +65,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         // persist the current movie
         if (currentMovie != null) {
             Log.d(Tags.BUNDLE, String.format("Storing current movie %d to bundle", currentMovie.id));
-            outState.putParcelable(BUNDLE_MOVIE, currentMovie);
+            outState.putParcelable(BUNDLE_MOVIE, Parcels.wrap(currentMovie));
         }
         super.onSaveInstanceState(outState);
     }
@@ -95,7 +96,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
 
             if (savedInstanceState != null) {
-                currentMovie = savedInstanceState.getParcelable(BUNDLE_MOVIE);
+                currentMovie = Parcels.unwrap(savedInstanceState.getParcelable(BUNDLE_MOVIE));
                 if (currentMovie != null) {
                     Log.d(Tags.BUNDLE, String.format("Restoring movie from bundle: %d", currentMovie.id));
                 }
