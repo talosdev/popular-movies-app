@@ -6,9 +6,10 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.talosdev.movies.contract.MoviesContract.MovieEntry;
+import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 import com.talosdev.movies.db.MovieDbHelper;
 import com.talosdev.movies.util.ContextBasedTest;
 import com.talosdev.movies.util.DatabaseTestUtils;
@@ -16,7 +17,6 @@ import com.talosdev.movies.util.TestDataHelper;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,12 +29,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class MoviesProviderTest extends ContextBasedTest {
 
-    public static final long MOVIE_ID = 12345L;
-    public static final Uri URI_MOVIE_DETAILS = MovieEntry.buildDetailsUri(MOVIE_ID);
-    private static Context ctx ;
+    public static final Uri URI_FAVORITE_WITH_ID = FavoriteMovieEntry.buildFavoriteMovieUri(1000l);
+    private static final Uri URI_FAVORITE = FavoriteMovieEntry.CONTENT_URI;
+    private static Context ctx;
     private static MovieDbHelper dbHelper;
     private static SQLiteDatabase db;
     public static ContentValues testValues;
+
+    private static final String POSTER_PATH = "/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg";
 
 
     @BeforeClass
@@ -51,87 +53,120 @@ public class MoviesProviderTest extends ContextBasedTest {
         db.close();
     }
 
-    @Before
-    public void addRecordToDatabase() {
-        DatabaseTestUtils.insertValues(
-                db,
-                MovieEntry.TABLE_ΝΑΜΕ,
-                testValues);
-
-    }
-
     @After
-    public  void clearTables() {
-        DatabaseTestUtils.clearTables(dbHelper, MovieEntry.TABLE_ΝΑΜΕ);
+    public void clearTables() {
+        DatabaseTestUtils.clearTables(dbHelper, FavoriteMovieEntry.TABLE_ΝΑΜΕ);
     }
 
     @Test
     public void testUriMatcher() {
         UriMatcher matcher = MoviesProvider.buildUriMatcher();
 
-        assertThat(matcher.match(URI_MOVIE_DETAILS)).
-                isEqualTo(MoviesProvider.MOVIE_DETAILS);
+        assertThat(matcher.match(URI_FAVORITE_WITH_ID)).
+                isEqualTo(MoviesProvider.FAVORITES_ITEM);
+
+        assertThat(matcher.match(URI_FAVORITE)).
+                isEqualTo(MoviesProvider.FAVORITES_LIST);
+
     }
 
 
     @Test
-    public void testBasicQuery() {
-
-        // Test the basic content provider query
-        Cursor cursor = getContext().getContentResolver().query(
-                MovieEntry.buildDetailsUri(TestDataHelper.TEST_MOVIE_ID),
-                null,
-                null,
-                null,
-                null
-        );
-
-        testQuery(cursor);
-    }
-
-    @Test
-    public void testQueryBasedOnId() {
-
-        // Test the basic content provider query
-        Cursor cursor = getContext().getContentResolver().query(
-                MovieEntry.buildDetailsUri(TestDataHelper.TEST_MOVIE_ID),
-                null,
-                MovieEntry._ID + "= ?",
-                new String[]{TestDataHelper.TEST_MOVIE_ID + ""},
-                null
-        );
-
-        testQuery(cursor);
+    public void testInsertNoValues() {
+        Uri returnedUri = getContext().getContentResolver().insert(URI_FAVORITE_WITH_ID, new ContentValues());
+        assertThat(returnedUri).isNull();
     }
 
 
     @Test
-    public void testQueryBasedOnTitle() {
+    public void testInsertAndCheck() {
+        insertFavorite();
 
-        // Test the basic content provider query
-        Cursor cursor = getContext().getContentResolver().query(
-                MovieEntry.buildDetailsUri(TestDataHelper.TEST_MOVIE_ID),
+        // Check by getting all favorites
+        Cursor c = getContext().getContentResolver().query(FavoriteMovieEntry.CONTENT_URI,
                 null,
-                MovieEntry.COLUMN_TITLE + " = ?",
-                new String[]{TestDataHelper.TEST_MOVIE_TITLE},
-                null
-        );
+                null,
+                null,
+                null);
 
-        testQuery(cursor);
+        assertThat(c.getCount()).isEqualTo(1);
+
+        assertThat(c.moveToFirst());
+
+        int idCol = c.getColumnIndex(FavoriteMovieEntry._ID);
+        int posterCol = c.getColumnIndex(FavoriteMovieEntry.COLUMN_POSTER_PATH);
+        assertThat(c.getLong(idCol)).isEqualTo(1000);
+        assertThat(c.getString(posterCol)).isEqualTo(POSTER_PATH);
+
+
+        // Check specifically
+        // Check by getting all favorites
+        Cursor c1 = getContext().getContentResolver().query(FavoriteMovieEntry.buildFavoriteMovieUri(1000l),
+                null,
+                null,
+                null,
+                null);
+
+        assertThat(c1.getCount()).isEqualTo(1);
+
+        assertThat(c1.moveToFirst());
+
+        assertThat(c1.getLong(idCol)).isEqualTo(1000);
+        assertThat(c1.getString(posterCol)).isEqualTo(POSTER_PATH);
+
+    }
+
+    private void insertFavorite() {
+        Uri returnedUri = getContext().getContentResolver().insert(URI_FAVORITE_WITH_ID, createContentValues());
+        assertThat(returnedUri).isNotNull();
+        assertThat(FavoriteMovieEntry.getMovieIdFromUri(returnedUri)).isEqualTo(1000l);
+    }
+
+    @NonNull
+    private ContentValues createContentValues() {
+        ContentValues values = new ContentValues();
+        values.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, POSTER_PATH);
+        return values;
+    }
+
+    @Test
+    public void testInsertAndDelete() {
+        insertFavorite();
+
+        Uri insertUri2 = FavoriteMovieEntry.buildFavoriteMovieUri(2000l);
+        Uri uri2 = getContext().getContentResolver().insert(
+                insertUri2, createContentValues());
+        assertThat(uri2).isNotNull();
+        assertThat(FavoriteMovieEntry.getMovieIdFromUri(uri2)).isEqualTo(2000l);
+
+
+        Cursor c = getContext().getContentResolver().query(FavoriteMovieEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+
+        assertThat(c.getCount()).isEqualTo(2);
+
+
+        int deleted = getContext().getContentResolver().delete(URI_FAVORITE_WITH_ID, null, null);
+        assertThat(deleted).isEqualTo(1);
+
+        Cursor c2 = getContext().getContentResolver().query(FavoriteMovieEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+        assertThat(c2.getCount()).isEqualTo(1);
+
+
     }
 
 
-    private void testQuery(Cursor cursor) {
 
 
 
-        cursor.moveToFirst();
 
-        DatabaseTestUtils.validateCurrentRecord(
-                "The movie that the provider returned doesn't match the one inserted to the database",
-                cursor,
-                testValues);
-    }
 
 
 }

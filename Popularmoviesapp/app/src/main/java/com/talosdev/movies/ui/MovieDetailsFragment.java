@@ -7,6 +7,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -72,6 +74,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         if (container == null) {
             return null;
         }
+
+        setHasOptionsMenu(true);
 
         // Do not inflate the layout, if there are no arguments, for example
         // when the application is opened in two-pane mode, and so there is no
@@ -162,6 +166,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         });
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.movie_actions, menu);
+    }
 
     @DebugLog
     @Override

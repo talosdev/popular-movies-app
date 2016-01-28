@@ -4,15 +4,15 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import com.talosdev.movies.contract.MoviesContract;
+import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 import com.talosdev.movies.db.MovieDbHelper;
 
 /**
- *  TODO This is WiP, I should modify it: database access and content provider
- * will only be used to support the favorite movies feature.
  * Created by apapad on 6/01/16.
  */
 public class MoviesProvider extends ContentProvider {
@@ -20,8 +20,9 @@ public class MoviesProvider extends ContentProvider {
     public static UriMatcher uriMatcher = buildUriMatcher();
 
 
-    public static final int MOVIES_LIST = 100;
-    public static final int MOVIE_DETAILS = 200;
+    public static final int FAVORITES_LIST = 100;
+    public static final int FAVORITES_ITEM = 101;
+
     private MovieDbHelper movieDbHelper;
 
 
@@ -30,11 +31,11 @@ public class MoviesProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         matcher.addURI(MoviesContract.CONTENT_AUTHORITY,
-                        MoviesContract.PATH_LIST,
-                        MOVIES_LIST);
+                MoviesContract.PATH_FAV,
+                FAVORITES_LIST);
         matcher.addURI(MoviesContract.CONTENT_AUTHORITY,
-                MoviesContract.PATH_DETAILS + "/#",
-                MOVIE_DETAILS);
+                MoviesContract.PATH_FAV + "/#",
+                FAVORITES_ITEM);
 
         return matcher;
     }
@@ -46,7 +47,6 @@ public class MoviesProvider extends ContentProvider {
     }
 
 
-
     @Nullable
     @Override
     public String getType(Uri uri) {
@@ -54,14 +54,43 @@ public class MoviesProvider extends ContentProvider {
         final int match = uriMatcher.match(uri);
 
         switch (match) {
-
-            case MOVIES_LIST:
-                return MoviesContract.MoviesListEntry.CONTENT_TYPE;
-            case MOVIE_DETAILS:
-                return MoviesContract.MovieEntry.CONTENT_TYPE;
+            case FAVORITES_LIST:
+                return FavoriteMovieEntry.CONTENT_TYPE_DIR;
+            case FAVORITES_ITEM:
+                return FavoriteMovieEntry.CONTENT_TYPE_ITEM;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
+    }
+
+    @Nullable
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        switch (uriMatcher.match(uri)) {
+            case FAVORITES_LIST:
+                return null;
+            case FAVORITES_ITEM:
+                // TODO
+                return insertFavoriteMovie(FavoriteMovieEntry.getMovieIdFromUri(uri),
+                        values);
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+    }
+
+    private Uri insertFavoriteMovie(long movieIdFromUri, ContentValues values) {
+
+        values.put(FavoriteMovieEntry._ID, movieIdFromUri);
+
+        SQLiteDatabase database = movieDbHelper.getWritableDatabase();
+        long rowId = database.insert(FavoriteMovieEntry.TABLE_ΝΑΜΕ, null, values);
+
+        if (rowId == -1) {
+            return null;
+        } else {
+            return FavoriteMovieEntry.buildFavoriteMovieUri(rowId);
+        }
+
     }
 
 
@@ -69,57 +98,62 @@ public class MoviesProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor cursor;
-        switch(uriMatcher.match(uri)) {
-            case MOVIES_LIST:
-                cursor = getMovieList();
+        switch (uriMatcher.match(uri)) {
+            case FAVORITES_LIST:
+                cursor = getFavoritesList();
                 break;
-            case MOVIE_DETAILS:
-                cursor = getMovieDetails(uri, projection, sortOrder);
+            case FAVORITES_ITEM:
+                cursor = checkIsFavorite(FavoriteMovieEntry.getMovieIdFromUri(uri));
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
+        // TODO do I need this?
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
-    private Cursor getMovieDetails(Uri uri, String[] projection, String sortOrder) {
-        return  movieDbHelper.getReadableDatabase().query(
-                MoviesContract.MovieEntry.TABLE_ΝΑΜΕ,
-                projection,
-                MoviesContract.MovieEntry._ID + " = ?",
-                new String[]{MoviesContract.MovieEntry.getMovieIdFromUri(uri) + ""},
-                sortOrder,
+    public Cursor getFavoritesList() {
+        SQLiteDatabase database = movieDbHelper.getReadableDatabase();
+        return database.query(FavoriteMovieEntry.TABLE_ΝΑΜΕ,
+                null,
+                null,
+                null,
+                null,
                 null,
                 null);
     }
 
-    private Cursor getMovieList() {
-        return null;
+
+    private Cursor checkIsFavorite(long movieId) {
+        SQLiteDatabase database = movieDbHelper.getReadableDatabase();
+        return database.query(FavoriteMovieEntry.TABLE_ΝΑΜΕ,
+                null,
+                FavoriteMovieEntry._ID + " = ?",
+                new String[]{movieId+""},
+                null,
+                null,
+                null);
     }
 
-
-    @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        switch(uriMatcher.match(uri)) {
-            case MOVIES_LIST:
-                return null;
-            case MOVIE_DETAILS:
-                long rowId = movieDbHelper.getWritableDatabase().insert(
-                        MoviesContract.MovieEntry.TABLE_ΝΑΜΕ,
-                        null,
-                        values);
-                return MoviesContract.MovieEntry.buildDetailsUri(rowId);
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        switch (uriMatcher.match(uri)) {
+            case FAVORITES_LIST:
+                return 0;
+            case FAVORITES_ITEM:
+                return removeFavorite(FavoriteMovieEntry.getMovieIdFromUri(uri));
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
     }
 
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+    private int removeFavorite(long movieId) {
+        SQLiteDatabase database = movieDbHelper.getWritableDatabase();
+        return database.delete(FavoriteMovieEntry.TABLE_ΝΑΜΕ,
+                FavoriteMovieEntry._ID + " = ?",
+                new String[] {movieId + ""});
     }
 
     @Override

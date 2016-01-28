@@ -4,8 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.talosdev.movies.contract.MoviesContract.MovieEntry;
-import com.talosdev.movies.contract.MoviesContract.PopularityRankingEntry;
+import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 
 /**
  * TODO This is WiP, I should modify it: database access and content provider
@@ -26,28 +25,13 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String SQL_CREATE_MOVIE_TABLE =
-                "CREATE TABLE " + MovieEntry.TABLE_ΝΑΜΕ + " (" +
-                MovieEntry._ID + " INTEGER PRIMARY KEY, " +
-                MovieEntry.COLUMN_TITLE + " TEXT NOT NULL," +
-                MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL," +
-                MovieEntry.COLUMN_RELEASE_DATE + " DATE NOT NULL," +
-                MovieEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL, " +
-                MovieEntry.COLUMN_VOTE_COUNT + " INTEGER NOT NULL" +
-                ");";
+        final String SQL_CREATE_FAVORITES_TABLE =
+                "CREATE TABLE " + FavoriteMovieEntry.TABLE_ΝΑΜΕ + " (" +
+                        FavoriteMovieEntry._ID + " INTEGER PRIMARY KEY, " +
+                        FavoriteMovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL" +
+                        ");";
 
-
-        final String SQL_CREATE_POPULARITY_RANKING_TABLE =
-                "CREATE TABLE " + PopularityRankingEntry.TABLE_NAME + " (" +
-                PopularityRankingEntry._ID + " INTEGER NOT NULL," +
-                PopularityRankingEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL" +
-                ");";
-
-
-
-        db.execSQL(SQL_CREATE_MOVIE_TABLE);
-        db.execSQL(SQL_CREATE_POPULARITY_RANKING_TABLE);
-
+        db.execSQL(SQL_CREATE_FAVORITES_TABLE);
     }
 
 
