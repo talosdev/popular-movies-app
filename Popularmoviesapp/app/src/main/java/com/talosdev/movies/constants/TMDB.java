@@ -31,12 +31,20 @@ public class TMDB {
      * The URL for getting the details of a movie
      */
     public static final String URL_MOVIE_DETAILS = BASE_URL + "/3/movie/";
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
 
     /**
      * The URL for getting the poster image
      */
-    public static final String IMAGE_BASE_URL_154 = "http://image.tmdb.org/t/p/w154/";
+    private static final String POSTER_BASE_URL_154 = "http://image.tmdb.org/t/p/w154/";
 
+
+    /**
+     * The URL for getting the backdrop image
+     */
+    private static final String BACKDROP_BASE_URL_780 = "http://image.tmdb.org/t/p/w780/";
+
+    private static final String BACKDROP_BASE_URL_1280 = "http://image.tmdb.org/t/p/w1280/";
     /**
      * The number of movies that are included in each page of results returned by the
      * discover queries.
@@ -45,7 +53,12 @@ public class TMDB {
 
 
     public static String buildPosterUrl(String poster) {
-        return IMAGE_BASE_URL_154 + poster;
+        return POSTER_BASE_URL_154 + poster;
+    }
+
+
+    public static String buildBackdropUrl(String backdrop) {
+        return BACKDROP_BASE_URL_1280 + backdrop;
     }
 
 }

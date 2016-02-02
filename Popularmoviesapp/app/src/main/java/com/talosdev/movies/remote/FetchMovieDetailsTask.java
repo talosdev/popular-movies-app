@@ -1,15 +1,10 @@
 package com.talosdev.movies.remote;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import com.talosdev.movies.R;
-import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.callbacks.MovieDetailsCallback;
+import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.remote.json.Movie;
 
 import java.io.IOException;
@@ -17,16 +12,16 @@ import java.io.IOException;
 /**
  * Created by apapad on 13/11/15.
  */
+
 public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
 
-    private final Context context;
-    private String LOG_TAG = "REMOTE";
+    private final MovieDetailsCallback callback;
 
 
-    public FetchMovieDetailsTask(Context context) {
+    public FetchMovieDetailsTask(MovieDetailsCallback callback) {
         super();
-        this.context = context;
+        this.callback = callback;
 
     }
 
@@ -41,43 +36,23 @@ public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
             return movie;
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error when contacting the server to get the movie details", e);
+            Log.e(Tags.REMOTE, "Error when contacting the server to get the movie details", e);
             return null;
         }
 
     }
 
 
-    // TODO check if this thing that I am doing with casting the context to activity is the best way.
+    // TODO check if this thing that I am doing with casting the activity to activity is the best way.
     @Override
     protected void onPostExecute(Movie movie) {
+        super.onPostExecute(movie);
         if (movie == null) {
             return;
         }
 
-        TextView titleView = (TextView) ((Activity) context).findViewById(R.id.movieTitle);
-        TextView descriptionView = (TextView) ((Activity) context).findViewById(R.id.movieDescription);
-        TextView releaseDateView = (TextView) ((Activity) context).findViewById(R.id.releaseDate);
-        TextView voteView = (TextView) ((Activity) context).findViewById(R.id.votes);
-        ImageView imageView = (ImageView) ((Activity) context).findViewById(R.id.imageView);
+        callback.onMovieDetailsReceived(movie);
 
-        titleView.setText(movie.title);
-        descriptionView.setText(movie.overview);
-        releaseDateView.setText(movie.releaseDate);
-        voteView.setText(movie.voteAverage
-                + " "
-                + context.getString(R.string.based_on)
-                + " "
-                + movie.voteCount + " "
-                + context.getString(R.string.votes)
-        );
-
-
-        Picasso.
-                with(context).
-                load(TMDB.buildPosterUrl(movie.posterPath)).
-                fit().
-                into(imageView);
     }
 
 

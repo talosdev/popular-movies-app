@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sortOptions">
+        <item>@string/sort_by_popularity</item>
+        <item>@string/sort_by_vote</item>
+        <item>@string/favorites</item>
+    </string-array>
+    <string-array name="pref_dateFormat_entries">
+        <item>@string/pref_dateFormat_entry_a</item>
+        <item>@string/pref_dateFormat_entry_b</item>
+        <item>@string/pref_dateFormat_entry_c</item>
+        <item>@string/pref_dateFormat_entry_d</item>
+        <item>@string/pref_dateFormat_entry_e</item>
+        <item>@string/pref_dateFormat_entry_f</item>
+        <item>@string/pref_dateFormat_entry_g</item>
+        <item>@string/pref_dateFormat_entry_h</item>
+    </string-array>
+
+    <string-array name="pref_dateFormat_values">
+        <item>@string/pref_dateFormat_value_a</item>
+        <item>@string/pref_dateFormat_value_b</item>
+        <item>@string/pref_dateFormat_value_c</item>
+        <item>@string/pref_dateFormat_value_d</item>
+        <item>@string/pref_dateFormat_value_e</item>
+        <item>@string/pref_dateFormat_value_f</item>
+        <item>@string/pref_dateFormat_value_g</item>
+        <item>@string/pref_dateFormat_value_h</item>
+    </string-array>
+
+    <string name="sort_by_popularity">Most popular movies</string>
+    <string name="sort_by_vote">Best voted movies</string>
+    <string name="favorites">Favorite movies</string>
+    <string name="pref_dateFormat_entry_a">yyyy-MM-dd (eg. 2016-12-25)</string>
+    <string name="pref_dateFormat_entry_b">yyyy/MM/dd (eg. 2016/12/25)</string>
+    <string name="pref_dateFormat_entry_c">yyyy-dd-MM (eg. 2016-25-12)</string>
+    <string name="pref_dateFormat_entry_d">yyyy/dd/MM (eg. 2016/25/12)</string>
+    <string name="pref_dateFormat_entry_e">dd-MM-yyyy (eg. 25-12-2016)</string>
+    <string name="pref_dateFormat_entry_f">dd/MM/yyyy (eg. 25/12/2016)</string>
+    <string name="pref_dateFormat_entry_g">MM-dd-yyyy (eg. 12-25-2016)</string>
+    <string name="pref_dateFormat_entry_h">MM/dd/yyyy (eg. 12/25/2016)</string>
+
+    <string name="pref_dateFormat_value_a">yyyy-MM-dd</string>
+    <string name="pref_dateFormat_value_b">yyyy/MM/dd</string>
+    <string name="pref_dateFormat_value_c">yyyy-dd-MM</string>
+    <string name="pref_dateFormat_value_d">yyyy/dd/MM</string>
+    <string name="pref_dateFormat_value_e">dd-MM-yyyy</string>
+    <string name="pref_dateFormat_value_f">dd/MM/yyyy</string>
+    <string name="pref_dateFormat_value_g">MM-dd-yyyy</string>
+    <string name="pref_dateFormat_value_h">MM/dd/yyyy</string>
+
+</resources>

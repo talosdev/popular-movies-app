@@ -1,10 +1,12 @@
 package com.talosdev.movies.data;
 
+import java.io.Serializable;
+
 /**
  * Tuple that groups the movieId with the poster url.
  * Created by apapad on 26/11/15.
  */
-public class MoviePoster {
+public class MoviePoster implements Serializable {
     private long movieId;
     private String posterUrl;
 
