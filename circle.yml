@@ -11,10 +11,7 @@ machine:
         ANDROID_HOME: /usr/local/android-sdk-linux
 
 dependencies:
-  cache_directories:
-    - ~/.android
-    - ~/android
-  override:
+    override:
 #        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.2,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support
         - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-23"
         - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.2"
@@ -39,8 +36,7 @@ test:
     # wait for it to have booted
     - circle-android wait-for-boot
     # run tests  against the emulator.
-    - (./gradlew connectedAndroidTest):
-      timeout: 1200
+    - ./gradlew connectedAndroidTest
     # copy the build outputs to artifacts
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
