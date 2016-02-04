@@ -13,25 +13,18 @@ machine:
 
 dependencies:
   cache_directories:
-    - ~/.android
-    - ~/android
+    - /home/ubuntu/.android
+    - /home/ubuntu/android
   override:
-#        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.2,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support
         - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-23"
         - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.2"
-#        - ./gradlew dependencies
 
-#test:
-#    override:
-#        - (./gradlew assemble)
-
-
-        
         
 
 test:
   override:
    # start the emulator
+   - ls -la /home/ubuntu
    - emulator -avd circleci-android22 -no-audio -no-window:
        background: true
        parallel: true
