@@ -100,7 +100,6 @@ public class MoviesProviderTest extends ContextBasedTest {
 
 
         // Check specifically
-        // Check by getting all favorites
         Cursor c1 = getContext().getContentResolver().query(FavoriteMovieEntry.buildFavoriteMovieUri(1000l),
                 null,
                 null,

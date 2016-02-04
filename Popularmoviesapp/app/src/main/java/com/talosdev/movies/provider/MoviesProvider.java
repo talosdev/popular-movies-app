@@ -7,7 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.contract.MoviesContract;
 import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 import com.talosdev.movies.db.MovieDbHelper;
@@ -66,6 +68,8 @@ public class MoviesProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        Log.d(Tags.DB, "Insert favorite: " + uri);
+
         switch (uriMatcher.match(uri)) {
             case FAVORITES_LIST:
                 return null;
@@ -97,6 +101,7 @@ public class MoviesProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        Log.d(Tags.DB, "Query favorites: " + uri);
         Cursor cursor;
         switch (uriMatcher.match(uri)) {
             case FAVORITES_LIST:
@@ -139,6 +144,8 @@ public class MoviesProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        Log.d(Tags.DB, "Delete favorite: " + uri);
+
         switch (uriMatcher.match(uri)) {
             case FAVORITES_LIST:
                 return 0;

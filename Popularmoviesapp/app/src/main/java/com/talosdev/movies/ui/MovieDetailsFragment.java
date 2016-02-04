@@ -1,14 +1,17 @@
 package com.talosdev.movies.ui;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,12 +21,15 @@ import com.squareup.picasso.Picasso;
 import com.talosdev.movies.R;
 import com.talosdev.movies.callbacks.MovieDetailsCallback;
 import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.contract.MoviesContract;
 import com.talosdev.movies.remote.FetchMovieDetailsTask;
 import com.talosdev.movies.remote.json.Movie;
 
 import java.text.SimpleDateFormat;
 
 import hugo.weaving.DebugLog;
+
+import static com.talosdev.movies.contract.MoviesContract.*;
 
 /**
  * Created by apapad on 3/01/16.
@@ -41,8 +47,18 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
     private TextView voteCountView;
     private ImageView imageView;
 
+
     // holds the current movie being displayed
     private Movie currentMovie;
+    // we need to store separately the id of the movie and the actual movie object
+    // because the id comes is known on creation of the fragment, but the full details object
+    // is loaded asynchronously
+    private long currentMovieId;
+
+
+    private boolean currentMovieIsFavorite;
+
+    private MenuItem favItem;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -110,10 +126,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
             if (getArguments() != null) {
                 long argMovieId = getArguments().getLong(ARG_MOVIE_ID);
                 if (currentMovie == null || argMovieId != currentMovie.id) {
+                    currentMovieId = argMovieId;
                     FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(this);
                     fetcher.execute(argMovieId);
                 } else {
                     updateUI(currentMovie);
+                    currentMovieId = currentMovie.id;
                 }
             }
         }
@@ -171,6 +189,57 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.movie_actions, menu);
+
+        favItem = menu.findItem(R.id.menu_favorite);
+
+        Cursor c1 = getActivity().getContentResolver().query(
+                FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
+                null,
+                null,
+                null,
+                null);
+        setFavoriteActive(c1.moveToFirst());
+    }
+
+    private void setFavoriteActive(boolean active) {
+        if (active) {
+            favItem.setIcon(R.drawable.favorite_sel);
+            currentMovieIsFavorite = true;
+        } else {
+            favItem.setIcon(R.drawable.favorite_unsel);
+            currentMovieIsFavorite = false;
+        }
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_favorite:
+                // currentMovie hasn't been loaded yet
+                if (currentMovie == null) {
+                    return false;
+                }
+                if (currentMovieIsFavorite) {
+                    getActivity().getContentResolver().delete(
+                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
+                            null,
+                            null);
+                    setFavoriteActive(false);
+                } else {
+                    ContentValues cv = new ContentValues();
+                    cv.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, currentMovie.posterPath);
+                    getActivity().getContentResolver().insert(
+                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
+                            cv);
+                    setFavoriteActive(true);
+                }
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+                return super.onOptionsItemSelected(item);
     }
 
     @DebugLog
