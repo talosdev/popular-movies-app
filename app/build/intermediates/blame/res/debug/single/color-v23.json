@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/home/apapad/AndroidStudioProjects/popular-movies-app/app/build/intermediates/res/merged/debug/color-v23/abc_color_highlight_material.xml",
+        "source": "/home/apapad/AndroidStudioProjects/popular-movies-app/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/color-v23/abc_color_highlight_material.xml"
+    },
+    {
+        "merged": "/home/apapad/AndroidStudioProjects/popular-movies-app/Popularmoviesapp/app/build/intermediates/res/merged/debug/color-v23/abc_color_highlight_material.xml",
+        "source": "/home/apapad/AndroidStudioProjects/popular-movies-app/Popularmoviesapp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/color-v23/abc_color_highlight_material.xml"
+    }
+]

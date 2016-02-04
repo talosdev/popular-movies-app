@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.talosdev.movies.config.ApiKeyTest" tests="13" failures="0" errors="0" skipped="0" time="1.36" timestamp="2016-02-04T13:42:34" hostname="localhost">
+  <properties>
+    <property name="device" value="Nexus_5_API_23(AVD) - 6.0" />
+    <property name="flavor" value="" />
+    <property name="project" value="app" />
+  </properties>
+  <testcase name="testApiKey" classname="com.talosdev.movies.config.ApiKeyTest" time="0.0" />
+  <testcase name="testBuildDetailsUri" classname="com.talosdev.movies.contract.MoviesContractTest" time="0.0" />
+  <testcase name="testInsertAndQuery" classname="com.talosdev.movies.db.MovieCrudATC" time="0.075" />
+  <testcase name="testTableColumns" classname="com.talosdev.movies.db.MovieDbHelperTest" time="0.0" />
+  <testcase name="testTablesExist" classname="com.talosdev.movies.db.MovieDbHelperTest" time="0.0" />
+  <testcase name="testBasicQuery" classname="com.talosdev.movies.provider.MoviesProviderTest" time="0.0" />
+  <testcase name="testUriMatcher" classname="com.talosdev.movies.provider.MoviesProviderTest" time="0.0" />
+  <testcase name="testQueryBasedOnTitle" classname="com.talosdev.movies.provider.MoviesProviderTest" time="0.0" />
+  <testcase name="testQueryBasedOnId" classname="com.talosdev.movies.provider.MoviesProviderTest" time="0.0" />
+  <testcase name="testFetchMoviesPopularity" classname="com.talosdev.movies.remote.FetchPopularMoviesTest" time="0.603" />
+  <testcase name="testFetchWithPaging" classname="com.talosdev.movies.remote.FetchPopularMoviesTest" time="0.401" />
+  <testcase name="testFetchMoviesVote" classname="com.talosdev.movies.remote.FetchPopularMoviesTest" time="0.176" />
+  <testcase name="testFetchMovie" classname="com.talosdev.movies.remote.MovieDetailsFetcherTest" time="0.126" />
+</testsuite>

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/home/apapad/AndroidStudioProjects/popular-movies-app/Popularmoviesapp/app/build/intermediates/res/merged/debug/xml/preferences.xml",
+        "source": "/home/apapad/AndroidStudioProjects/popular-movies-app/Popularmoviesapp/app/src/main/res/xml/preferences.xml"
+    },
+    {
+        "merged": "/home/apapad/AndroidStudioProjects/popular-movies-app/app/build/intermediates/res/merged/debug/xml/preferences.xml",
+        "source": "/home/apapad/AndroidStudioProjects/popular-movies-app/app/src/main/res/xml/preferences.xml"
+    }
+]
