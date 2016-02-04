@@ -39,7 +39,7 @@ test:
    - circle-android wait-for-boot
    # run tests  against the emulator.
    - (./gradlew connectedAndroidTest):
-      - timeout: 1200
+       timeout: 1200
    # copy the build outputs to artifacts
    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
    # copy the test results to the test results directory.
