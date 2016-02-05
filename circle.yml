@@ -24,8 +24,7 @@ dependencies:
 test:
   override:
    # start the emulator
-   - ls -la /home/ubuntu
-   - emulator -avd circleci-android22 -no-audio -no-window:
+   - emulator -avd circleci-android21 -no-audio -no-window:
        background: true
        parallel: true
    # wait for it to have booted
