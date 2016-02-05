@@ -21,7 +21,6 @@ import com.squareup.picasso.Picasso;
 import com.talosdev.movies.R;
 import com.talosdev.movies.callbacks.MovieDetailsCallback;
 import com.talosdev.movies.constants.TMDB;
-import com.talosdev.movies.contract.MoviesContract;
 import com.talosdev.movies.remote.FetchMovieDetailsTask;
 import com.talosdev.movies.remote.json.Movie;
 
@@ -29,7 +28,7 @@ import java.text.SimpleDateFormat;
 
 import hugo.weaving.DebugLog;
 
-import static com.talosdev.movies.contract.MoviesContract.*;
+import static com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 
 /**
  * Created by apapad on 3/01/16.
@@ -39,6 +38,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
     private static final String ARG_MOVIE_ID = "ARG_MOVIE_ID";
     private static final String BUNDLE_MOVIE = "BUNDLE_MOVIE";
+    public static final int ICON_FAV_SEL = R.drawable.ic_favorite_black_24dp;
+    public static final int ICON_FAV_UNSEL = R.drawable.ic_favorite_border_black_24dp;
 
     private TextView titleView;
     private TextView descriptionView;
@@ -201,12 +202,17 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         setFavoriteActive(c1.moveToFirst());
     }
 
+    /**
+     * Depending on the boolean value marks/unmarks the current movie as favorite and
+     * sets the correct icon.
+     * @param active
+     */
     private void setFavoriteActive(boolean active) {
         if (active) {
-            favItem.setIcon(R.drawable.favorite_sel);
+            favItem.setIcon(ICON_FAV_SEL);
             currentMovieIsFavorite = true;
         } else {
-            favItem.setIcon(R.drawable.favorite_unsel);
+            favItem.setIcon(ICON_FAV_UNSEL);
             currentMovieIsFavorite = false;
         }
     }
