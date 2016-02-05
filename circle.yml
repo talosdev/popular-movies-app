@@ -14,7 +14,6 @@ machine:
 dependencies:
   cache_directories:
     - /home/ubuntu/.android
-    - /home/ubuntu/android
   override:
         - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-23"
         - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.2"
