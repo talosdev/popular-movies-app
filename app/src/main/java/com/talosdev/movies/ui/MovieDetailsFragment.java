@@ -1,12 +1,17 @@
 package com.talosdev.movies.ui;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -23,6 +28,8 @@ import java.text.SimpleDateFormat;
 
 import hugo.weaving.DebugLog;
 
+import static com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
+
 /**
  * Created by apapad on 3/01/16.
  */
@@ -31,6 +38,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
     private static final String ARG_MOVIE_ID = "ARG_MOVIE_ID";
     private static final String BUNDLE_MOVIE = "BUNDLE_MOVIE";
+    public static final int ICON_FAV_SEL = R.drawable.ic_favorite_black_24dp;
+    public static final int ICON_FAV_UNSEL = R.drawable.ic_favorite_border_black_24dp;
 
     private TextView titleView;
     private TextView descriptionView;
@@ -39,8 +48,18 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
     private TextView voteCountView;
     private ImageView imageView;
 
+
     // holds the current movie being displayed
     private Movie currentMovie;
+    // we need to store separately the id of the movie and the actual movie object
+    // because the id comes is known on creation of the fragment, but the full details object
+    // is loaded asynchronously
+    private long currentMovieId;
+
+
+    private boolean currentMovieIsFavorite;
+
+    private MenuItem favItem;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -72,6 +91,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         if (container == null) {
             return null;
         }
+
+        setHasOptionsMenu(true);
 
         // Do not inflate the layout, if there are no arguments, for example
         // when the application is opened in two-pane mode, and so there is no
@@ -106,10 +127,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
             if (getArguments() != null) {
                 long argMovieId = getArguments().getLong(ARG_MOVIE_ID);
                 if (currentMovie == null || argMovieId != currentMovie.id) {
+                    currentMovieId = argMovieId;
                     FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(this);
                     fetcher.execute(argMovieId);
                 } else {
                     updateUI(currentMovie);
+                    currentMovieId = currentMovie.id;
                 }
             }
         }
@@ -162,6 +185,68 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         });
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.movie_actions, menu);
+
+        favItem = menu.findItem(R.id.menu_favorite);
+
+        Cursor c1 = getActivity().getContentResolver().query(
+                FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
+                null,
+                null,
+                null,
+                null);
+        setFavoriteActive(c1.moveToFirst());
+    }
+
+    /**
+     * Depending on the boolean value marks/unmarks the current movie as favorite and
+     * sets the correct icon.
+     * @param active
+     */
+    private void setFavoriteActive(boolean active) {
+        if (active) {
+            favItem.setIcon(ICON_FAV_SEL);
+            currentMovieIsFavorite = true;
+        } else {
+            favItem.setIcon(ICON_FAV_UNSEL);
+            currentMovieIsFavorite = false;
+        }
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_favorite:
+                // currentMovie hasn't been loaded yet
+                if (currentMovie == null) {
+                    return false;
+                }
+                if (currentMovieIsFavorite) {
+                    getActivity().getContentResolver().delete(
+                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
+                            null,
+                            null);
+                    setFavoriteActive(false);
+                } else {
+                    ContentValues cv = new ContentValues();
+                    cv.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, currentMovie.posterPath);
+                    getActivity().getContentResolver().insert(
+                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
+                            cv);
+                    setFavoriteActive(true);
+                }
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+                return super.onOptionsItemSelected(item);
+    }
 
     @DebugLog
     @Override

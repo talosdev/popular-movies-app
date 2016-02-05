@@ -3,7 +3,7 @@ package com.talosdev.movies.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.talosdev.movies.contract.MoviesContract.MovieEntry;
+import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 import com.talosdev.movies.util.DatabaseTestUtils;
 import com.talosdev.movies.util.TestDataHelper;
 
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by apapad on 2016-01-14.
  */
-public class MovieCrudATC extends AbstractDatabaseATC<MovieDbHelper> {
+public class FavoriteMovieCrudATC extends AbstractDatabaseATC<MovieDbHelper> {
 
 
     @Override
@@ -33,13 +33,13 @@ public class MovieCrudATC extends AbstractDatabaseATC<MovieDbHelper> {
 
         ContentValues testValues = TestDataHelper.createMovieValues();
 
-        long rowId = db.insert(MovieEntry.TABLE_ΝΑΜΕ, null, testValues);
+        long rowId = db.insert(FavoriteMovieEntry.TABLE_ΝΑΜΕ, null, testValues);
 
         // Verify we got a row back.
         assertThat(rowId).isNotEqualTo(-1);
 
         Cursor cursor = db.query(
-                MovieEntry.TABLE_ΝΑΜΕ,  // Table to Query
+                FavoriteMovieEntry.TABLE_ΝΑΜΕ,  // Table to Query
                 null, // all columns
                 null, // Columns for the "where" clause
                 null, // Values for the "where" clause

@@ -1,7 +1,6 @@
 package com.talosdev.movies.db;
 
-import com.talosdev.movies.contract.MoviesContract.MovieEntry;
-import com.talosdev.movies.contract.MoviesContract.PopularityRankingEntry;
+import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 
 import org.junit.Test;
 
@@ -34,21 +33,11 @@ public class MovieDbHelperTest extends AbstractSchemaValidatorATC<MovieDbHelper>
         Map<String, Set<String>> map = new HashMap<>();
 
         Set<String> movieColumnsSet = new HashSet<>();
-        movieColumnsSet.add(MovieEntry._ID);
-        movieColumnsSet.add(MovieEntry.COLUMN_TITLE);
-        movieColumnsSet.add(MovieEntry.COLUMN_OVERVIEW);
-        movieColumnsSet.add(MovieEntry.COLUMN_RELEASE_DATE);
-        movieColumnsSet.add(MovieEntry.COLUMN_VOTE_AVERAGE);
-        movieColumnsSet.add(MovieEntry.COLUMN_VOTE_COUNT);
-
-        map.put(MovieEntry.TABLE_ΝΑΜΕ, movieColumnsSet);
+        movieColumnsSet.add(FavoriteMovieEntry._ID);
+        movieColumnsSet.add(FavoriteMovieEntry.COLUMN_POSTER_PATH);
 
 
-        Set<String> popRankingColumns = new HashSet<>();
-        popRankingColumns.add(PopularityRankingEntry._ID);
-        popRankingColumns.add(PopularityRankingEntry.COLUMN_MOVIE_ID);
-
-        map.put(PopularityRankingEntry.TABLE_NAME, popRankingColumns);
+        map.put(FavoriteMovieEntry.TABLE_ΝΑΜΕ, movieColumnsSet);
 
         return map;
     }
