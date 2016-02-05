@@ -4,16 +4,16 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.talosdev.movies.constants.TMDB;
 import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
 import com.talosdev.movies.remote.json.Movie;
 import com.talosdev.movies.remote.json.MovieList;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by apapad on 13/11/15.
@@ -63,13 +63,14 @@ public class FetchPopularMoviesTask extends
     @Override
     protected void onPostExecute(FetchPopularMoviesResult result) {
         super.onPostExecute(result);
-        if (result.isReplace()) {
-            adapter.clear();
+        if (result != null) {
+            if (result.isReplace()) {
+                adapter.clear();
+            }
+            adapter.addAll(getPosterURLs(result.getMovieList()));
+            Log.d("UI", "Received posterList with " + result.getMovieList().movies.size() + " items. Notifying the adapter...");
+            adapter.notifyDataSetChanged();
         }
-        adapter.addAll(getPosterURLs(result.getMovieList()));
-        Log.d("UI", "Received posterList with " + result.getMovieList().movies.size() + " items. Notifying the adapter...");
-        adapter.notifyDataSetChanged();
-
     }
 
     private List<MoviePoster> getPosterURLs(MovieList movieList) {
