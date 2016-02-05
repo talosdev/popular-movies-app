@@ -23,14 +23,13 @@ dependencies:
 test:
   override:
    # start the emulator
-   - emulator -avd circleci-android21 -no-audio -no-window:
-       background: true
-       parallel: true
-   # wait for it to have booted
-   - circle-android wait-for-boot
-   # run tests  against the emulator.
-   - (./gradlew connectedAndroidTest):
-       timeout: 1200
+#   - emulator -avd circleci-android21 -no-audio -no-window:
+#       background: true
+#       parallel: true
+#   # wait for it to have booted
+#   - circle-android wait-for-boot
+#
+   - (./gradlew compileDebugUnitTest)
    # copy the build outputs to artifacts
    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
    # copy the test results to the test results directory.
