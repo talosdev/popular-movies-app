@@ -73,7 +73,7 @@ public class MovieJSONParserTest {
         assertEquals(6.7f, movie.voteAverage, TestUtils.EPSILON);
         assertEquals(453, movie.voteCount);
         assertEquals(57.231904f, movie.popularity, TestUtils.EPSILON);
-        assertEquals("/1n9D32o30XOHMdMWuIT4AaA5ruI.jp", movie.posterPath);
+        assertEquals("/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg", movie.posterPath);
         assertEquals("/wVTYlkKPKrljJfugXN7UlLNjtuJ.jpg", movie.backdropPath);
         assertEquals(OVERVIEW, movie.overview);
     }
