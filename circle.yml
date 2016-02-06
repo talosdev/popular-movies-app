@@ -34,7 +34,7 @@ test:
 
    # execute the android tests (instrumentation)
    - (./gradlew connectedAndroidTest):
-          timeout: 1200
+      timeout: 1200
 
    # copy the build outputs to artifacts
    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
