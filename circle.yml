@@ -26,12 +26,22 @@ test:
    - emulator -avd circleci-android21 -no-audio -no-window:
        background: true
        parallel: true
-   # wait for it to have booted
+   # execute the local junit tests as we wait for the emulator to boot
+   - (./gradlew test)
+
+   # block until the emulator has booted
    - circle-android wait-for-boot
-   # run tests  against the emulator.
+
+   # execute the android tests (instrumentation)
    - (./gradlew connectedAndroidTest):
-       timeout: 1200
+      timeout: 1200
+
    # copy the build outputs to artifacts
    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+
    # copy the test results to the test results directory.
+
+   # instrumentation
    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+   # local junit
+   - cp -r app/build/reports/tests/debug/* $CIRCLE_TEST_REPORTS
