@@ -49,16 +49,15 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
             Picasso.
                     with(context).
                     load(posterUrl).
-                    placeholder(R.drawable.animation_loading).
-                    error(R.drawable.error).
-                    //                   fit().
+                    placeholder(R.drawable.background).
+                    error(R.drawable.error128).
                     resizeDimen(R.dimen.poster_width_grid, R.dimen.poster_height_grid).
                     centerCrop().
                     into((ImageView) convertView);
         } else {
             Picasso.
                     with(context).
-                    load(R.drawable.not_available).
+                    load(R.drawable.movie128).
                     into((ImageView) convertView);
         }
 

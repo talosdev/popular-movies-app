@@ -6,4 +6,12 @@
     android:layout_height="@dimen/poster_height_grid"
     android:paddingBottom="2dp"
     android:paddingTop="2dp"
+
+
      />
+
+<!--
+
+android:background="@android:color/darker_gray"
+
+-->
