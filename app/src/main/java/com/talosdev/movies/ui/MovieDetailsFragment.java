@@ -38,8 +38,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
     private static final String ARG_MOVIE_ID = "ARG_MOVIE_ID";
     private static final String BUNDLE_MOVIE = "BUNDLE_MOVIE";
-    public static final int ICON_FAV_SEL = R.drawable.ic_favorite_black_24dp;
-    public static final int ICON_FAV_UNSEL = R.drawable.ic_favorite_border_black_24dp;
+    public static final int ICON_FAV_SEL = R.drawable.ic_favorite_blue_24dp;
+    public static final int ICON_FAV_UNSEL = R.drawable.ic_favorite_border_blue_24dp;
 
     private TextView titleView;
     private TextView descriptionView;
