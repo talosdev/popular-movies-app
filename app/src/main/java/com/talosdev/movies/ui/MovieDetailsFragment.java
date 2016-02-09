@@ -175,12 +175,20 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         imageView.post(new Runnable() {
             @Override
             public void run() {
-                Picasso.
-                        with(getActivity()).
-                        load(TMDB.buildBackdropUrl(m.backdropPath)).
-                        resize(imageView.getWidth(), imageView.getHeight()).
-                        centerCrop().
-                        into(imageView);
+                if (m.backdropPath != null) {
+                    Picasso.
+                            with(getActivity()).
+                            load(TMDB.buildBackdropUrl(m.backdropPath)).
+                            resize(imageView.getWidth(), imageView.getHeight()).
+                            centerCrop().
+                            into(imageView);
+                } else {
+                    Picasso.
+                            with(getActivity()).
+                            load(R.drawable.movie512
+                            ).
+                            into(imageView);
+                }
             }
         });
     }
