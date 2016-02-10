@@ -3,4 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="grid_list_item_background">#d1c4e9</color>
+    <color name="favorite_icon">#4b29a2</color>
 </resources>
