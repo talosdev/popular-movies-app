@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/backdrop_image"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="@dimen/backdrop_image_height"
     tools:showIn="@layout/movie_details_fragment">
 
     <ImageView

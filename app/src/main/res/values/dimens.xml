@@ -13,4 +13,6 @@
     <dimen name="card_radius">0dp</dimen>
     <dimen name="card_horizontal_spacing">10dp</dimen>
     <dimen name="cardview_margin">2dp</dimen>
+
+    <dimen name="backdrop_image_height">120dp</dimen>
 </resources>
