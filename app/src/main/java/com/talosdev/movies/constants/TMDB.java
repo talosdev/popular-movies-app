@@ -44,9 +44,8 @@ public class TMDB {
     /**
      * The URL for getting the backdrop image
      */
-    private static final String BACKDROP_BASE_URL_780 = "http://image.tmdb.org/t/p/w780/";
+    public static final String BACKDROP_BASE_URL = "http://image.tmdb.org/t/p";
 
-    private static final String BACKDROP_BASE_URL_1280 = "http://image.tmdb.org/t/p/w1280/";
     /**
      * The number of movies that are included in each page of results returned by the
      * discover queries.
@@ -62,12 +61,6 @@ public class TMDB {
         return POSTER_BASE_URL_154 + poster;
     }
 
-    @Nullable
-    public static String buildBackdropUrl(String backdrop) {
-        if (backdrop == null || backdrop.equals("") || backdrop.equals("null")) {
-            return null;
-        }
-        return BACKDROP_BASE_URL_1280 + backdrop;
-    }
+
 
 }

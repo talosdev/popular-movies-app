@@ -16,6 +16,8 @@ public class URLBuilder {
     private static final String PARAM_SORT_BY = "sort_by";
     private static final String PARAM_PAGE = "page";
 
+    private static final int[] BACKDROP_RESOLUTIONS = new int[]{1280, 780, 300};
+
 
     public static URL buildPopularMoviesURL(SortByCriterion sortBy, int page) throws MalformedURLException {
         Uri uri = Uri.parse(TMDB.URL_MOVIES).buildUpon().
@@ -42,6 +44,34 @@ public class URLBuilder {
             default:
                 return "";
         }
+    }
+
+    public static String buildBackdropPath(String backdrop, int imageViewWidth) {
+        if (backdrop == null || backdrop.equals("") || backdrop.equals("null")) {
+            return null;
+        }
+
+        int tmdbResolution = calculateBackdropResolutionToDownload(imageViewWidth);
+        return TMDB.BACKDROP_BASE_URL + "/w" + tmdbResolution + backdrop;
+    }
+
+
+    /**
+     * Calculates the resolution of the backdrop image to get from the API, taking into account
+     * the available space in the UI
+     *
+     * @param imageViewWidth in pixels
+     * @return
+     */
+    private static int calculateBackdropResolutionToDownload(int imageViewWidth) {
+
+        for (int i = 0; i < BACKDROP_RESOLUTIONS.length; i++) {
+            if (imageViewWidth >= BACKDROP_RESOLUTIONS[i]) {
+                return BACKDROP_RESOLUTIONS[i];
+            }
+        }
+        return BACKDROP_RESOLUTIONS[BACKDROP_RESOLUTIONS.length - 1];
+
     }
 
 }
