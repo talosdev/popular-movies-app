@@ -1,9 +1,7 @@
 package com.talosdev.movies.ui;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +32,6 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
