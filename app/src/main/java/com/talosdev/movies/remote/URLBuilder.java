@@ -16,7 +16,7 @@ public class URLBuilder {
     private static final String PARAM_SORT_BY = "sort_by";
     private static final String PARAM_PAGE = "page";
 
-    private static final int[] BACKDROP_RESOLUTIONS = new int[]{1280, 780, 300};
+    private static final int[] BACKDROP_RESOLUTIONS = new int[]{300, 780, 1280};
 
 
     public static URL buildPopularMoviesURL(SortByCriterion sortBy, int page) throws MalformedURLException {
@@ -65,8 +65,12 @@ public class URLBuilder {
      */
     private static int calculateBackdropResolutionToDownload(int imageViewWidth) {
 
-        for (int i = 0; i < BACKDROP_RESOLUTIONS.length; i++) {
-            if (imageViewWidth >= BACKDROP_RESOLUTIONS[i]) {
+        if (imageViewWidth < BACKDROP_RESOLUTIONS[0]) {
+            return BACKDROP_RESOLUTIONS[0];
+        }
+
+        for (int i = 1; i < BACKDROP_RESOLUTIONS.length - 1; i++) {
+            if (imageViewWidth <= BACKDROP_RESOLUTIONS[i]) {
                 return BACKDROP_RESOLUTIONS[i];
             }
         }

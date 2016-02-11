@@ -15,14 +15,14 @@ public class URLTest {
 
     @Test
     public void testBackrdropURLs() throws Exception {
-        assertThat(URLBuilder.buildBackdropPath(backdrop, 1080)).
-                isEqualTo(URL_780);
-
         assertThat(URLBuilder.buildBackdropPath(backdrop, 1600)).
                 isEqualTo(URL_1280);
 
+        assertThat(URLBuilder.buildBackdropPath(backdrop, 1080)).
+                isEqualTo(URL_1280);
+
         assertThat(URLBuilder.buildBackdropPath(backdrop, 500)).
-                isEqualTo(URL_300);
+                isEqualTo(URL_780);
 
         assertThat(URLBuilder.buildBackdropPath(backdrop, 280)).
                 isEqualTo(URL_300);
