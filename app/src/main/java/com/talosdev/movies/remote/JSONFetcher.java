@@ -57,6 +57,7 @@ public abstract class JSONFetcher {
         return jsonString;
     }
 
+    //TODO what is this doing here?
     @NonNull
     protected URL getMovieDetailsUrl(long id) throws MalformedURLException {
         Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
