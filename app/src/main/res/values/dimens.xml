@@ -7,8 +7,6 @@
 
     <dimen name="poster_width_grid">120dp</dimen>
     <dimen name="poster_height_grid">180dp</dimen>
-    <dimen name="poster_width_grid_reduced">100dp</dimen>
-    <dimen name="poster_height_grid_reduced">150dp</dimen>
 
 
     <dimen name="card_padding">5dp</dimen>

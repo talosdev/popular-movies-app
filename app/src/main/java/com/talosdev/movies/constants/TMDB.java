@@ -1,7 +1,5 @@
 package com.talosdev.movies.constants;
 
-import android.support.annotation.Nullable;
-
 import com.talosdev.movies.BuildConfig;
 
 /**
@@ -36,13 +34,13 @@ public class TMDB {
     public static final String DATE_FORMAT = "yyyy-MM-dd";
 
     /**
-     * The URL for getting the poster image
+     * The base URL for getting the poster image
      */
-    private static final String POSTER_BASE_URL_154 = "http://image.tmdb.org/t/p/w154";
+    public static final String POSTER_BASE_URL = "http://image.tmdb.org/t/p";
 
 
     /**
-     * The URL for getting the backdrop image
+     * The base URL for getting the backdrop image
      */
     public static final String BACKDROP_BASE_URL = "http://image.tmdb.org/t/p";
 
@@ -53,13 +51,7 @@ public class TMDB {
     public static final int MOVIES_PER_PAGE = 20;
 
 
-    @Nullable
-    public static String buildPosterUrl(String poster) {
-        if (poster == null || poster.equals("") || poster.equals("null")) {
-            return null;
-        }
-        return POSTER_BASE_URL_154 + poster;
-    }
+
 
 
 

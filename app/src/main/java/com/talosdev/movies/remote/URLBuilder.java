@@ -1,7 +1,10 @@
 package com.talosdev.movies.remote;
 
+import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 
+import com.talosdev.movies.R;
 import com.talosdev.movies.constants.TMDB;
 import com.talosdev.movies.data.SortByCriterion;
 
@@ -17,6 +20,14 @@ public class URLBuilder {
     private static final String PARAM_PAGE = "page";
 
     private static final int[] BACKDROP_RESOLUTIONS = new int[]{300, 780, 1280};
+
+    private static final int[] POSTER_RESOLUTIONS = new int[]{92, 154, 185, 342, 500, 780};
+    private final int posterWidth;
+
+    public URLBuilder(Context context) {
+        // This is returned already in pixel
+        this.posterWidth = context.getResources().getDimensionPixelSize(R.dimen.poster_width_grid);
+    }
 
 
     public static URL buildPopularMoviesURL(SortByCriterion sortBy, int page) throws MalformedURLException {
@@ -76,6 +87,29 @@ public class URLBuilder {
         }
         return BACKDROP_RESOLUTIONS[BACKDROP_RESOLUTIONS.length - 1];
 
+    }
+
+    @Nullable
+    public String buildPosterUrl(String poster) {
+        if (poster == null || poster.equals("") || poster.equals("null")) {
+            return null;
+        }
+        int tmdbResolution = calculatePosterResolutionToDownload();
+        return TMDB.POSTER_BASE_URL + "/w" + tmdbResolution + poster;
+    }
+
+
+    private  int calculatePosterResolutionToDownload() {
+        if (posterWidth < POSTER_RESOLUTIONS[0]) {
+            return POSTER_RESOLUTIONS[0];
+        }
+
+        for (int i = 1; i < POSTER_RESOLUTIONS.length - 1; i++) {
+            if (posterWidth <= POSTER_RESOLUTIONS[i]) {
+                return POSTER_RESOLUTIONS[i];
+            }
+        }
+        return POSTER_RESOLUTIONS[POSTER_RESOLUTIONS.length - 1];
     }
 
 }

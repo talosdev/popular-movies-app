@@ -2,6 +2,7 @@ package com.talosdev.movies.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,9 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.talosdev.movies.R;
+import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.data.MoviePoster;
+import com.talosdev.movies.remote.URLBuilder;
 
 import java.util.List;
 
@@ -20,15 +23,15 @@ import java.util.List;
 public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
 
     private final Context context;
-    private final LayoutInflater inflater;
     private final int resource;
+    private final URLBuilder urlBuilder;
 
 
     public GridViewArrayAdapter(Context context, int resource, List<MoviePoster> movies) {
         super(context, resource, movies);
-        inflater = LayoutInflater.from(context);
         this.context = context;
         this.resource = resource;
+        urlBuilder = new URLBuilder(context);
 
     }
 
@@ -41,12 +44,16 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
             convertView = inflater.inflate(resource, parent, false);
         }
 
-        String posterUrl = getItem(position).getPosterUrl();
-        if (posterUrl != null) {
+        String posterPath = getItem(position).getPosterPath();
+        if (posterPath != null) {
+            String posterUrl = urlBuilder.buildPosterUrl(posterPath);
+            Log.v(Tags.REMOTE, String.format("Requesting poster image: %s", posterUrl));
+
             Picasso.
                     with(context).
                     load(posterUrl).
                     placeholder(R.drawable.background).
+                    // TODO
                     error(R.drawable.error128).
                     resizeDimen(R.dimen.poster_width_grid, R.dimen.poster_height_grid).
                     centerCrop().
@@ -54,6 +61,7 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
         } else {
             Picasso.
                     with(context).
+                    //TODO resolution
                     load(R.drawable.movie128).
                     into((ImageView) convertView);
         }
