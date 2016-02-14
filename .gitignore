@@ -9,3 +9,4 @@
 /.idea/*
 /.gradle/*
 /app/.idea
+/app/local.properties

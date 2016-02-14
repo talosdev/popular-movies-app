@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.talosdev.movies.constants.TMDB;
 import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
@@ -78,7 +77,7 @@ public class FetchPopularMoviesTask extends
         for (Movie movie:movieList.movies) {
             String poster = movie.posterPath;
 
-            urls.add(new MoviePoster(movie.id, TMDB.buildPosterUrl(poster)));
+            urls.add(new MoviePoster(movie.id, poster));
         }
         return urls;
     }

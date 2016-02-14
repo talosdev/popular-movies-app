@@ -8,26 +8,19 @@ import java.io.Serializable;
  */
 public class MoviePoster implements Serializable {
     private long movieId;
-    private String posterUrl;
+    private String posterPath;
 
-    public MoviePoster(long movieId, String posterUrl) {
+    public MoviePoster(long movieId, String posterPath) {
         this.movieId = movieId;
-        this.posterUrl = posterUrl;
+        this.posterPath = posterPath;
     }
 
-    public String getPosterUrl() {
-        return posterUrl;
-    }
-
-    public void setPosterUrl(String posterUrl) {
-        this.posterUrl = posterUrl;
+    public String getPosterPath() {
+        return posterPath;
     }
 
     public long getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(long movieId) {
-        this.movieId = movieId;
-    }
 }

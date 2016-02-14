@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,8 +21,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.talosdev.movies.R;
 import com.talosdev.movies.callbacks.MovieDetailsCallback;
-import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.remote.FetchMovieDetailsTask;
+import com.talosdev.movies.remote.URLBuilder;
 import com.talosdev.movies.remote.json.Movie;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +50,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
     private TextView voteCountView;
     private ImageView imageView;
 
+    private URLBuilder urlBuilder;
 
     // holds the current movie being displayed
     private Movie currentMovie;
@@ -175,18 +178,24 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         imageView.post(new Runnable() {
             @Override
             public void run() {
+                int width = imageView.getWidth(); // in pixels
+
+                String backdropURL = URLBuilder.buildBackdropPath(m.backdropPath, width);
+
+                Log.d(Tags.REMOTE, String.format("Requesting backdrop image: %s", backdropURL));
+
                 if (m.backdropPath != null) {
                     Picasso.
                             with(getActivity()).
-                            load(TMDB.buildBackdropUrl(m.backdropPath)).
+                            load(backdropURL).
                             resize(imageView.getWidth(), imageView.getHeight()).
                             centerCrop().
                             into(imageView);
                 } else {
                     Picasso.
                             with(getActivity()).
-                            load(R.drawable.movie512
-                            ).
+                            //TODO
+                            load(R.drawable.movie512).
                             into(imageView);
                 }
             }

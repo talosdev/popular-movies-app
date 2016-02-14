@@ -15,6 +15,7 @@ public class MovieDetailActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_movie_detail);
 
         long movieId = getIntent().getLongExtra(Intents.EXTRA_MOVIE_ID, 0L);
@@ -24,8 +25,6 @@ public class MovieDetailActivity extends Activity {
 
             getFragmentManager().beginTransaction().add(R.id.detail_frame, fragment).commit();
         }
-
-
     }
 
     @DebugLog

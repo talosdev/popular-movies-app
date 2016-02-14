@@ -4,14 +4,7 @@
     android:id="@+id/image"
     android:layout_width="@dimen/poster_width_grid"
     android:layout_height="@dimen/poster_height_grid"
-    android:paddingBottom="2dp"
-    android:paddingTop="2dp"
-
+    android:padding="2dp"
 
      />
 
-<!--
-
-android:background="@android:color/darker_gray"
-
--->
