@@ -29,7 +29,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class MoviesProviderTest extends ContextBasedTest {
 
-    public static final Uri URI_FAVORITE_WITH_ID = FavoriteMovieEntry.buildFavoriteMovieUri(1000l);
+    public static final long MOVIE_ID = 1000l;
+    public static final Uri URI_FAVORITE_WITH_ID = FavoriteMovieEntry.buildFavoriteMovieUri(MOVIE_ID);
     private static final Uri URI_FAVORITE = FavoriteMovieEntry.CONTENT_URI;
     private static Context ctx;
     private static MovieDbHelper dbHelper;
@@ -95,12 +96,12 @@ public class MoviesProviderTest extends ContextBasedTest {
 
         int idCol = c.getColumnIndex(FavoriteMovieEntry._ID);
         int posterCol = c.getColumnIndex(FavoriteMovieEntry.COLUMN_POSTER_PATH);
-        assertThat(c.getLong(idCol)).isEqualTo(1000);
+        assertThat(c.getLong(idCol)).isEqualTo(MOVIE_ID);
         assertThat(c.getString(posterCol)).isEqualTo(POSTER_PATH);
 
 
         // Check specifically
-        Cursor c1 = getContext().getContentResolver().query(FavoriteMovieEntry.buildFavoriteMovieUri(1000l),
+        Cursor c1 = getContext().getContentResolver().query(FavoriteMovieEntry.buildFavoriteMovieUri(MOVIE_ID),
                 null,
                 null,
                 null,
@@ -110,7 +111,7 @@ public class MoviesProviderTest extends ContextBasedTest {
 
         assertThat(c1.moveToFirst());
 
-        assertThat(c1.getLong(idCol)).isEqualTo(1000);
+        assertThat(c1.getLong(idCol)).isEqualTo(MOVIE_ID);
         assertThat(c1.getString(posterCol)).isEqualTo(POSTER_PATH);
 
     }
@@ -118,12 +119,13 @@ public class MoviesProviderTest extends ContextBasedTest {
     private void insertFavorite() {
         Uri returnedUri = getContext().getContentResolver().insert(URI_FAVORITE_WITH_ID, createContentValues());
         assertThat(returnedUri).isNotNull();
-        assertThat(FavoriteMovieEntry.getMovieIdFromUri(returnedUri)).isEqualTo(1000l);
+        assertThat(FavoriteMovieEntry.getMovieIdFromUri(returnedUri)).isEqualTo(MOVIE_ID);
     }
 
     @NonNull
     private ContentValues createContentValues() {
         ContentValues values = new ContentValues();
+        values.put(FavoriteMovieEntry.COLUMN_MOVIE_ID, MOVIE_ID);
         values.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, POSTER_PATH);
         return values;
     }

@@ -29,7 +29,7 @@ import com.talosdev.movies.R;
 import com.talosdev.movies.callbacks.MovieSelectedCallback;
 import com.talosdev.movies.constants.TMDB;
 import com.talosdev.movies.constants.Tags;
-import com.talosdev.movies.contract.MoviesContract;
+import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
 import com.talosdev.movies.remote.FetchPopularMoviesTask;
@@ -125,7 +125,7 @@ public class MovieListFragment extends Fragment
         }
 
         tmdbAdapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
-        favoritesAdapter = new GridViewCursorAdapter(getActivity(), null,  0);
+        favoritesAdapter = new GridViewFavoritesCursorAdapter(getActivity(), null, 0);
 
         if (currentSortBy == SortByCriterion.FAVORITES) {
             gridView.setAdapter(favoritesAdapter);
@@ -170,6 +170,7 @@ public class MovieListFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //TODO generalize this so that it uses getAdapter()
         if (tmdbAdapter != null) {
             int n = tmdbAdapter.getCount();
             List<MoviePoster> movies = new ArrayList<>();
@@ -183,7 +184,7 @@ public class MovieListFragment extends Fragment
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        long movieId = ( (MoviePoster) gridView.getAdapter().getItem(position)).getMovieId();
+        long movieId = ((MoviePoster) gridView.getAdapter().getItem(position)).getMovieId();
 
         ((MovieSelectedCallback) getActivity()).onMovieSelected(movieId);
 
@@ -247,7 +248,7 @@ public class MovieListFragment extends Fragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_settings:
                 Intent intent = new Intent(getActivity(), PreferencesActivity.class);
                 startActivity(intent);
@@ -262,18 +263,18 @@ public class MovieListFragment extends Fragment
 
         if (id == LOADER_FAVORITES) {
 
-            String[] projection = new String[] {
-                    MoviesContract.FavoriteMovieEntry._ID,
-                    MoviesContract.FavoriteMovieEntry.COLUMN_POSTER_PATH
+            String[] projection = new String[]{
+                    FavoriteMovieEntry._ID,
+                    FavoriteMovieEntry.COLUMN_MOVIE_ID,
+                    FavoriteMovieEntry.COLUMN_POSTER_PATH
             };
 
             CursorLoader loader = new CursorLoader(getActivity(),
-                    MoviesContract.FavoriteMovieEntry.CONTENT_URI,
+                    FavoriteMovieEntry.CONTENT_URI,
                     projection,
                     null,
                     null,
-                    null // TODO sort by date descending
-                    );
+                    "ORDER BY " + FavoriteMovieEntry._ID + " DESC ");
 
             return loader;
         } else {

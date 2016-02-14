@@ -25,19 +25,12 @@ public class MoviesContract {
         public static final String CONTENT_TYPE_ITEM =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAV;
 
-    //    private static final String QUERY_POSTER_PATH = "posterPath";
-
 
         public static Uri buildFavoriteMovieUri(long movieId) {
             return ContentUris.withAppendedId(CONTENT_URI, movieId);
         }
 
-//        public static Uri buildFavoriteMovieUriWithPosterPath(long movieId, String posterPath) {
-//            return ContentUris.withAppendedId(CONTENT_URI, movieId).
-//                    buildUpon().
-//                    appendQueryParameter(QUERY_POSTER_PATH, posterPath).
-//                    build();
-//        }
+
 
         public static long getMovieIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
@@ -47,19 +40,14 @@ public class MoviesContract {
 
         public static final String TABLE_ΝΑΜΕ = "favorites";
 
-        // Only store the poster path in the db (and the movieId, as the id column)
+
+
+        public static final String COLUMN_MOVIE_ID = "movie_id";
+
         public static final String COLUMN_POSTER_PATH = "poster_path";
 
 
-//        public static final String COLUMN_TITLE = "title";
-//
-//        public static final String COLUMN_OVERVIEW = "overview";
-//
-//        public static final String COLUMN_RELEASE_DATE = "release_date";
-//
-//        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
-//
-//        public static final String COLUMN_VOTE_COUNT = "vote_count";
+
 
     }
 

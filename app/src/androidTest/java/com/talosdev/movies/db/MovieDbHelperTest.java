@@ -34,6 +34,7 @@ public class MovieDbHelperTest extends AbstractSchemaValidatorATC<MovieDbHelper>
 
         Set<String> movieColumnsSet = new HashSet<>();
         movieColumnsSet.add(FavoriteMovieEntry._ID);
+        movieColumnsSet.add(FavoriteMovieEntry.COLUMN_MOVIE_ID);
         movieColumnsSet.add(FavoriteMovieEntry.COLUMN_POSTER_PATH);
 
 

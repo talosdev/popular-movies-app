@@ -25,6 +25,7 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
 
     /**
      * Method to be implemented by concrete subclasses.
+     *
      * @return a {@link Map} that defines the schema of the database.
      * The keys of the map are the table names, and the values are
      * sets of strings with the names of the columns.
@@ -33,6 +34,7 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
 
     /**
      * Test that the tables are created correctly
+     *
      * @throws Exception
      */
     @Test
@@ -50,12 +52,10 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
         // Iterate through the cursor and remove from the set as we go
         do {
             String tableName = c.getString(0);
-            if (! tableName.equals("android_metadata")) {
-                observedTablesSet.add(tableName);
-            }
+            observedTablesSet.add(tableName);
         } while (c.moveToNext());
 
-        assertThat(observedTablesSet).hasSameElementsAs(expectedTablesSet);
+        assertThat(observedTablesSet).containsAll(expectedTablesSet);
 
         c.close();
     }
@@ -63,17 +63,18 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
 
     /**
      * Tests that all tables have the required columns.
+     *
      * @throws Exception
      */
     @Test
     public void testTableColumns() throws Exception {
-        
+
         Set<String> tables = getTablesSet();
 
         Map<String, Set<String>> schema = getSchemaHashMap();
 
 
-        for(String table: tables) {
+        for (String table : tables) {
             // Query table columns from the database
             Cursor c = db.rawQuery("PRAGMA table_info(" + table + ")",
                     null);
@@ -90,7 +91,7 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
             do {
                 String columnName = c.getString(columnNameIndex);
                 observedColumns.add(columnName);
-            } while(c.moveToNext());
+            } while (c.moveToNext());
 
 
             assertThat(observedColumns).hasSameElementsAs(expectedColumns);
@@ -102,8 +103,8 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
     /**
      * Utility method that returns a {@link Set} with the table names
      * from the schema map.
-     * @return the keyset of the schema hash map.
      *
+     * @return the keyset of the schema hash map.
      */
     private Set<String> getTablesSet() {
         return getSchemaHashMap().keySet();

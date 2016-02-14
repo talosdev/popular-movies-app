@@ -18,14 +18,20 @@ import com.talosdev.movies.remote.URLBuilder;
 /**
  * Created by apapad on 14/02/16.
  */
-public class GridViewCursorAdapter extends CursorAdapter {
+public class GridViewFavoritesCursorAdapter extends CursorAdapter {
     private final URLBuilder urlBuilder;
 
-    public GridViewCursorAdapter(Context context,  Cursor c, int flags) {
+    public GridViewFavoritesCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
         urlBuilder = new URLBuilder(context);
     }
 
+    /**
+     * We need to override this and return a {@link MoviePoster} object instead of a Cursor,
+     * so that the behaviour matches the {@link GridViewArrayAdapter}'s behaviour.
+     * @param position
+     * @return
+     */
     @Override
     public Object getItem(int position) {
         Cursor c = (Cursor) super.getItem(position);
@@ -37,11 +43,13 @@ public class GridViewCursorAdapter extends CursorAdapter {
         return LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false);
     }
 
+    // TODO duplicate code
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
 
-        String posterPath = cursor.getString(1);
+        // TODO move this 2 to a constant
+        String posterPath = cursor.getString(2);
 
         if (posterPath != null) {
             String posterUrl = urlBuilder.buildPosterUrl(posterPath);

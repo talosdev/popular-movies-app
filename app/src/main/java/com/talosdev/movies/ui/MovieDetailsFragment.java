@@ -252,6 +252,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
                     setFavoriteActive(false);
                 } else {
                     ContentValues cv = new ContentValues();
+                    cv.put(FavoriteMovieEntry.COLUMN_MOVIE_ID, currentMovie.id);
                     cv.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, currentMovie.posterPath);
                     getActivity().getContentResolver().insert(
                             FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
