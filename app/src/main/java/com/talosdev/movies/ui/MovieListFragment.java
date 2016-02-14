@@ -3,9 +3,13 @@ package com.talosdev.movies.ui;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,13 +21,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.SpinnerAdapter;
 
 import com.talosdev.movies.R;
 import com.talosdev.movies.callbacks.MovieSelectedCallback;
-import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.constants.Tags;
+import com.talosdev.movies.contract.MoviesContract;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
 import com.talosdev.movies.remote.FetchPopularMoviesTask;
@@ -40,7 +46,7 @@ import hugo.weaving.DebugLog;
  * Created by apapad on 19/11/15.
  */
 public class MovieListFragment extends Fragment
-        implements AdapterView.OnItemClickListener, ActionBar.OnNavigationListener {
+        implements AdapterView.OnItemClickListener, ActionBar.OnNavigationListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String BUNDLE_MOVIE_POSTER = "BUNDLE_KEY_MOVIE_POSTER";
     private static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
@@ -48,6 +54,7 @@ public class MovieListFragment extends Fragment
     // Currently selected sort by criterion is stored in SharedPReferences and not in the bundle
     // so that is can persist across app shutdowns and phone reboots etc
     public static final String SHARED_PREF_CRITERION = "SHARED_PREF_CRITERION";
+    public static final int LOADER_FAVORITES = 0;
 
     private SortByCriterion currentSortBy;
 
@@ -56,7 +63,9 @@ public class MovieListFragment extends Fragment
      */
     private static final int SCROLL_THRESHOLD = 5;
 
-    private ArrayAdapter adapter;
+    private ArrayAdapter tmdbAdapter;
+    private CursorAdapter favoritesAdapter;
+
     private GridView gridView;
 
     @DebugLog
@@ -87,8 +96,13 @@ public class MovieListFragment extends Fragment
             //TODO find a better way to get the index
             getActivity().getActionBar().setSelectedNavigationItem(currentSortBy.getIndex());
         }
+    }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        getLoaderManager().initLoader(LOADER_FAVORITES, null, this);
     }
 
     @DebugLog
@@ -110,8 +124,14 @@ public class MovieListFragment extends Fragment
             Log.d(Tags.BUNDLE, String.format("Found current page: %d", page));
         }
 
-        adapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
-        gridView.setAdapter(adapter);
+        tmdbAdapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
+        favoritesAdapter = new GridViewCursorAdapter(getActivity(), null,  0);
+
+        if (currentSortBy == SortByCriterion.FAVORITES) {
+            gridView.setAdapter(favoritesAdapter);
+        } else {
+            gridView.setAdapter(tmdbAdapter);
+        }
 
         gridView.setOnScrollListener(new MovieEndlessScrollListener(SCROLL_THRESHOLD, page));
 
@@ -134,7 +154,7 @@ public class MovieListFragment extends Fragment
      * @param replace
      */
     private void fetchMovies(int page, boolean replace) {
-        FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
+        FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(tmdbAdapter);
         FetchPopularMoviesParams params =
                 new FetchPopularMoviesParams(currentSortBy, page, replace);
         fetchMovies.execute(params);
@@ -150,11 +170,11 @@ public class MovieListFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (adapter != null) {
-            int n = adapter.getCount();
+        if (tmdbAdapter != null) {
+            int n = tmdbAdapter.getCount();
             List<MoviePoster> movies = new ArrayList<>();
             for (int i = 0; i < n; i++) {
-                movies.add((MoviePoster) adapter.getItem(i));
+                movies.add((MoviePoster) tmdbAdapter.getItem(i));
             }
             outState.putSerializable(BUNDLE_MOVIE_POSTER, (ArrayList) movies);
             outState.putInt(BUNDLE_CURRENT_PAGE, movies.size() / TMDB.MOVIES_PER_PAGE - 1);
@@ -163,7 +183,7 @@ public class MovieListFragment extends Fragment
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        long movieId = ((GridViewArrayAdapter) adapter).getItem(position).getMovieId();
+        long movieId = ( (MoviePoster) gridView.getAdapter().getItem(position)).getMovieId();
 
         ((MovieSelectedCallback) getActivity()).onMovieSelected(movieId);
 
@@ -191,10 +211,18 @@ public class MovieListFragment extends Fragment
         boolean isUserAction = (newSortBy != currentSortBy);
         currentSortBy = newSortBy;
         if (isUserAction) {
-            Log.d(Tags.NAVBAR, "Scrolling to top, because the criterion has changed");
-            fetchMovies(1, true);
-            // TODO check how this works with slow connections, maybe clear the adapter here?
-            gridView.smoothScrollToPosition(0);
+            if (currentSortBy == SortByCriterion.FAVORITES) {
+                gridView.smoothScrollToPosition(0);
+                gridView.setAdapter(favoritesAdapter);
+            } else {
+                Log.d(Tags.NAVBAR, "Scrolling to top, because the criterion has changed");
+                fetchMovies(1, true);
+                gridView.setAdapter(tmdbAdapter);
+
+                // TODO check how this works with slow connections, maybe clear the tmdbAdapter here?
+                gridView.smoothScrollToPosition(0);
+            }
+
         }
         return true;
     }
@@ -227,6 +255,41 @@ public class MovieListFragment extends Fragment
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+
+        if (id == LOADER_FAVORITES) {
+
+            String[] projection = new String[] {
+                    MoviesContract.FavoriteMovieEntry._ID,
+                    MoviesContract.FavoriteMovieEntry.COLUMN_POSTER_PATH
+            };
+
+            CursorLoader loader = new CursorLoader(getActivity(),
+                    MoviesContract.FavoriteMovieEntry.CONTENT_URI,
+                    projection,
+                    null,
+                    null,
+                    null // TODO sort by date descending
+                    );
+
+            return loader;
+        } else {
+            return null;
+        }
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Cursor data) {
+        favoritesAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        favoritesAdapter.swapCursor(null);
     }
 
     /**

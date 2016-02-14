@@ -6,7 +6,8 @@ package com.talosdev.movies.data;
  */
 public enum SortByCriterion  {
     POPULARITY(0),
-    VOTE(1);
+    VOTE(1),
+    FAVORITES(2);
 
     /**
      * The index of the criterion, that must match the order in which it is displayed in the UI.
