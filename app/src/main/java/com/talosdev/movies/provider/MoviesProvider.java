@@ -74,9 +74,11 @@ public class MoviesProvider extends ContentProvider {
             case FAVORITES_LIST:
                 return null;
             case FAVORITES_ITEM:
-                // TODO
-                return insertFavoriteMovie(FavoriteMovieEntry.getMovieIdFromUri(uri),
+                Uri uriToReturn = insertFavoriteMovie(FavoriteMovieEntry.getMovieIdFromUri(uri),
                         values);
+                // note that we need to notify the list-type uri, not the current one (that includes the movieId)
+                getContext().getContentResolver().notifyChange(FavoriteMovieEntry.CONTENT_URI, null);
+                return uriToReturn;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -147,7 +149,10 @@ public class MoviesProvider extends ContentProvider {
             case FAVORITES_LIST:
                 return 0;
             case FAVORITES_ITEM:
-                return removeFavorite(FavoriteMovieEntry.getMovieIdFromUri(uri));
+                int n = removeFavorite(FavoriteMovieEntry.getMovieIdFromUri(uri));
+                // note that we need to notify the list-type uri, not the current one (that includes the movieId)
+                getContext().getContentResolver().notifyChange(FavoriteMovieEntry.CONTENT_URI, null);
+                return n;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
