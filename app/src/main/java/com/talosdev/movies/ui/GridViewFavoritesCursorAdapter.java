@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 import com.talosdev.movies.R;
 import com.talosdev.movies.constants.Tags;
+import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.remote.URLBuilder;
 
@@ -35,7 +36,7 @@ public class GridViewFavoritesCursorAdapter extends CursorAdapter {
     @Override
     public Object getItem(int position) {
         Cursor c = (Cursor) super.getItem(position);
-        return new MoviePoster(c.getLong(1), c.getString(2));
+        return new MoviePoster(c.getLong(FavoriteMovieEntry.COL_INDEX_MOVIE_ID), c.getString(FavoriteMovieEntry.COL_INDEX_POSTER_PATH));
     }
 
     @Override
@@ -47,9 +48,7 @@ public class GridViewFavoritesCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-
-        // TODO move this 2 to a constant
-        String posterPath = cursor.getString(2);
+        String posterPath = cursor.getString(FavoriteMovieEntry.COL_INDEX_POSTER_PATH);
 
         if (posterPath != null) {
             String posterUrl = urlBuilder.buildPosterUrl(posterPath);

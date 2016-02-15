@@ -263,15 +263,11 @@ public class MovieListFragment extends Fragment
 
         if (id == LOADER_FAVORITES) {
 
-            String[] projection = new String[]{
-                    FavoriteMovieEntry._ID,
-                    FavoriteMovieEntry.COLUMN_MOVIE_ID,
-                    FavoriteMovieEntry.COLUMN_POSTER_PATH
-            };
+
 
             CursorLoader loader = new CursorLoader(getActivity(),
                     FavoriteMovieEntry.CONTENT_URI,
-                    projection,
+                    FavoriteMovieEntry.PROJECTION,
                     null,
                     null,
                     FavoriteMovieEntry._ID + " DESC ");
