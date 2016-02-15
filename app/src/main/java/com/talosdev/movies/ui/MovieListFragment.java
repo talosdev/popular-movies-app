@@ -274,7 +274,7 @@ public class MovieListFragment extends Fragment
                     projection,
                     null,
                     null,
-                    "ORDER BY " + FavoriteMovieEntry._ID + " DESC ");
+                    FavoriteMovieEntry._ID + " DESC ");
 
             return loader;
         } else {

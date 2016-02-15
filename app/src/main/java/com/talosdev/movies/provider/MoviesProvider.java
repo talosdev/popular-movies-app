@@ -84,7 +84,7 @@ public class MoviesProvider extends ContentProvider {
 
     private Uri insertFavoriteMovie(long movieIdFromUri, ContentValues values) {
 
-        values.put(FavoriteMovieEntry._ID, movieIdFromUri);
+        values.put(FavoriteMovieEntry.COLUMN_MOVIE_ID, movieIdFromUri);
 
         SQLiteDatabase database = movieDbHelper.getWritableDatabase();
         long rowId = database.insert(FavoriteMovieEntry.TABLE_ΝΑΜΕ, null, values);
@@ -92,7 +92,7 @@ public class MoviesProvider extends ContentProvider {
         if (rowId == -1) {
             return null;
         } else {
-            return FavoriteMovieEntry.buildFavoriteMovieUri(rowId);
+            return FavoriteMovieEntry.buildFavoriteMovieUri(movieIdFromUri);
         }
 
     }
@@ -103,9 +103,17 @@ public class MoviesProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Log.d(Tags.DB, "Query favorites: " + uri);
         Cursor cursor;
+        SQLiteDatabase database = movieDbHelper.getReadableDatabase();
+
         switch (uriMatcher.match(uri)) {
             case FAVORITES_LIST:
-                cursor = getFavoritesList();
+                cursor = database.query(FavoriteMovieEntry.TABLE_ΝΑΜΕ,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
                 break;
             case FAVORITES_ITEM:
                 cursor = checkIsFavorite(FavoriteMovieEntry.getMovieIdFromUri(uri));
@@ -119,23 +127,12 @@ public class MoviesProvider extends ContentProvider {
         return cursor;
     }
 
-    public Cursor getFavoritesList() {
-        SQLiteDatabase database = movieDbHelper.getReadableDatabase();
-        return database.query(FavoriteMovieEntry.TABLE_ΝΑΜΕ,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-    }
-
 
     private Cursor checkIsFavorite(long movieId) {
         SQLiteDatabase database = movieDbHelper.getReadableDatabase();
         return database.query(FavoriteMovieEntry.TABLE_ΝΑΜΕ,
                 null,
-                FavoriteMovieEntry._ID + " = ?",
+                FavoriteMovieEntry.COLUMN_MOVIE_ID + " = ?",
                 new String[]{movieId+""},
                 null,
                 null,
@@ -159,7 +156,7 @@ public class MoviesProvider extends ContentProvider {
     private int removeFavorite(long movieId) {
         SQLiteDatabase database = movieDbHelper.getWritableDatabase();
         return database.delete(FavoriteMovieEntry.TABLE_ΝΑΜΕ,
-                FavoriteMovieEntry._ID + " = ?",
+                FavoriteMovieEntry.COLUMN_MOVIE_ID + " = ?",
                 new String[] {movieId + ""});
     }
 

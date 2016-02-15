@@ -95,8 +95,10 @@ public class MoviesProviderTest extends ContextBasedTest {
         assertThat(c.moveToFirst());
 
         int idCol = c.getColumnIndex(FavoriteMovieEntry._ID);
+        int movieIdCol = c.getColumnIndex(FavoriteMovieEntry.COLUMN_MOVIE_ID);
         int posterCol = c.getColumnIndex(FavoriteMovieEntry.COLUMN_POSTER_PATH);
-        assertThat(c.getLong(idCol)).isEqualTo(MOVIE_ID);
+        assertThat(c.getLong(idCol)).isGreaterThan(0l);
+        assertThat(c.getLong(movieIdCol)).isEqualTo(1000l);
         assertThat(c.getString(posterCol)).isEqualTo(POSTER_PATH);
 
 
@@ -111,7 +113,8 @@ public class MoviesProviderTest extends ContextBasedTest {
 
         assertThat(c1.moveToFirst());
 
-        assertThat(c1.getLong(idCol)).isEqualTo(MOVIE_ID);
+        assertThat(c1.getLong(idCol)).isGreaterThan(0l);
+        assertThat(c1.getLong(movieIdCol)).isEqualTo(1000l);
         assertThat(c1.getString(posterCol)).isEqualTo(POSTER_PATH);
 
     }
