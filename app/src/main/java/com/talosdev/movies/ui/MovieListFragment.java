@@ -67,6 +67,7 @@ public class MovieListFragment extends Fragment
     private CursorAdapter favoritesAdapter;
 
     private GridView gridView;
+    private EndlessScrollListener onScrollListener;
 
     @DebugLog
     @Override
@@ -126,20 +127,39 @@ public class MovieListFragment extends Fragment
 
         tmdbAdapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
         favoritesAdapter = new GridViewFavoritesCursorAdapter(getActivity(), null, 0);
+        onScrollListener = new MovieEndlessScrollListener(SCROLL_THRESHOLD, page);
 
         if (currentSortBy == SortByCriterion.FAVORITES) {
-            gridView.setAdapter(favoritesAdapter);
+            changeGridMode(GridMode.DATABASE);
         } else {
-            gridView.setAdapter(tmdbAdapter);
+            changeGridMode(GridMode.REMOTE);
+            // If nothing was found in the Bundle, fetch from the API
+            if (movies.size() == 0) {
+                fetchMovies(1, true);
+            }
         }
 
-        gridView.setOnScrollListener(new MovieEndlessScrollListener(SCROLL_THRESHOLD, page));
 
-        // If nothing was found in the Bundle, fetch from the API
-        if (movies.size() == 0) {
-            fetchMovies(1, true);
-        }
         return gridView;
+    }
+
+    private void changeGridMode(GridMode mode) {
+
+        switch (mode) {
+            case REMOTE:
+                gridView.setAdapter(tmdbAdapter);
+                gridView.setOnScrollListener(onScrollListener);
+                break;
+            case DATABASE:
+                gridView.setAdapter(favoritesAdapter);
+                gridView.setOnScrollListener(null);
+                break;
+        }
+    }
+
+    public enum GridMode {
+        REMOTE,
+        DATABASE
     }
 
     @DebugLog
@@ -212,16 +232,15 @@ public class MovieListFragment extends Fragment
         boolean isUserAction = (newSortBy != currentSortBy);
         currentSortBy = newSortBy;
         if (isUserAction) {
-            if (currentSortBy == SortByCriterion.FAVORITES) {
-                gridView.smoothScrollToPosition(0);
-                gridView.setAdapter(favoritesAdapter);
-            } else {
-                Log.d(Tags.NAVBAR, "Scrolling to top, because the criterion has changed");
-                fetchMovies(1, true);
-                gridView.setAdapter(tmdbAdapter);
+            // TODO check how this works with slow connections, maybe clear the tmdbAdapter here?
+            Log.d(Tags.NAVBAR, "Scrolling to top, because the criterion has changed");
+            gridView.smoothScrollToPosition(0);
 
-                // TODO check how this works with slow connections, maybe clear the tmdbAdapter here?
-                gridView.smoothScrollToPosition(0);
+            if (newSortBy == SortByCriterion.FAVORITES) {
+                changeGridMode(GridMode.DATABASE);
+            } else {
+                fetchMovies(1, true);
+                changeGridMode(GridMode.REMOTE);
             }
 
         }
@@ -264,7 +283,6 @@ public class MovieListFragment extends Fragment
         if (id == LOADER_FAVORITES) {
 
 
-
             CursorLoader loader = new CursorLoader(getActivity(),
                     FavoriteMovieEntry.CONTENT_URI,
                     FavoriteMovieEntry.PROJECTION,
@@ -303,7 +321,6 @@ public class MovieListFragment extends Fragment
             Log.i(TAG_SCROLL, String.format("Scroll listener will load more items, " +
                             "currently we are at page %d, with %d total items",
                     page, totalItemsCount));
-
             fetchMovies(page, false);
             return true;
         }
