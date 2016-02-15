@@ -128,7 +128,6 @@ public class MoviesProviderTest extends ContextBasedTest {
     @NonNull
     private ContentValues createContentValues() {
         ContentValues values = new ContentValues();
-        values.put(FavoriteMovieEntry.COLUMN_MOVIE_ID, MOVIE_ID);
         values.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, POSTER_PATH);
         return values;
     }
@@ -168,6 +167,27 @@ public class MoviesProviderTest extends ContextBasedTest {
 
 
 
+    @Test
+    public void testQueryOrder() throws Exception {
+        insertFavorite();
+        Uri insertUri2 = FavoriteMovieEntry.buildFavoriteMovieUri(2000l);
+        Uri uri2 = getContext().getContentResolver().insert(
+                insertUri2, createContentValues());
+        Uri insertUri3 = FavoriteMovieEntry.buildFavoriteMovieUri(3000l);
+        Uri uri3 = getContext().getContentResolver().insert(
+                insertUri3, createContentValues());
+
+
+        Cursor c = getContext().getContentResolver().query(URI_FAVORITE, null, null, null, FavoriteMovieEntry.COLUMN_MOVIE_ID + " DESC");
+        c.moveToFirst();
+        int movieIdCol = c.getColumnIndex(FavoriteMovieEntry.COLUMN_MOVIE_ID);
+        assertThat(c.getLong(movieIdCol)).isEqualTo(3000l);
+        c.moveToNext();
+        assertThat(c.getLong(movieIdCol)).isEqualTo(2000l);
+        c.moveToNext();
+        assertThat(c.getLong(movieIdCol)).isEqualTo(1000l);
+
+    }
 
 
 
