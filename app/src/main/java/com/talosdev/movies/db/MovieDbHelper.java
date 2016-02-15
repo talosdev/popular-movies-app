@@ -12,14 +12,14 @@ import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 public class MovieDbHelper extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     static final String DATABASE_NAME = "pop_movies.db";
 
     public static final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + FavoriteMovieEntry.TABLE_ΝΑΜΕ + " (" +
             FavoriteMovieEntry._ID + " INTEGER  PRIMARY KEY AUTOINCREMENT, " +
             FavoriteMovieEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
-            FavoriteMovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL" +
+            FavoriteMovieEntry.COLUMN_POSTER_PATH + " TEXT " +
             ");";
 
     public MovieDbHelper(Context context) {
@@ -38,7 +38,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 4) {
+        if (oldVersion < 5) {
             dropFavoritesTable(db);
             // create favorites tables, which was not available in v1
             createFavoritesTable(db);

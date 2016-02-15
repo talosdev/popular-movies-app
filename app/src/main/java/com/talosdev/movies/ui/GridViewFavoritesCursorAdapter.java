@@ -35,7 +35,7 @@ public class GridViewFavoritesCursorAdapter extends CursorAdapter {
     @Override
     public Object getItem(int position) {
         Cursor c = (Cursor) super.getItem(position);
-        return new MoviePoster(c.getInt(0), c.getString(1));
+        return new MoviePoster(c.getLong(1), c.getString(2));
     }
 
     @Override
