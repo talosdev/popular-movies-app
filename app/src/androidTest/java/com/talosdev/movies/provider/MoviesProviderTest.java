@@ -29,7 +29,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class MoviesProviderTest extends ContextBasedTest {
 
-    public static final Uri URI_FAVORITE_WITH_ID = FavoriteMovieEntry.buildFavoriteMovieUri(1000l);
+    public static final long MOVIE_ID = 1000l;
+    public static final Uri URI_FAVORITE_WITH_ID = FavoriteMovieEntry.buildFavoriteMovieUri(MOVIE_ID);
     private static final Uri URI_FAVORITE = FavoriteMovieEntry.CONTENT_URI;
     private static Context ctx;
     private static MovieDbHelper dbHelper;
@@ -94,13 +95,15 @@ public class MoviesProviderTest extends ContextBasedTest {
         assertThat(c.moveToFirst());
 
         int idCol = c.getColumnIndex(FavoriteMovieEntry._ID);
+        int movieIdCol = c.getColumnIndex(FavoriteMovieEntry.COLUMN_MOVIE_ID);
         int posterCol = c.getColumnIndex(FavoriteMovieEntry.COLUMN_POSTER_PATH);
-        assertThat(c.getLong(idCol)).isEqualTo(1000);
+        assertThat(c.getLong(idCol)).isGreaterThan(0l);
+        assertThat(c.getLong(movieIdCol)).isEqualTo(1000l);
         assertThat(c.getString(posterCol)).isEqualTo(POSTER_PATH);
 
 
         // Check specifically
-        Cursor c1 = getContext().getContentResolver().query(FavoriteMovieEntry.buildFavoriteMovieUri(1000l),
+        Cursor c1 = getContext().getContentResolver().query(FavoriteMovieEntry.buildFavoriteMovieUri(MOVIE_ID),
                 null,
                 null,
                 null,
@@ -110,7 +113,8 @@ public class MoviesProviderTest extends ContextBasedTest {
 
         assertThat(c1.moveToFirst());
 
-        assertThat(c1.getLong(idCol)).isEqualTo(1000);
+        assertThat(c1.getLong(idCol)).isGreaterThan(0l);
+        assertThat(c1.getLong(movieIdCol)).isEqualTo(1000l);
         assertThat(c1.getString(posterCol)).isEqualTo(POSTER_PATH);
 
     }
@@ -118,7 +122,7 @@ public class MoviesProviderTest extends ContextBasedTest {
     private void insertFavorite() {
         Uri returnedUri = getContext().getContentResolver().insert(URI_FAVORITE_WITH_ID, createContentValues());
         assertThat(returnedUri).isNotNull();
-        assertThat(FavoriteMovieEntry.getMovieIdFromUri(returnedUri)).isEqualTo(1000l);
+        assertThat(FavoriteMovieEntry.getMovieIdFromUri(returnedUri)).isEqualTo(MOVIE_ID);
     }
 
     @NonNull
@@ -163,6 +167,27 @@ public class MoviesProviderTest extends ContextBasedTest {
 
 
 
+    @Test
+    public void testQueryOrder() throws Exception {
+        insertFavorite();
+        Uri insertUri2 = FavoriteMovieEntry.buildFavoriteMovieUri(2000l);
+        Uri uri2 = getContext().getContentResolver().insert(
+                insertUri2, createContentValues());
+        Uri insertUri3 = FavoriteMovieEntry.buildFavoriteMovieUri(3000l);
+        Uri uri3 = getContext().getContentResolver().insert(
+                insertUri3, createContentValues());
+
+
+        Cursor c = getContext().getContentResolver().query(URI_FAVORITE, null, null, null, FavoriteMovieEntry.COLUMN_MOVIE_ID + " DESC");
+        c.moveToFirst();
+        int movieIdCol = c.getColumnIndex(FavoriteMovieEntry.COLUMN_MOVIE_ID);
+        assertThat(c.getLong(movieIdCol)).isEqualTo(3000l);
+        c.moveToNext();
+        assertThat(c.getLong(movieIdCol)).isEqualTo(2000l);
+        c.moveToNext();
+        assertThat(c.getLong(movieIdCol)).isEqualTo(1000l);
+
+    }
 
 
 

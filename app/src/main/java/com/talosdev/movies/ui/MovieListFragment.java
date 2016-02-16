@@ -3,9 +3,13 @@ package com.talosdev.movies.ui;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,13 +21,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.SpinnerAdapter;
 
 import com.talosdev.movies.R;
 import com.talosdev.movies.callbacks.MovieSelectedCallback;
-import com.talosdev.movies.constants.Tags;
 import com.talosdev.movies.constants.TMDB;
+import com.talosdev.movies.constants.Tags;
+import com.talosdev.movies.contract.MoviesContract.FavoriteMovieEntry;
 import com.talosdev.movies.data.MoviePoster;
 import com.talosdev.movies.data.SortByCriterion;
 import com.talosdev.movies.remote.FetchPopularMoviesTask;
@@ -40,7 +46,7 @@ import hugo.weaving.DebugLog;
  * Created by apapad on 19/11/15.
  */
 public class MovieListFragment extends Fragment
-        implements AdapterView.OnItemClickListener, ActionBar.OnNavigationListener {
+        implements AdapterView.OnItemClickListener, ActionBar.OnNavigationListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String BUNDLE_MOVIE_POSTER = "BUNDLE_KEY_MOVIE_POSTER";
     private static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
@@ -48,6 +54,7 @@ public class MovieListFragment extends Fragment
     // Currently selected sort by criterion is stored in SharedPReferences and not in the bundle
     // so that is can persist across app shutdowns and phone reboots etc
     public static final String SHARED_PREF_CRITERION = "SHARED_PREF_CRITERION";
+    public static final int LOADER_FAVORITES = 0;
 
     private SortByCriterion currentSortBy;
 
@@ -56,8 +63,11 @@ public class MovieListFragment extends Fragment
      */
     private static final int SCROLL_THRESHOLD = 5;
 
-    private ArrayAdapter adapter;
+    private ArrayAdapter tmdbAdapter;
+    private CursorAdapter favoritesAdapter;
+
     private GridView gridView;
+    private EndlessScrollListener onScrollListener;
 
     @DebugLog
     @Override
@@ -87,8 +97,13 @@ public class MovieListFragment extends Fragment
             //TODO find a better way to get the index
             getActivity().getActionBar().setSelectedNavigationItem(currentSortBy.getIndex());
         }
+    }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        getLoaderManager().initLoader(LOADER_FAVORITES, null, this);
     }
 
     @DebugLog
@@ -110,16 +125,41 @@ public class MovieListFragment extends Fragment
             Log.d(Tags.BUNDLE, String.format("Found current page: %d", page));
         }
 
-        adapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
-        gridView.setAdapter(adapter);
+        tmdbAdapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
+        favoritesAdapter = new GridViewFavoritesCursorAdapter(getActivity(), null, 0);
+        onScrollListener = new MovieEndlessScrollListener(SCROLL_THRESHOLD, page);
 
-        gridView.setOnScrollListener(new MovieEndlessScrollListener(SCROLL_THRESHOLD, page));
-
-        // If nothing was found in the Bundle, fetch from the API
-        if (movies.size() == 0) {
-            fetchMovies(1, true);
+        if (currentSortBy == SortByCriterion.FAVORITES) {
+            changeGridMode(GridMode.DATABASE);
+        } else {
+            changeGridMode(GridMode.REMOTE);
+            // If nothing was found in the Bundle, fetch from the API
+            if (movies.size() == 0) {
+                fetchMovies(1, true);
+            }
         }
+
+
         return gridView;
+    }
+
+    private void changeGridMode(GridMode mode) {
+
+        switch (mode) {
+            case REMOTE:
+                gridView.setAdapter(tmdbAdapter);
+                gridView.setOnScrollListener(onScrollListener);
+                break;
+            case DATABASE:
+                gridView.setAdapter(favoritesAdapter);
+                gridView.setOnScrollListener(null);
+                break;
+        }
+    }
+
+    public enum GridMode {
+        REMOTE,
+        DATABASE
     }
 
     @DebugLog
@@ -134,7 +174,7 @@ public class MovieListFragment extends Fragment
      * @param replace
      */
     private void fetchMovies(int page, boolean replace) {
-        FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(adapter);
+        FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(tmdbAdapter);
         FetchPopularMoviesParams params =
                 new FetchPopularMoviesParams(currentSortBy, page, replace);
         fetchMovies.execute(params);
@@ -150,11 +190,12 @@ public class MovieListFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (adapter != null) {
-            int n = adapter.getCount();
+        //TODO generalize this so that it uses getAdapter()
+        if (tmdbAdapter != null) {
+            int n = tmdbAdapter.getCount();
             List<MoviePoster> movies = new ArrayList<>();
             for (int i = 0; i < n; i++) {
-                movies.add((MoviePoster) adapter.getItem(i));
+                movies.add((MoviePoster) tmdbAdapter.getItem(i));
             }
             outState.putSerializable(BUNDLE_MOVIE_POSTER, (ArrayList) movies);
             outState.putInt(BUNDLE_CURRENT_PAGE, movies.size() / TMDB.MOVIES_PER_PAGE - 1);
@@ -163,7 +204,7 @@ public class MovieListFragment extends Fragment
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        long movieId = ((GridViewArrayAdapter) adapter).getItem(position).getMovieId();
+        long movieId = ((MoviePoster) gridView.getAdapter().getItem(position)).getMovieId();
 
         ((MovieSelectedCallback) getActivity()).onMovieSelected(movieId);
 
@@ -191,10 +232,17 @@ public class MovieListFragment extends Fragment
         boolean isUserAction = (newSortBy != currentSortBy);
         currentSortBy = newSortBy;
         if (isUserAction) {
+            // TODO check how this works with slow connections, maybe clear the tmdbAdapter here?
             Log.d(Tags.NAVBAR, "Scrolling to top, because the criterion has changed");
-            fetchMovies(1, true);
-            // TODO check how this works with slow connections, maybe clear the adapter here?
             gridView.smoothScrollToPosition(0);
+
+            if (newSortBy == SortByCriterion.FAVORITES) {
+                changeGridMode(GridMode.DATABASE);
+            } else {
+                fetchMovies(1, true);
+                changeGridMode(GridMode.REMOTE);
+            }
+
         }
         return true;
     }
@@ -219,7 +267,7 @@ public class MovieListFragment extends Fragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_settings:
                 Intent intent = new Intent(getActivity(), PreferencesActivity.class);
                 startActivity(intent);
@@ -227,6 +275,36 @@ public class MovieListFragment extends Fragment
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+
+        if (id == LOADER_FAVORITES) {
+
+
+            CursorLoader loader = new CursorLoader(getActivity(),
+                    FavoriteMovieEntry.CONTENT_URI,
+                    FavoriteMovieEntry.PROJECTION,
+                    null,
+                    null,
+                    FavoriteMovieEntry._ID + " DESC ");
+
+            return loader;
+        } else {
+            return null;
+        }
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Cursor data) {
+        favoritesAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        favoritesAdapter.swapCursor(null);
     }
 
     /**
@@ -243,7 +321,6 @@ public class MovieListFragment extends Fragment
             Log.i(TAG_SCROLL, String.format("Scroll listener will load more items, " +
                             "currently we are at page %d, with %d total items",
                     page, totalItemsCount));
-
             fetchMovies(page, false);
             return true;
         }
