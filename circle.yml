@@ -1,0 +1,47 @@
+#
+# Build configuration for Circle CI
+#
+
+general:
+    artifacts:
+        - /home/ubuntu/popular-movies-app/app/build/outputs/apk/
+
+machine:
+    environment:
+        ADB_INSTALL_TIMEOUT: 8
+        ANDROID_HOME: /usr/local/android-sdk-linux
+
+dependencies:
+  cache_directories:
+    - /home/ubuntu/.android
+  override:
+        - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-23"
+        - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.2"
+
+        
+
+test:
+  override:
+   # start the emulator
+   - emulator -avd circleci-android21 -no-audio -no-window:
+       background: true
+       parallel: true
+   # execute the local junit tests as we wait for the emulator to boot
+   - (./gradlew test)
+
+   # block until the emulator has booted
+   - circle-android wait-for-boot
+
+   # execute the android tests (instrumentation)
+   - (./gradlew connectedAndroidTest):
+      timeout: 1200
+
+   # copy the build outputs to artifacts
+   - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+
+   # copy the test results to the test results directory.
+
+   # instrumentation
+   - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+   # local junit
+   - cp -r app/build/reports/tests/debug/* $CIRCLE_TEST_REPORTS

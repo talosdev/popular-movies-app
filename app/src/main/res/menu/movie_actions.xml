@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- If there is a dependency to v7-support, the app namespace must be used for the
+    showAsAction attribute, otherwise the android namespace must be used -->
+    <item
+        android:id="@+id/menu_favorite"
+        android:icon="@drawable/ic_favorite_border_black_24dp"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_favorite"/>
+</menu>
