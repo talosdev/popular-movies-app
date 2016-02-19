@@ -1,4 +1,4 @@
-package com.talosdev.movies.remote;
+package app.we.go.movies.remote;
 
 import org.junit.Test;
 

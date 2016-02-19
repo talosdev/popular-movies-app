@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.talosdev.movies">
+    package="app.we.go.movies">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -27,7 +27,7 @@
 
 
         <provider
-            android:authorities="com.talosdev.movies"
+            android:authorities="app.we.go.movies"
             android:name=".provider.MoviesProvider"/>
 
     </application>
