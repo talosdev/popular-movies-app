@@ -1,4 +1,4 @@
-package com.talosdev.movies;
+package app.we.go.movies;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
