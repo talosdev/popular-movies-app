@@ -1,10 +1,10 @@
-package com.talosdev.movies.remote;
+package app.we.go.movies.remote;
 
-import com.talosdev.movies.TestUtils;
-import com.talosdev.movies.constants.TMDB;
-import com.talosdev.movies.remote.json.Movie;
-import com.talosdev.movies.remote.json.MovieJSONParser;
-import com.talosdev.movies.remote.json.MovieList;
+import app.we.go.movies.TestUtils;
+import app.we.go.movies.constants.TMDB;
+import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.MovieJSONParser;
+import app.we.go.movies.remote.json.MovieList;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
