@@ -132,8 +132,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
                     FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(this);
                     fetcher.execute(argMovieId);
                 } else {
-                    pagerAdapter.onMovieDetailsReceived(currentMovie);
-                    currentMovieId = currentMovie.id;
+                    onMovieDetailsReceived(currentMovie);
                 }
             }
         }
