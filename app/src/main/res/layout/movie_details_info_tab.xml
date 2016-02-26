@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:tools="http://schemas.android.com/tools"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:showIn="@layout/movie_details_fragment">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
     <android.support.v7.widget.CardView
@@ -12,8 +15,8 @@
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        card_view:cardUseCompatPadding="true"
         card_view:cardCornerRadius="@dimen/card_radius"
+        card_view:cardUseCompatPadding="true"
         card_view:contentPadding="@dimen/card_padding">
 
         <LinearLayout
@@ -33,7 +36,7 @@
             <TextView
                 android:id="@+id/movieDescription"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
@@ -58,8 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            card_view:cardUseCompatPadding="true"
             card_view:cardCornerRadius="@dimen/card_radius"
+            card_view:cardUseCompatPadding="true"
             card_view:contentPadding="@dimen/card_padding">
 
             <LinearLayout
@@ -92,8 +95,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
-            card_view:cardUseCompatPadding="true"
             card_view:cardCornerRadius="@dimen/card_radius"
+            card_view:cardUseCompatPadding="true"
             card_view:contentPadding="@dimen/card_padding">
 
             <LinearLayout
@@ -121,27 +124,27 @@
     </LinearLayout>
 
     <!--<Space-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/card_vertical_spacing" />-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/card_vertical_spacing" />-->
 
 
     <!--<android.support.v7.widget.CardView-->
-        <!--android:id="@+id/lorem_card"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
-        <!--android:layout_marginRight="@dimen/activity_horizontal_margin"-->
-        <!--card_view:cardUseCompatPadding="true"-->
-        <!--card_view:cardCornerRadius="@dimen/card_radius"-->
-        <!--card_view:contentPadding="@dimen/card_padding">-->
+    <!--android:id="@+id/lorem_card"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+    <!--android:layout_marginRight="@dimen/activity_horizontal_margin"-->
+    <!--card_view:cardUseCompatPadding="true"-->
+    <!--card_view:cardCornerRadius="@dimen/card_radius"-->
+    <!--card_view:contentPadding="@dimen/card_padding">-->
 
 
-        <!--<TextView-->
-            <!--android:id="@+id/lorem"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Lorem ipsum\n blah blah blah" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/lorem"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Lorem ipsum\n blah blah blah" />-->
 
     <!--</android.support.v7.widget.CardView>-->
-</merge>
+</LinearLayout>
