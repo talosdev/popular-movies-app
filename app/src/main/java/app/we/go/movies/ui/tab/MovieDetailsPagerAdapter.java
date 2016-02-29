@@ -5,34 +5,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import app.we.go.movies.callbacks.MovieDetailsCallback;
-import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.ui.fragments.MovieInfoTabFragment;
-import app.we.go.movies.ui.fragments.MovieReviewsTabFragment;
-import app.we.go.movies.ui.fragments.MovieTrailerTabFragment;
 
 /**
  * Created by apapad on 26/02/16.
  */
-public class MovieDetailsPagerAdapter extends FragmentPagerAdapter implements MovieDetailsCallback {
+public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_TABS = 3;
-    private final List<Fragment> tabFragments = new ArrayList<>(NUM_TABS);
+    private List<Fragment> tabFragments;
     // TODO get from resources
     public static final String[] TAB_TITLES = new String[]{"INFO", "REVIEWS", "TRAILER"};
-    private Movie currentMovie;
 
 
-    public MovieDetailsPagerAdapter(FragmentManager fm) {
+    public MovieDetailsPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
-        tabFragments.add(MovieInfoTabFragment.newInstance(this));
-        tabFragments.add(MovieReviewsTabFragment.newInstance(this));
-        tabFragments.add(MovieTrailerTabFragment.newInstance(this));
-
-
+        tabFragments = fragments;
     }
 
 
@@ -43,7 +31,7 @@ public class MovieDetailsPagerAdapter extends FragmentPagerAdapter implements Mo
         Fragment fragment = (Fragment) super.instantiateItem(container, position);
         tabFragments.set(position, fragment);
         return fragment;
- }
+    }
 
 
     @Override
@@ -64,18 +52,6 @@ public class MovieDetailsPagerAdapter extends FragmentPagerAdapter implements Mo
     }
 
 
-
-    @Override
-    public void onMovieDetailsReceived(Movie movie) {
-        currentMovie = movie;
-        for (Fragment f: tabFragments) {
-            ((MovieDetailsCallback) f).onMovieDetailsReceived(movie);
-        }
-    }
-
-    public Movie getCurrentMovie() {
-        return currentMovie;
-    }
 }
 
 

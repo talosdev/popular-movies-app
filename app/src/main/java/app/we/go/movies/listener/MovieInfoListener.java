@@ -1,4 +1,4 @@
-package app.we.go.movies.callbacks;
+package app.we.go.movies.listener;
 
 import app.we.go.movies.remote.json.Movie;
 
@@ -6,7 +6,7 @@ import app.we.go.movies.remote.json.Movie;
  * Callback that is called when the details of a movie are received.
  * Created by apapad on 27/01/16.
  */
-public interface MovieDetailsCallback {
+public interface MovieInfoListener {
 
-    void onMovieDetailsReceived(Movie movie);
+    void onMovieInfoReceived(Movie movie);
 }

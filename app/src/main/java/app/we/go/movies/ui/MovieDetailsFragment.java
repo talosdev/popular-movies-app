@@ -18,13 +18,21 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import app.we.go.movies.R;
-import app.we.go.movies.callbacks.MovieDetailsCallback;
+import app.we.go.movies.listener.MovieInfoListener;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
+import app.we.go.movies.listener.MovieReviewsListener;
+import app.we.go.movies.listener.MovieTrailerListener;
 import app.we.go.movies.remote.FetchMovieDetailsTask;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.ui.fragments.MovieInfoTabFragment;
+import app.we.go.movies.ui.fragments.MovieReviewsTabFragment;
+import app.we.go.movies.ui.fragments.MovieTrailerTabFragment;
 import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
 import hugo.weaving.DebugLog;
 
@@ -33,7 +41,7 @@ import static app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
 /**
  * Created by apapad on 3/01/16.
  */
-public class MovieDetailsFragment extends Fragment implements MovieDetailsCallback {
+public class MovieDetailsFragment extends Fragment implements MovieInfoListener {
 
 
     private static final String BUNDLE_MOVIE = "BUNDLE_MOVIE";
@@ -58,6 +66,9 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
     private MenuItem favItem;
     private MovieDetailsPagerAdapter pagerAdapter;
     private ViewPager pager;
+    private MovieInfoListener movieInfoListener;
+    private MovieReviewsListener movieReviewsListener;
+    private MovieTrailerListener movieTrailerListener;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -98,7 +109,10 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         if (getArguments() != null) {
             View rootView = inflater.inflate(R.layout.movie_details_fragment, container, false);
 
-            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager());
+
+            List<Fragment> tabFragments = buildTabFragments();
+
+            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), tabFragments);
 
             pager = (ViewPager)rootView.findViewById(R.id.details_pager);
             pager.setAdapter(pagerAdapter);
@@ -113,6 +127,23 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
             return null;
         }
 
+    }
+
+    private List<Fragment> buildTabFragments() {
+        List<Fragment> tabFragments = new ArrayList<>();
+        MovieInfoTabFragment movieInfoTabFragment = MovieInfoTabFragment.newInstance();
+        tabFragments.add(movieInfoTabFragment);
+        movieInfoListener = movieInfoTabFragment;
+
+        MovieReviewsTabFragment movieReviewsTabFragment = MovieReviewsTabFragment.newInstance();
+        tabFragments.add(movieReviewsTabFragment);
+        movieReviewsListener = movieReviewsTabFragment;
+
+        MovieTrailerTabFragment movieTrailerTabFragment = MovieTrailerTabFragment.newInstance();
+        tabFragments.add(movieTrailerTabFragment);
+        movieTrailerListener = movieTrailerTabFragment;
+
+        return tabFragments;
     }
 
     @DebugLog
@@ -132,7 +163,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
                     FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(this);
                     fetcher.execute(argMovieId);
                 } else {
-                    onMovieDetailsReceived(currentMovie);
+                    onMovieInfoReceived(currentMovie);
                 }
             }
         }
@@ -140,12 +171,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
 
     @Override
-    public void onMovieDetailsReceived(Movie movie) {
+    public void onMovieInfoReceived(Movie movie) {
         currentMovie = movie;
 
+        movieInfoListener.onMovieInfoReceived(movie);
         updateUI(movie);
 
-        pagerAdapter.onMovieDetailsReceived(movie);
     }
 
     private void updateUI(Movie movie) {

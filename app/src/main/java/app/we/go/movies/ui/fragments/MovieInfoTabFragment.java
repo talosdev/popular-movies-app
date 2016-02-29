@@ -14,17 +14,15 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 
 import app.we.go.movies.R;
-import app.we.go.movies.callbacks.MovieDetailsCallback;
+import app.we.go.movies.listener.MovieInfoListener;
 import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
 import hugo.weaving.DebugLog;
 
 /**
  * Created by apapad on 26/02/16.
  */
-public class MovieInfoTabFragment extends Fragment implements MovieDetailsCallback {
+public class MovieInfoTabFragment extends Fragment implements MovieInfoListener {
 
-    private static MovieDetailsPagerAdapter adapter;
     private TextView descriptionView;
     private TextView releaseDateView;
     private TextView voteAverageView;
@@ -61,8 +59,7 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsCallba
 
 
 
-    public static MovieInfoTabFragment newInstance(MovieDetailsPagerAdapter movieDetailsPagerAdapter) {
-        adapter = movieDetailsPagerAdapter;
+    public static MovieInfoTabFragment newInstance() {
 
         MovieInfoTabFragment f = new MovieInfoTabFragment();
 
@@ -75,9 +72,8 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsCallba
     public void onResume() {
         super.onResume();
 
-        Movie m = adapter.getCurrentMovie();
-        if (m != null) {
-            updateUI(m);
+        if (currentMovie != null) {
+            updateUI(currentMovie);
         }
     }
 
@@ -90,8 +86,16 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsCallba
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            currentMovie = (Movie) savedInstanceState.getParcelable(Movie.BUNDLE_KEY);
+        }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Movie.BUNDLE_KEY, currentMovie);
+    }
 
     @Override
     public void onStart() {
@@ -125,7 +129,7 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsCallba
     }
 
     @Override
-    public void onMovieDetailsReceived(Movie movie) {
+    public void onMovieInfoReceived(Movie movie) {
         currentMovie = movie;
         updateUI(movie);
     }

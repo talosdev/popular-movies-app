@@ -7,17 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import app.we.go.movies.R;
-import app.we.go.movies.callbacks.MovieDetailsCallback;
+import app.we.go.movies.listener.MovieInfoListener;
+import app.we.go.movies.listener.MovieTrailerListener;
 import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
 
 /**
  * Created by apapad on 26/02/16.
  */
-public class MovieTrailerTabFragment extends Fragment implements MovieDetailsCallback {
+public class MovieTrailerTabFragment extends Fragment implements MovieInfoListener, MovieTrailerListener {
 
 
-    private static MovieDetailsPagerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,8 +25,7 @@ public class MovieTrailerTabFragment extends Fragment implements MovieDetailsCal
         return v;
     }
 
-    public static MovieTrailerTabFragment newInstance(MovieDetailsPagerAdapter movieDetailsPagerAdapter) {
-        adapter = movieDetailsPagerAdapter;
+    public static MovieTrailerTabFragment newInstance() {
         MovieTrailerTabFragment f = new MovieTrailerTabFragment();
 
         return f;
@@ -41,7 +39,12 @@ public class MovieTrailerTabFragment extends Fragment implements MovieDetailsCal
     }
 
     @Override
-    public void onMovieDetailsReceived(Movie movie) {
+    public void onMovieInfoReceived(Movie movie) {
+
+    }
+
+    @Override
+    public void onMovieTrailerReceived(Movie movie) {
 
     }
 }

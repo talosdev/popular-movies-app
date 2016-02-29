@@ -26,7 +26,7 @@ import android.widget.GridView;
 import android.widget.SpinnerAdapter;
 
 import app.we.go.movies.R;
-import app.we.go.movies.callbacks.MovieSelectedCallback;
+import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
