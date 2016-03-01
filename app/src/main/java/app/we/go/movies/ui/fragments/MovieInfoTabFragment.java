@@ -51,7 +51,6 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener 
         voteAverageView = (TextView) v.findViewById(R.id.vote_average);
         voteCountView = (TextView) v.findViewById(R.id.vote_count);
 
-
         return v;
     }
 

@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.we.go.movies.R;
-import app.we.go.movies.listener.MovieInfoListener;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
+import app.we.go.movies.listener.MovieInfoListener;
 import app.we.go.movies.listener.MovieReviewsListener;
 import app.we.go.movies.listener.MovieTrailerListener;
 import app.we.go.movies.remote.FetchMovieDetailsTask;
