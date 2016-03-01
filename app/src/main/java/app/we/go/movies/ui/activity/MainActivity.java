@@ -1,19 +1,17 @@
 package app.we.go.movies.ui.activity;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import app.we.go.movies.R;
-import app.we.go.movies.callbacks.MovieSelectedCallback;
+import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.constants.Fragments;
 import app.we.go.movies.constants.Intents;
 import app.we.go.movies.ui.MovieDetailsFragment;
-
 import hugo.weaving.DebugLog;
 
-public class MainActivity extends Activity implements MovieSelectedCallback {
+public class MainActivity extends FragmentActivity implements MovieSelectedCallback {
 
     private boolean twoPane;
 
@@ -28,7 +26,7 @@ public class MainActivity extends Activity implements MovieSelectedCallback {
         if (findViewById(R.id.detail_frame) != null) {
             twoPane = true;
             if (savedInstanceState == null) {
-                getFragmentManager().
+                getSupportFragmentManager().
                         beginTransaction().
                         addToBackStack(null).
                         replace(R.id.detail_frame, new MovieDetailsFragment(), Fragments.MOVIE_DETAILS_FRAGMENT_TAG).
@@ -76,8 +74,8 @@ public class MainActivity extends Activity implements MovieSelectedCallback {
         if (twoPane) {
             // TABLET
             MovieDetailsFragment details = MovieDetailsFragment.newInstance(movieId);
-            getFragmentManager().beginTransaction().replace(R.id.detail_frame, details).addToBackStack(null)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame, details).addToBackStack(null)
+                  //  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
         } else {
             // MOBILE

@@ -1,15 +1,14 @@
 package app.we.go.movies.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Intents;
 import app.we.go.movies.ui.MovieDetailsFragment;
-
 import hugo.weaving.DebugLog;
 
-public class MovieDetailActivity extends Activity {
+public class MovieDetailActivity extends FragmentActivity {
 
     @DebugLog
     @Override
@@ -23,7 +22,7 @@ public class MovieDetailActivity extends Activity {
         if (savedInstanceState == null) {
             MovieDetailsFragment fragment = MovieDetailsFragment.newInstance(movieId);
 
-            getFragmentManager().beginTransaction().add(R.id.detail_frame, fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.detail_frame, fragment).commit();
         }
     }
 

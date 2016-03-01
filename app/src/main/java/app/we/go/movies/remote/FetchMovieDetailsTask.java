@@ -3,7 +3,7 @@ package app.we.go.movies.remote;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import app.we.go.movies.callbacks.MovieDetailsCallback;
+import app.we.go.movies.listener.MovieInfoListener;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.remote.json.Movie;
 
@@ -16,10 +16,10 @@ import java.io.IOException;
 public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
 
-    private final MovieDetailsCallback callback;
+    private final MovieInfoListener callback;
 
 
-    public FetchMovieDetailsTask(MovieDetailsCallback callback) {
+    public FetchMovieDetailsTask(MovieInfoListener callback) {
         super();
         this.callback = callback;
 
@@ -51,7 +51,7 @@ public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
             return;
         }
 
-        callback.onMovieDetailsReceived(movie);
+        callback.onMovieInfoReceived(movie);
 
     }
 

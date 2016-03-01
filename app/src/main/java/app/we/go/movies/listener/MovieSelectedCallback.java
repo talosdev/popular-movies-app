@@ -1,4 +1,4 @@
-package app.we.go.movies.callbacks;
+package app.we.go.movies.listener;
 
 /**
  * Callback used for fragment-enclosing activity interaction

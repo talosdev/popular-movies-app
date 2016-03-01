@@ -1,13 +1,11 @@
 package app.we.go.movies.ui;
 
-import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,15 +17,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import app.we.go.movies.R;
-import app.we.go.movies.callbacks.MovieDetailsCallback;
+import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
+import app.we.go.movies.listener.MovieInfoListener;
+import app.we.go.movies.listener.MovieReviewsListener;
+import app.we.go.movies.listener.MovieTrailerListener;
 import app.we.go.movies.remote.FetchMovieDetailsTask;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.json.Movie;
-
-import java.text.SimpleDateFormat;
-
+import app.we.go.movies.ui.fragments.MovieInfoTabFragment;
+import app.we.go.movies.ui.fragments.MovieReviewsTabFragment;
+import app.we.go.movies.ui.fragments.MovieTrailerTabFragment;
+import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
 import hugo.weaving.DebugLog;
 
 import static app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
@@ -35,20 +41,13 @@ import static app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
 /**
  * Created by apapad on 3/01/16.
  */
-public class MovieDetailsFragment extends Fragment implements MovieDetailsCallback {
+public class MovieDetailsFragment extends Fragment implements MovieInfoListener {
 
 
-    private static final String ARG_MOVIE_ID = "ARG_MOVIE_ID";
     private static final String BUNDLE_MOVIE = "BUNDLE_MOVIE";
     public static final int ICON_FAV_SEL = R.drawable.ic_favorite_blue_24dp;
     public static final int ICON_FAV_UNSEL = R.drawable.ic_favorite_border_blue_24dp;
 
-    private TextView titleView;
-    private TextView descriptionView;
-    private TextView releaseDateView;
-    private TextView voteAverageView;
-    private TextView voteCountView;
-    private ImageView imageView;
 
     private URLBuilder urlBuilder;
 
@@ -61,8 +60,15 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
 
     private boolean currentMovieIsFavorite;
+    private ImageView imageView;
+    private TextView titleView;
 
     private MenuItem favItem;
+    private MovieDetailsPagerAdapter pagerAdapter;
+    private ViewPager pager;
+    private MovieInfoListener movieInfoListener;
+    private MovieReviewsListener movieReviewsListener;
+    private MovieTrailerListener movieTrailerListener;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -72,7 +78,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
     public static MovieDetailsFragment newInstance(long movieId) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
         Bundle b = new Bundle();
-        b.putLong(ARG_MOVIE_ID, movieId);
+        b.putLong(Args.ARG_MOVIE_ID, movieId);
         fragment.setArguments(b);
         return fragment;
     }
@@ -102,13 +108,19 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         // current movie selected to show in the details pane.
         if (getArguments() != null) {
             View rootView = inflater.inflate(R.layout.movie_details_fragment, container, false);
-            titleView = (TextView) rootView.findViewById(R.id.movieTitle);
-            descriptionView = (TextView) rootView.findViewById(R.id.movieDescription);
-            releaseDateView = (TextView) rootView.findViewById(R.id.releaseDate);
-            voteAverageView = (TextView) rootView.findViewById(R.id.vote_average);
-            voteCountView = (TextView) rootView.findViewById(R.id.vote_count);
+
+
+            List<Fragment> tabFragments = buildTabFragments();
+
+            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), tabFragments);
+
+            pager = (ViewPager)rootView.findViewById(R.id.details_pager);
+            pager.setAdapter(pagerAdapter);
+
             imageView = (ImageView) rootView.findViewById(R.id.imageView);
             imageView.forceLayout();
+            titleView = (TextView) rootView.findViewById(R.id.movieTitle);
+
 
             return rootView;
         } else {
@@ -117,10 +129,27 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
     }
 
+    private List<Fragment> buildTabFragments() {
+        List<Fragment> tabFragments = new ArrayList<>();
+        MovieInfoTabFragment movieInfoTabFragment = MovieInfoTabFragment.newInstance();
+        tabFragments.add(movieInfoTabFragment);
+        movieInfoListener = movieInfoTabFragment;
+
+        MovieReviewsTabFragment movieReviewsTabFragment = MovieReviewsTabFragment.newInstance();
+        tabFragments.add(movieReviewsTabFragment);
+        movieReviewsListener = movieReviewsTabFragment;
+
+        MovieTrailerTabFragment movieTrailerTabFragment = MovieTrailerTabFragment.newInstance();
+        tabFragments.add(movieTrailerTabFragment);
+        movieTrailerListener = movieTrailerTabFragment;
+
+        return tabFragments;
+    }
+
     @DebugLog
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         // TODO
         // This is a hack for the problem I was facing with configuration changes from
         // two-pane landscape to one-pane portrait. If getView is null, we skip all
@@ -128,14 +157,13 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
         // must return a null view in the cases that this is happening.
         if (getView() != null) {
             if (getArguments() != null) {
-                long argMovieId = getArguments().getLong(ARG_MOVIE_ID);
+                long argMovieId = getArguments().getLong(Args.ARG_MOVIE_ID);
                 if (currentMovie == null || argMovieId != currentMovie.id) {
                     currentMovieId = argMovieId;
                     FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(this);
                     fetcher.execute(argMovieId);
                 } else {
-                    updateUI(currentMovie);
-                    currentMovieId = currentMovie.id;
+                    onMovieInfoReceived(currentMovie);
                 }
             }
         }
@@ -143,32 +171,16 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
 
 
     @Override
-    public void onMovieDetailsReceived(Movie movie) {
+    public void onMovieInfoReceived(Movie movie) {
         currentMovie = movie;
 
+        movieInfoListener.onMovieInfoReceived(movie);
         updateUI(movie);
-    }
 
+    }
 
     private void updateUI(Movie movie) {
         titleView.setText(movie.title);
-        descriptionView.setText(movie.overview);
-
-        if (movie.releaseDate != null) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String dateFormat = sharedPreferences.getString(
-                    getResources().getString(R.string.pref_dateFormat_key),
-                    getResources().getString(R.string.pref_dateFormat_value_a));
-            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-
-            releaseDateView.setText(sdf.format(movie.releaseDate));
-        } else {
-            releaseDateView.setText(getResources().getString(R.string.unavailable));
-            releaseDateView.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-        }
-
-        voteAverageView.setText(movie.voteAverage + "");
-        voteCountView.setText("based on " + movie.voteCount + " votes");
 
         final Movie m = movie;
 
@@ -195,7 +207,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsCallba
                     Picasso.
                             with(getActivity()).
                             //TODO
-                            load(R.drawable.movie512).
+                                    load(R.drawable.movie512).
                             into(imageView);
                 }
             }
