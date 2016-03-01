@@ -1,15 +1,14 @@
 package app.we.go.movies.remote;
 
-import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-import app.we.go.movies.R;
-import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.data.SortByCriterion;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import app.we.go.movies.constants.TMDB;
+import app.we.go.movies.data.SortByCriterion;
 
 /**
  * Created by apapad on 29/11/15.
@@ -22,11 +21,8 @@ public class URLBuilder {
     private static final int[] BACKDROP_RESOLUTIONS = new int[]{300, 780, 1280};
 
     private static final int[] POSTER_RESOLUTIONS = new int[]{92, 154, 185, 342, 500, 780};
-    private final int posterWidth;
 
-    public URLBuilder(Context context) {
-        // This is returned already in pixel
-        this.posterWidth = context.getResources().getDimensionPixelSize(R.dimen.poster_width_grid);
+    public URLBuilder() {
     }
 
 
@@ -89,17 +85,53 @@ public class URLBuilder {
 
     }
 
+    @NonNull
+    public  URL buildMovieDetailsUrl(long id) throws MalformedURLException {
+        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
+                appendEncodedPath(id+"").
+                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
+
+        return new URL(uri.toString());
+    }
+
+    @NonNull
+    public  URL buildMovieReviewsUrl(long id) throws MalformedURLException {
+        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
+                appendPath(id + "").
+                appendPath(TMDB.URL_MOVIE_REVIEWS_SUFFIX).
+                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
+
+        return new URL(uri.toString());
+    }
+
+    @NonNull
+    public  URL buildMovieTrailersUrl(long id) throws MalformedURLException {
+        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
+                appendPath(id + "").
+                appendPath(TMDB.URL_MOVIE_TRAILERS_SUFFIX).
+                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
+
+        return new URL(uri.toString());
+    }
+
+    /**
+     *
+     * @param poster
+     * @param posterWidth
+     *  in pixels
+     * @return
+     */
     @Nullable
-    public String buildPosterUrl(String poster) {
+    public String buildPosterUrl(String poster, int posterWidth) {
         if (poster == null || poster.equals("") || poster.equals("null")) {
             return null;
         }
-        int tmdbResolution = calculatePosterResolutionToDownload();
+        int tmdbResolution = calculatePosterResolutionToDownload(posterWidth);
         return TMDB.POSTER_BASE_URL + "/w" + tmdbResolution + poster;
     }
 
 
-    private  int calculatePosterResolutionToDownload() {
+    private  int calculatePosterResolutionToDownload(int posterWidth) {
         if (posterWidth < POSTER_RESOLUTIONS[0]) {
             return POSTER_RESOLUTIONS[0];
         }

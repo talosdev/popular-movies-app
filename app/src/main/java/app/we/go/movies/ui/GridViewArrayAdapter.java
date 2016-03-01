@@ -10,12 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.data.MoviePoster;
 import app.we.go.movies.remote.URLBuilder;
-
-import java.util.List;
 
 /**
  * Created by apapad on 19/11/15.
@@ -31,7 +32,7 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
         super(context, resource, movies);
         this.context = context;
         this.resource = resource;
-        urlBuilder = new URLBuilder(context);
+        urlBuilder = new URLBuilder();
 
     }
 
@@ -46,7 +47,9 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
 
         String posterPath = getItem(position).getPosterPath();
         if (posterPath != null) {
-            String posterUrl = urlBuilder.buildPosterUrl(posterPath);
+            // already in pixels
+            int posterWidth = context.getResources().getDimensionPixelSize(R.dimen.poster_width_grid);
+            String posterUrl = urlBuilder.buildPosterUrl(posterPath, posterWidth);
             Log.v(Tags.REMOTE, String.format("Requesting poster image: %s", posterUrl));
 
             Picasso.

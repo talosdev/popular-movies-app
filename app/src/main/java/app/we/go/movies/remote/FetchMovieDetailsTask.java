@@ -3,11 +3,11 @@ package app.we.go.movies.remote;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import app.we.go.movies.listener.MovieInfoListener;
-import app.we.go.movies.constants.Tags;
-import app.we.go.movies.remote.json.Movie;
-
 import java.io.IOException;
+
+import app.we.go.movies.constants.Tags;
+import app.we.go.movies.listener.MovieInfoListener;
+import app.we.go.movies.remote.json.Movie;
 
 /**
  * Created by apapad on 13/11/15.
@@ -22,7 +22,6 @@ public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
     public FetchMovieDetailsTask(MovieInfoListener callback) {
         super();
         this.callback = callback;
-
     }
 
     @Override

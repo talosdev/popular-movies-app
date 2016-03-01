@@ -21,10 +21,12 @@ import app.we.go.movies.remote.URLBuilder;
  */
 public class GridViewFavoritesCursorAdapter extends CursorAdapter {
     private final URLBuilder urlBuilder;
+    private final int posterWidth;
 
     public GridViewFavoritesCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-        urlBuilder = new URLBuilder(context);
+        posterWidth = context.getResources().getDimensionPixelSize(R.dimen.poster_width_grid);
+        urlBuilder = new URLBuilder();
     }
 
     /**
@@ -51,7 +53,7 @@ public class GridViewFavoritesCursorAdapter extends CursorAdapter {
         String posterPath = cursor.getString(FavoriteMovieEntry.COL_INDEX_POSTER_PATH);
 
         if (posterPath != null) {
-            String posterUrl = urlBuilder.buildPosterUrl(posterPath);
+            String posterUrl = urlBuilder.buildPosterUrl(posterPath, posterWidth);
             Log.v(Tags.REMOTE, String.format("Requesting poster image: %s", posterUrl));
 
             Picasso.
