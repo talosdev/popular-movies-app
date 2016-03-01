@@ -30,9 +30,9 @@ import app.we.go.movies.listener.MovieTrailerListener;
 import app.we.go.movies.remote.FetchMovieDetailsTask;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.ui.fragments.MovieInfoTabFragment;
-import app.we.go.movies.ui.fragments.MovieReviewsTabFragment;
-import app.we.go.movies.ui.fragments.MovieTrailerTabFragment;
+import app.we.go.movies.ui.tab.MovieInfoTabFragment;
+import app.we.go.movies.ui.tab.MovieReviewsTabFragment;
+import app.we.go.movies.ui.tab.MovieTrailerTabFragment;
 import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
 import hugo.weaving.DebugLog;
 
@@ -130,12 +130,14 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
     }
 
     private List<Fragment> buildTabFragments() {
+        long movieId = getArguments().getLong(Args.ARG_MOVIE_ID);
+
         List<Fragment> tabFragments = new ArrayList<>();
         MovieInfoTabFragment movieInfoTabFragment = MovieInfoTabFragment.newInstance();
         tabFragments.add(movieInfoTabFragment);
         movieInfoListener = movieInfoTabFragment;
 
-        MovieReviewsTabFragment movieReviewsTabFragment = MovieReviewsTabFragment.newInstance();
+        MovieReviewsTabFragment movieReviewsTabFragment = MovieReviewsTabFragment.newInstance(movieId);
         tabFragments.add(movieReviewsTabFragment);
         movieReviewsListener = movieReviewsTabFragment;
 

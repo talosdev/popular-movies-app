@@ -40,9 +40,10 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            // TODO use the field?
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            convertView = inflater.inflate(resource, parent, false);
+            if (context instanceof Activity) {
+                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+                convertView = inflater.inflate(resource, parent, false);
+            }
         }
 
         String posterPath = getItem(position).getPosterPath();

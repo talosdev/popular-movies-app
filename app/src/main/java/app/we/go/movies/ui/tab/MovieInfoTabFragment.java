@@ -1,4 +1,4 @@
-package app.we.go.movies.ui.fragments;
+package app.we.go.movies.ui.tab;
 
 import android.content.SharedPreferences;
 import android.graphics.Typeface;

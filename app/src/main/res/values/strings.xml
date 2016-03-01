@@ -10,4 +10,5 @@
     <string name="pref_dateFormat_key">pref_dateFormat</string>
     <string name="unavailable">Unavailable</string>
     <string name="menu_favorite">Favorite</string>
+    <string name="empty_reviews">No reviews found</string>
 </resources>
