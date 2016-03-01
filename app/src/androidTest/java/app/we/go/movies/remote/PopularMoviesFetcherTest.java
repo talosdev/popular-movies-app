@@ -2,14 +2,14 @@ package app.we.go.movies.remote;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import app.we.go.movies.data.SortByCriterion;
-import app.we.go.movies.remote.json.Movie;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+
+import app.we.go.movies.data.SortByCriterion;
+import app.we.go.movies.remote.json.Movie;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by apapad on 14/11/15.
  */
 @RunWith(AndroidJUnit4.class)
-public class FetchPopularMoviesTest {
+public class PopularMoviesFetcherTest {
 
     private PopularMoviesFetcher fetcher;
 
