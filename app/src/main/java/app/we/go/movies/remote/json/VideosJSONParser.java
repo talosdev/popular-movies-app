@@ -4,20 +4,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- * Created by apapad on 1/03/16.
+ * Created by apapad on 13/11/15.
  */
-public class MovieReviewsJSONParser {
+public class VideosJSONParser {
+
 
     private Gson gson;
 
-    public MovieReviewsJSONParser() {
+    public VideosJSONParser() {
         gson = new GsonBuilder().create();
     }
 
 
-
-    public ReviewList parse(String json) {
-        ReviewList list = gson.fromJson(json, ReviewList.class);
+    public VideoList parse(String json) {
+        VideoList list = gson.fromJson(json, VideoList.class);
         return list;
     }
 
