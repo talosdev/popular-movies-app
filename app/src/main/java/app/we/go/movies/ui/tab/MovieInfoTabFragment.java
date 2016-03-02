@@ -122,7 +122,7 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener 
         }
 
         voteAverageView.setText(movie.voteAverage + "");
-        voteCountView.setText("based on " + movie.voteCount + " votes");
+        voteCountView.setText("(" + movie.voteCount + " votes)");
 
 
     }
