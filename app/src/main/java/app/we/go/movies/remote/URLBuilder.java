@@ -88,7 +88,7 @@ public class URLBuilder {
     @NonNull
     public  URL buildMovieDetailsUrl(long id) throws MalformedURLException {
         Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
-                appendEncodedPath(id+"").
+                appendEncodedPath(id + "").
                 appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
 
         return new URL(uri.toString());
@@ -105,7 +105,7 @@ public class URLBuilder {
     }
 
     @NonNull
-    public  URL buildMovieTrailersUrl(long id) throws MalformedURLException {
+    public  URL buildMovieVideosUrl(long id) throws MalformedURLException {
         Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
                 appendPath(id + "").
                 appendPath(TMDB.URL_MOVIE_TRAILERS_SUFFIX).
@@ -113,6 +113,9 @@ public class URLBuilder {
 
         return new URL(uri.toString());
     }
+
+
+
 
     /**
      *
@@ -129,7 +132,6 @@ public class URLBuilder {
         int tmdbResolution = calculatePosterResolutionToDownload(posterWidth);
         return TMDB.POSTER_BASE_URL + "/w" + tmdbResolution + poster;
     }
-
 
     private  int calculatePosterResolutionToDownload(int posterWidth) {
         if (posterWidth < POSTER_RESOLUTIONS[0]) {
