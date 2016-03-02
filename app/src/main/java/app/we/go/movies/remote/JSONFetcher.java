@@ -1,20 +1,16 @@
 package app.we.go.movies.remote;
 
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.constants.Tags;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+
+import app.we.go.movies.constants.Tags;
 
 /**
  * Created by apapad on 29/11/15.
@@ -57,13 +53,5 @@ public abstract class JSONFetcher {
         return jsonString;
     }
 
-    //TODO what is this doing here?
-    @NonNull
-    protected URL getMovieDetailsUrl(long id) throws MalformedURLException {
-        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
-                appendEncodedPath(id+"").
-                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
 
-        return new URL(uri.toString());
-    }
 }

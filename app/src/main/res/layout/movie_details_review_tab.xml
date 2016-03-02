@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <ListView
+        android:id="@id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/card_vertical_spacing">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="0dp" />
+
+    <TextView
+        android:id="@id/android:empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:text="@string/empty_reviews" />
 
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reviews will be added here\n\nYEah!\n\n\n\n\n\n\nAAAA\n\n\n\n\nZZZZZ" />
-    </LinearLayout>
-</ScrollView>
+</RelativeLayout>

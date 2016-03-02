@@ -2,11 +2,11 @@ package app.we.go.movies.remote;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import app.we.go.movies.remote.json.Movie;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import app.we.go.movies.remote.json.Movie;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

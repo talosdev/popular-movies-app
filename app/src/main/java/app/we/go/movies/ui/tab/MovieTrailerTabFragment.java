@@ -1,4 +1,4 @@
-package app.we.go.movies.ui.fragments;
+package app.we.go.movies.ui.tab;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

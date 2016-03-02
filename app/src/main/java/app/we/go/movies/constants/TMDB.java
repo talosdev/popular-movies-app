@@ -31,7 +31,12 @@ public class TMDB {
      * The URL for getting the details of a movie
      */
     public static final String URL_MOVIE_DETAILS = BASE_URL + "/3/movie/";
+    public static final String URL_MOVIE_REVIEWS_SUFFIX = "reviews";
+    public static final String URL_MOVIE_TRAILERS_SUFFIX = "videos";
+
+
     public static final String DATE_FORMAT = "yyyy-MM-dd";
+
 
     /**
      * The base URL for getting the poster image
@@ -49,10 +54,6 @@ public class TMDB {
      * discover queries.
      */
     public static final int MOVIES_PER_PAGE = 20;
-
-
-
-
 
 
 }
