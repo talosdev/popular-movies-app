@@ -30,10 +30,10 @@ import app.we.go.movies.listener.MovieTrailerListener;
 import app.we.go.movies.remote.FetchMovieDetailsTask;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
 import app.we.go.movies.ui.tab.MovieInfoTabFragment;
 import app.we.go.movies.ui.tab.MovieReviewsTabFragment;
 import app.we.go.movies.ui.tab.VideosTabFragment;
-import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
 import hugo.weaving.DebugLog;
 
 import static app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
@@ -70,6 +70,10 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
     private MovieReviewsListener movieReviewsListener;
     private MovieTrailerListener movieTrailerListener;
 
+    // Variable that is set to true when this fragment is headless (ie container==null)
+    // This might happen when changing from dual-pane to single-pane
+    private boolean headless;
+
     public MovieDetailsFragment() {
         // Required empty public constructor
     }
@@ -98,7 +102,7 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
         // container might be null when there is a configuration change from
         // two-pane to one-pane, and this fragment is reloaded, but without container
         if (container == null) {
-            return null;
+            headless = true;
         }
 
         setHasOptionsMenu(true);
@@ -155,10 +159,9 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
         super.onResume();
         // TODO
         // This is a hack for the problem I was facing with configuration changes from
-        // two-pane landscape to one-pane portrait. If getView is null, we skip all
-        // the logic of the fragment. For this to work correctly, the onCreateView method
-        // must return a null view in the cases that this is happening.
-        if (getView() != null) {
+        // two-pane landscape to one-pane portrait. If headless is true, we skip all
+        // the logic of the fragment.
+        if (!headless) {
             if (getArguments() != null) {
                 long argMovieId = getArguments().getLong(Args.ARG_MOVIE_ID);
                 if (currentMovie == null || argMovieId != currentMovie.id) {
