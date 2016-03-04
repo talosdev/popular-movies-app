@@ -141,9 +141,11 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
 
         // TODO
         // This is a hack for the problem I was facing with configuration changes from
-        // two-pane landscape to one-pane portrait. If headless is true, we skip all
-        // the logic of the fragment.
-        if (!headless) {
+        // two-pane landscape to one-pane portrait. If getView is null, we skip all
+        // the logic of the fragment. For this to work correctly, the onCreateView method
+        // must return a null view in the cases that this is happening.
+        if (getView() != null) {
+
             if (currentMovie != null) {
                 onMovieInfoReceived(currentMovie);
             } else if (savedInstanceState != null) {
@@ -182,6 +184,33 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
 
         return tabFragments;
     }
+
+    @DebugLog
+    @Override
+    public void onResume() {
+        super.onResume();
+<<<<<<< Updated upstream
+        // TODO
+        // This is a hack for the problem I was facing with configuration changes from
+        // two-pane landscape to one-pane portrait. If headless is true, we skip all
+        // the logic of the fragment.
+        if (!headless) {
+            if (getArguments() != null) {
+                long argMovieId = getArguments().getLong(Args.ARG_MOVIE_ID);
+                if (currentMovie == null || argMovieId != currentMovie.id) {
+                    currentMovieId = argMovieId;
+                    FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(this);
+                    fetcher.execute(argMovieId);
+                } else {
+                    onMovieInfoReceived(currentMovie);
+                }
+            }
+        }
+=======
+
+>>>>>>> Stashed changes
+    }
+
 
     @Override
     public void onMovieInfoReceived(Movie movie) {
