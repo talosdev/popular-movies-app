@@ -1,6 +1,8 @@
 package app.we.go.movies.listener;
 
-import app.we.go.movies.remote.json.Movie;
+import java.util.ArrayList;
+
+import app.we.go.movies.remote.json.Review;
 
 /**
  * Callback that is called when the trailer list for a movie is received.
@@ -8,5 +10,5 @@ import app.we.go.movies.remote.json.Movie;
  */
 public interface MovieReviewsListener {
 
-    void onMovieReviewsReceived(Movie movie);
+    void onMovieReviewsReceived(ArrayList<Review> reviews);
 }

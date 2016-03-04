@@ -115,6 +115,11 @@ public class URLBuilder {
     }
 
 
+    public Uri buildYoutubeUri(String key)   {
+        Uri uri = Uri.parse(TMDB.YOUTUBE_BASE_URL).buildUpon().
+                appendQueryParameter(TMDB.YOUTUBE_VIDEO_PARAM, key).build();
+        return uri;
+    }
 
 
     /**

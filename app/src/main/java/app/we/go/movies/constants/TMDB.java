@@ -56,4 +56,6 @@ public class TMDB {
     public static final int MOVIES_PER_PAGE = 20;
 
 
+    public static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch";
+    public static final String YOUTUBE_VIDEO_PARAM = "v";
 }

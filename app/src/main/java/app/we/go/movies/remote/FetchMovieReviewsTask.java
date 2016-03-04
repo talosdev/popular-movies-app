@@ -2,11 +2,11 @@ package app.we.go.movies.remote;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import java.io.IOException;
 
 import app.we.go.movies.constants.Tags;
+import app.we.go.movies.listener.MovieReviewsListener;
 import app.we.go.movies.remote.json.ReviewList;
 
 /**
@@ -14,11 +14,12 @@ import app.we.go.movies.remote.json.ReviewList;
  */
 public class FetchMovieReviewsTask extends AsyncTask<Long, Void, ReviewList> {
 
-    private final ArrayAdapter adapter;
 
-    public FetchMovieReviewsTask(ArrayAdapter adapter) {
+    private final MovieReviewsListener listener;
+
+    public FetchMovieReviewsTask(MovieReviewsListener listener) {
         super();
-        this.adapter = adapter;
+        this.listener = listener;
     }
 
     @Override
@@ -26,9 +27,10 @@ public class FetchMovieReviewsTask extends AsyncTask<Long, Void, ReviewList> {
         super.onPostExecute(result);
         if (result != null) {
 
-            adapter.addAll(result.reviews);
             Log.d("UI", "Received reviewsList with " + result.reviews.size() + " items. Notifying the adapter...");
-            adapter.notifyDataSetChanged();
+
+            listener.onMovieReviewsReceived(result.reviews);
+
         }
     }
 

@@ -32,7 +32,7 @@ import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.ui.tab.MovieInfoTabFragment;
 import app.we.go.movies.ui.tab.MovieReviewsTabFragment;
-import app.we.go.movies.ui.tab.MovieTrailerTabFragment;
+import app.we.go.movies.ui.tab.VideosTabFragment;
 import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
 import hugo.weaving.DebugLog;
 
@@ -115,6 +115,7 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
             pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), tabFragments);
 
             pager = (ViewPager)rootView.findViewById(R.id.details_pager);
+            pager.setOffscreenPageLimit(2);
             pager.setAdapter(pagerAdapter);
 
             imageView = (ImageView) rootView.findViewById(R.id.imageView);
@@ -141,7 +142,7 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
         tabFragments.add(movieReviewsTabFragment);
         movieReviewsListener = movieReviewsTabFragment;
 
-        MovieTrailerTabFragment movieTrailerTabFragment = MovieTrailerTabFragment.newInstance();
+        VideosTabFragment movieTrailerTabFragment = VideosTabFragment.newInstance(movieId);
         tabFragments.add(movieTrailerTabFragment);
         movieTrailerListener = movieTrailerTabFragment;
 
