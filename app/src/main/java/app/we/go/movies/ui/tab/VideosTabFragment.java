@@ -29,10 +29,10 @@ import hugo.weaving.DebugLog;
 public class VideosTabFragment extends ListFragment implements MovieVideosListener, LoaderManager.LoaderCallbacks, AdapterView.OnItemClickListener {
 
 
-    private static final String BUNDLE_VIDEOS = "app.we.go.movies.BUNDLE_VIDEOS";
     private URLBuilder urlBuilder;
-    private ArrayList<Video> currentVideos;
-    private long currentMovie;
+
+    private boolean loaderHasData;
+    public static final String BUNDLE_LOADER_HAS_DATA = "app.we.go.movies.videosTab.LOADER_HAS_DATA";
 
     public static VideosTabFragment newInstance(long movieId) {
         VideosTabFragment f = new VideosTabFragment();
@@ -47,7 +47,7 @@ public class VideosTabFragment extends ListFragment implements MovieVideosListen
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(BUNDLE_VIDEOS, currentVideos);
+        outState.putBoolean(BUNDLE_LOADER_HAS_DATA, loaderHasData);
     }
 
     @Override
@@ -70,50 +70,39 @@ public class VideosTabFragment extends ListFragment implements MovieVideosListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         urlBuilder = new URLBuilder();
+
+
     }
 
 
-    // TODO why onActivityCreated?
     @DebugLog
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         ArrayAdapter adapter = new VideoArrayAdapter(getActivity(), R.layout.video_row, new ArrayList<Video>(), getActivity().getLayoutInflater());
         setListAdapter(adapter);
         getLoaderManager().initLoader(1, null, this);
+
         getListView().setOnItemClickListener(this);
 
+        // Check if there is a current movie saved in the bundle
+        if (savedInstanceState != null) {
+            loaderHasData = savedInstanceState.getBoolean(BUNDLE_LOADER_HAS_DATA);
+        }
 
-        // Restore state strategy: first check instance variable (back button), then check bundle
-        // (orientation change), and if not fetch from the network.
-        Log.d("ZZ", "Args " + getArguments().getLong(Args.ARG_MOVIE_ID) + " - currentMovie " + currentMovie);
-
-        if (currentVideos != null) {
-            // if the movie has changes, (replacing fragments in two-pane mode) we need to skip this
-            // and fetch from the network
-            if (currentMovie == getArguments().getLong(Args.ARG_MOVIE_ID)) {
-                onMovieVideosReceived(currentVideos);
-            }
-        } else if (savedInstanceState != null) {
-            ArrayList<Video> videosFromBundle = savedInstanceState.getParcelableArrayList(BUNDLE_VIDEOS);
-            if (videosFromBundle != null) {
-                onMovieVideosReceived(videosFromBundle);
-            }
-        } else {
+        // If the loader has no data, forceLoad
+        if (!loaderHasData) {
             getLoaderManager().getLoader(1).forceLoad();
         }
     }
 
     @Override
     public void onMovieVideosReceived(ArrayList<Video> videos) {
-        currentVideos = videos;
-        // currentMovie assignment must happen only here (and not in onLoadFinished)
-        currentMovie = getArguments().getLong(Args.ARG_MOVIE_ID);
         notifyAdapter(videos);
     }
 
     private void notifyAdapter(ArrayList<Video> videos) {
-        currentVideos = videos;
         ((ArrayAdapter) getListAdapter()).clear();
         ((ArrayAdapter) getListAdapter()).addAll(videos);
     }
@@ -126,9 +115,11 @@ public class VideosTabFragment extends ListFragment implements MovieVideosListen
                 getArguments().getLong(Args.ARG_MOVIE_ID));
     }
 
+    @DebugLog
     @Override
     public void onLoadFinished(Loader loader, Object data) {
         if (data != null) {
+            loaderHasData = true;
             notifyAdapter((ArrayList<Video>) data);
         }
     }
