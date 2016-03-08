@@ -3,9 +3,11 @@ package app.we.go.movies.ui.tab;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.ViewGroup;
 
-import java.util.List;
+import app.we.go.movies.listener.MovieInfoListener;
+import hugo.weaving.DebugLog;
 
 /**
  * Created by apapad on 26/02/16.
@@ -13,23 +15,28 @@ import java.util.List;
 public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_TABS = 3;
-    private List<Fragment> tabFragments;
+    private final long movieId;
+    private Fragment[] tabFragments = new Fragment[NUM_TABS];
     // TODO get from resources
     public static final String[] TAB_TITLES = new String[]{"INFO", "REVIEWS", "TRAILER"};
 
 
-    public MovieDetailsPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+    public MovieDetailsPagerAdapter(FragmentManager fm, long movieId) {
         super(fm);
-        tabFragments = fragments;
-    }
+        this.movieId = movieId;
+        Log.d("ZZZ", "Constructor: " + tabFragments.toString());
+       }
 
 
     // Hack to make sure that on orientation changes, the existing fragment is
     // reused
+    @DebugLog
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         Fragment fragment = (Fragment) super.instantiateItem(container, position);
-        tabFragments.set(position, fragment);
+        tabFragments[position] = fragment;
+        Log.d("ZZZ", "Instantiate: " + tabFragments.toString() + " - " + tabFragments[position].toString());
+
         return fragment;
     }
 
@@ -41,8 +48,23 @@ public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Fragment f = null;
+        switch (position) {
+            case 0:
+                f = MovieInfoTabFragment.newInstance(movieId);
+                break;
+            case 1:
+                f = MovieReviewsTabFragment.newInstance(movieId);
+                break;
+            case 2:
+                f = VideosTabFragment.newInstance(movieId);
+        }
 
-        return tabFragments.get(position);
+        tabFragments[position] = f;
+
+        Log.d("ZZZ", "getItem: " + tabFragments.toString() + " - " + tabFragments[position].toString());
+
+        return f;
     }
 
     // Returns the page title for the top indicator
@@ -51,6 +73,10 @@ public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
         return TAB_TITLES[position];
     }
 
+
+    public MovieInfoListener getMovieInfoListener() {
+        return (MovieInfoListener) tabFragments[0];
+    }
 
 }
 

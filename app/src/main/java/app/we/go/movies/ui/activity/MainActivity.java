@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import app.we.go.movies.R;
 import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.constants.Fragments;
-import app.we.go.movies.constants.Intents;
 import app.we.go.movies.ui.MovieDetailsFragment;
 import hugo.weaving.DebugLog;
 
@@ -69,18 +68,17 @@ public class MainActivity extends FragmentActivity implements MovieSelectedCallb
     }
 
     @Override
-    public void onMovieSelected(long movieId) {
+    public void onMovieSelected(long movieId, String posterPath) {
 
         if (twoPane) {
             // TABLET
-            MovieDetailsFragment details = MovieDetailsFragment.newInstance(movieId);
+            MovieDetailsFragment details = MovieDetailsFragment.newInstance(movieId, posterPath);
             getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame, details).addToBackStack(null)
                   //  .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
         } else {
             // MOBILE
-            Intent intent = new Intent(this, MovieDetailActivity.class);
-            intent.putExtra(Intents.EXTRA_MOVIE_ID, movieId);
+            Intent intent = MovieDetailActivity.newIntent(this, movieId, posterPath);
             startActivity(intent);
         }
     }

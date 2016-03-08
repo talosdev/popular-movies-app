@@ -18,21 +18,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.listener.MovieInfoListener;
-import app.we.go.movies.listener.MovieReviewsListener;
-import app.we.go.movies.listener.MovieTrailerListener;
-import app.we.go.movies.remote.FetchMovieDetailsTask;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.ui.tab.MovieInfoTabFragment;
-import app.we.go.movies.ui.tab.MovieReviewsTabFragment;
-import app.we.go.movies.ui.tab.MovieTrailerTabFragment;
 import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
 import hugo.weaving.DebugLog;
 
@@ -44,51 +35,49 @@ import static app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
 public class MovieDetailsFragment extends Fragment implements MovieInfoListener {
 
 
-    private static final String BUNDLE_MOVIE = "BUNDLE_MOVIE";
     public static final int ICON_FAV_SEL = R.drawable.ic_favorite_blue_24dp;
     public static final int ICON_FAV_UNSEL = R.drawable.ic_favorite_border_blue_24dp;
 
-
-    private URLBuilder urlBuilder;
-
-    // holds the current movie being displayed
-    private Movie currentMovie;
-    // we need to store separately the id of the movie and the actual movie object
-    // because the id comes is known on creation of the fragment, but the full details object
-    // is loaded asynchronously
     private long currentMovieId;
-
+    private String currentMoviePosterPath;
 
     private boolean currentMovieIsFavorite;
     private ImageView imageView;
-    private TextView titleView;
 
+    private TextView titleView;
     private MenuItem favItem;
     private MovieDetailsPagerAdapter pagerAdapter;
     private ViewPager pager;
-    private MovieInfoListener movieInfoListener;
-    private MovieReviewsListener movieReviewsListener;
-    private MovieTrailerListener movieTrailerListener;
+
+    // private MovieInfoListener movieInfoListener;
+    // Variable that is set to true when this fragment is headless (ie container==null)
+    // This might happen when changing from dual-pane to single-pane
+    private boolean headless;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
     }
 
 
-    public static MovieDetailsFragment newInstance(long movieId) {
+    public static MovieDetailsFragment newInstance(long movieId, String posterPath) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
         Bundle b = new Bundle();
         b.putLong(Args.ARG_MOVIE_ID, movieId);
+        b.putString(Args.ARG_POSTER_PATH, posterPath);
         fragment.setArguments(b);
         return fragment;
     }
 
-
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        // persist the current movie
-        super.onSaveInstanceState(outState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getLoaderManager().enableDebugLogging(true);
+        if (getArguments() != null) {
+            currentMovieId = getArguments().getLong(Args.ARG_MOVIE_ID);
+            currentMoviePosterPath = getArguments().getString(Args.ARG_POSTER_PATH);
+        }
     }
+
 
     @DebugLog
     @Override
@@ -98,7 +87,7 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
         // container might be null when there is a configuration change from
         // two-pane to one-pane, and this fragment is reloaded, but without container
         if (container == null) {
-            return null;
+            headless = true;
         }
 
         setHasOptionsMenu(true);
@@ -109,18 +98,15 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
         if (getArguments() != null) {
             View rootView = inflater.inflate(R.layout.movie_details_fragment, container, false);
 
+            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId);
 
-            List<Fragment> tabFragments = buildTabFragments();
-
-            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), tabFragments);
-
-            pager = (ViewPager)rootView.findViewById(R.id.details_pager);
+            pager = (ViewPager) rootView.findViewById(R.id.details_pager);
+            pager.setOffscreenPageLimit(2);
             pager.setAdapter(pagerAdapter);
 
             imageView = (ImageView) rootView.findViewById(R.id.imageView);
             imageView.forceLayout();
             titleView = (TextView) rootView.findViewById(R.id.movieTitle);
-
 
             return rootView;
         } else {
@@ -129,56 +115,10 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
 
     }
 
-    private List<Fragment> buildTabFragments() {
-        long movieId = getArguments().getLong(Args.ARG_MOVIE_ID);
-
-        List<Fragment> tabFragments = new ArrayList<>();
-        MovieInfoTabFragment movieInfoTabFragment = MovieInfoTabFragment.newInstance();
-        tabFragments.add(movieInfoTabFragment);
-        movieInfoListener = movieInfoTabFragment;
-
-        MovieReviewsTabFragment movieReviewsTabFragment = MovieReviewsTabFragment.newInstance(movieId);
-        tabFragments.add(movieReviewsTabFragment);
-        movieReviewsListener = movieReviewsTabFragment;
-
-        MovieTrailerTabFragment movieTrailerTabFragment = MovieTrailerTabFragment.newInstance();
-        tabFragments.add(movieTrailerTabFragment);
-        movieTrailerListener = movieTrailerTabFragment;
-
-        return tabFragments;
-    }
-
-    @DebugLog
-    @Override
-    public void onResume() {
-        super.onResume();
-        // TODO
-        // This is a hack for the problem I was facing with configuration changes from
-        // two-pane landscape to one-pane portrait. If getView is null, we skip all
-        // the logic of the fragment. For this to work correctly, the onCreateView method
-        // must return a null view in the cases that this is happening.
-        if (getView() != null) {
-            if (getArguments() != null) {
-                long argMovieId = getArguments().getLong(Args.ARG_MOVIE_ID);
-                if (currentMovie == null || argMovieId != currentMovie.id) {
-                    currentMovieId = argMovieId;
-                    FetchMovieDetailsTask fetcher = new FetchMovieDetailsTask(this);
-                    fetcher.execute(argMovieId);
-                } else {
-                    onMovieInfoReceived(currentMovie);
-                }
-            }
-        }
-    }
-
 
     @Override
     public void onMovieInfoReceived(Movie movie) {
-        currentMovie = movie;
-
-        movieInfoListener.onMovieInfoReceived(movie);
         updateUI(movie);
-
     }
 
     private void updateUI(Movie movie) {
@@ -236,6 +176,7 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
     /**
      * Depending on the boolean value marks/unmarks the current movie as favorite and
      * sets the correct icon.
+     *
      * @param active
      */
     private void setFavoriteActive(boolean active) {
@@ -249,13 +190,12 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_favorite:
                 // currentMovie hasn't been loaded yet
-                if (currentMovie == null) {
+                if (currentMovieId == 0) {
                     return false;
                 }
                 if (currentMovieIsFavorite) {
@@ -266,7 +206,7 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
                     setFavoriteActive(false);
                 } else {
                     ContentValues cv = new ContentValues();
-                    cv.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, currentMovie.posterPath);
+                    cv.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, currentMoviePosterPath);
                     getActivity().getContentResolver().insert(
                             FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
                             cv);
@@ -276,7 +216,7 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
             default:
                 return super.onOptionsItemSelected(item);
         }
-                return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     @DebugLog
@@ -296,4 +236,6 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
     public void onStop() {
         super.onStop();
     }
+
+
 }

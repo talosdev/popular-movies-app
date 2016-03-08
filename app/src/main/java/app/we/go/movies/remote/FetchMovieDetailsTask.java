@@ -10,9 +10,10 @@ import app.we.go.movies.listener.MovieInfoListener;
 import app.we.go.movies.remote.json.Movie;
 
 /**
+ * Use {@link MovieInfoLoader} instead.
  * Created by apapad on 13/11/15.
  */
-
+@Deprecated
 public class FetchMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
 
 

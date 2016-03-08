@@ -5,6 +5,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +16,16 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 
 import app.we.go.movies.R;
+import app.we.go.movies.constants.Args;
 import app.we.go.movies.listener.MovieInfoListener;
+import app.we.go.movies.remote.MovieInfoLoader;
 import app.we.go.movies.remote.json.Movie;
 import hugo.weaving.DebugLog;
 
 /**
  * Created by apapad on 26/02/16.
  */
-public class MovieInfoTabFragment extends Fragment implements MovieInfoListener {
+public class MovieInfoTabFragment extends Fragment implements MovieInfoListener, LoaderManager.LoaderCallbacks<Movie> {
 
     private TextView descriptionView;
     private TextView releaseDateView;
@@ -29,6 +33,25 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener 
     private TextView voteCountView;
 
     private Movie currentMovie;
+
+    public static MovieInfoTabFragment newInstance(long movieId) {
+        MovieInfoTabFragment f = new MovieInfoTabFragment();
+        Bundle b = new Bundle();
+        b.putLong(Args.ARG_MOVIE_ID, movieId);
+        f.setArguments(b);
+        return f;
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO is this required?
+        if (savedInstanceState != null) {
+            currentMovie = (Movie) savedInstanceState.getParcelable(Movie.BUNDLE_KEY);
+        }
+    }
+
 
     @DebugLog
     @Override
@@ -54,17 +77,12 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener 
         return v;
     }
 
-
-
-
-
-    public static MovieInfoTabFragment newInstance() {
-
-        MovieInfoTabFragment f = new MovieInfoTabFragment();
-
-        return f;
+    @DebugLog
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(1, null, this);
     }
-
 
     @DebugLog
     @Override
@@ -83,23 +101,11 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener 
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            currentMovie = (Movie) savedInstanceState.getParcelable(Movie.BUNDLE_KEY);
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(Movie.BUNDLE_KEY, currentMovie);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     private void updateUI(Movie movie) {
         if (getView() == null) {
@@ -131,5 +137,24 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener 
     public void onMovieInfoReceived(Movie movie) {
         currentMovie = movie;
         updateUI(movie);
+        ((MovieInfoListener) getParentFragment()).onMovieInfoReceived(movie);
+    }
+
+
+    @Override
+    public Loader<Movie> onCreateLoader(int id, Bundle args) {
+        return new MovieInfoLoader(getActivity(), getArguments().getLong(Args.ARG_MOVIE_ID));
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Movie> loader, Movie data) {
+        if (data != null) {
+            onMovieInfoReceived(data);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Movie> loader) {
+
     }
 }

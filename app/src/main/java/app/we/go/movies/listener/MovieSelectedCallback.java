@@ -6,5 +6,5 @@ package app.we.go.movies.listener;
  * Created by apapad on 28/01/16.
  */
 public interface MovieSelectedCallback {
-    void onMovieSelected(long movieId);
+    void onMovieSelected(long movieId, String posterPath);
 }
