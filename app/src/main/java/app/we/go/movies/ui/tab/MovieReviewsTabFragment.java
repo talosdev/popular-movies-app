@@ -21,8 +21,8 @@ import hugo.weaving.DebugLog;
 
 /**
  * AsyncTaskLoader based solution. There are still various problems with loaders:
- * - Offscreen tabs in ViewPager won't have their loaders started. Known bug, a workaround exists.
- * - On configuration changes, onLoadFinished is called twice.
+ * - Offscreen tabs in ViewPager won't have their loaders started. Known bug, a workaround exists.. {@link #onActivityCreated(Bundle)}
+ * - On configuration changes, onLoadFinished is called twice. There is a partial workaround, {@link #onResume()}
  * - Most important problem: In dual-pane mode, when the orientation changes, and then the user clicks
  * back, the loaders for the fragments in the backstack are no longer available, so network calls are made.
  *
@@ -66,9 +66,6 @@ public class MovieReviewsTabFragment extends ListFragment implements MovieReview
         setListAdapter(adapter);
         getListView().setOnItemClickListener(null);
 
-        // We will restore state here: First check if the instance variable is set (eg back button)
-        getLoaderManager().initLoader(LOADER_REVIEWS, null, this).startLoading();
-
         // Workaround for https://code.google.com/p/android/issues/detail?id=69586
         // Loader in off-screen tabs won't start if the first tab contains a loader.
         getView().post(new Runnable() {
@@ -79,9 +76,20 @@ public class MovieReviewsTabFragment extends ListFragment implements MovieReview
         });
     }
 
+
+    /**
+     * Due to a bug(?) in Loaders, the onLoadFinished method is called twice when the back button
+     * is pressed, or on configuration changes. By calling restartLoader in the onResume method
+     * instead of calling initLoader in onActivityCreated, we solve it in almost all cases:
+     * - back button on phone
+     * - conf changes on phone
+     * - conf changes on tablet
+     * BUT NOT in conf changes on tablet.
+     */
     @Override
     public void onResume() {
         super.onResume();
+        getLoaderManager().restartLoader(LOADER_REVIEWS, null, this);
     }
 
 

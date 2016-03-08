@@ -59,20 +59,12 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
 
     @DebugLog
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-    @DebugLog
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         ArrayAdapter adapter = new VideoArrayAdapter(getActivity(), R.layout.video_row, new ArrayList<Video>(), getActivity().getLayoutInflater());
         setListAdapter(adapter);
 
-        getLoaderManager().initLoader(LOADER_VIDEOS, null, this).startLoading();
 
         getListView().setOnItemClickListener(this);
 
@@ -87,6 +79,14 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
         });
     }
 
+
+    @DebugLog
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().restartLoader(LOADER_VIDEOS, null, this).startLoading();
+
+    }
 
 
 
