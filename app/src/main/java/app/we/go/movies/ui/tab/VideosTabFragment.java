@@ -23,10 +23,13 @@ import app.we.go.movies.remote.json.Video;
 import hugo.weaving.DebugLog;
 
 /**
+ * See {@link MovieReviewsTabFragment} for some notes.
+ *
  * Created by apapad on 26/02/16.
  */
-public class VideosTabFragment extends ListFragment implements LoaderManager.LoaderCallbacks, AdapterView.OnItemClickListener {
+public class VideosTabFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<Video>>, AdapterView.OnItemClickListener {
 
+    private static final int LOADER_VIDEOS = 3;
     private URLBuilder urlBuilder;
 
     public static VideosTabFragment newInstance(long movieId) {
@@ -36,6 +39,13 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
         f.setArguments(b);
         Log.d("ZZ", "Args " + movieId);
         return f;
+    }
+
+    @Override
+    @DebugLog
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        urlBuilder = new URLBuilder();
     }
 
     @Override
@@ -53,13 +63,6 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
         super.onResume();
     }
 
-    @Override
-    @DebugLog
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        urlBuilder = new URLBuilder();
-    }
-
 
     @DebugLog
     @Override
@@ -68,16 +71,23 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
 
         ArrayAdapter adapter = new VideoArrayAdapter(getActivity(), R.layout.video_row, new ArrayList<Video>(), getActivity().getLayoutInflater());
         setListAdapter(adapter);
-        getLoaderManager().initLoader(1, null, this);
+
+        getLoaderManager().initLoader(LOADER_VIDEOS, null, this).startLoading();
 
         getListView().setOnItemClickListener(this);
+
+
+        // Workaround for https://code.google.com/p/android/issues/detail?id=69586
+        // Loader in off-screen tabs won't start if the first tab contains a loader.
+        getView().post(new Runnable() {
+            @Override
+            public void run() {
+                setUserVisibleHint(true);
+            }
+        });
     }
 
-    
-    private void notifyAdapter(ArrayList<Video> videos) {
-        ((ArrayAdapter) getListAdapter()).clear();
-        ((ArrayAdapter) getListAdapter()).addAll(videos);
-    }
+
 
 
     @DebugLog
@@ -89,9 +99,10 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
 
     @DebugLog
     @Override
-    public void onLoadFinished(Loader loader, Object data) {
+    public void onLoadFinished(Loader<List<Video>> loader, List<Video> data) {
         if (data != null) {
-            notifyAdapter((ArrayList<Video>) data);
+            ((ArrayAdapter) getListAdapter()).clear();
+            ((ArrayAdapter) getListAdapter()).addAll(data);
         }
     }
 

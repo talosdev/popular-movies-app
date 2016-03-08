@@ -5,25 +5,23 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.List;
 
 import app.we.go.movies.constants.Tags;
-import app.we.go.movies.remote.json.Video;
-import app.we.go.movies.remote.json.VideoList;
+import app.we.go.movies.remote.json.Movie;
 
 /**
  * Created by apapad on 2/03/16.
  */
-public class VideoAsyncLoader extends AsyncTaskLoader<List<Video>> {
+public class MovieInfoLoader extends AsyncTaskLoader<Movie> {
 
     private final long movieId;
-    private VideosFetcher fetcher;
-    private List<Video> data;
+    private MovieDetailsFetcher fetcher;
+    private Movie data;
 
-    public VideoAsyncLoader(Context context, long id) {
+    public MovieInfoLoader(Context context, long id) {
         super(context);
         movieId = id;
-        fetcher = new VideosFetcher();
+        fetcher = new MovieDetailsFetcher();
     }
 
     @Override
@@ -38,7 +36,7 @@ public class VideoAsyncLoader extends AsyncTaskLoader<List<Video>> {
     }
 
     @Override
-    public void deliverResult(List<Video> data) {
+    public void deliverResult(Movie data) {
         // We’ll save the data for later retrieval
         this.data = data;
         // We can do any pre-processing we want here
@@ -47,15 +45,13 @@ public class VideoAsyncLoader extends AsyncTaskLoader<List<Video>> {
     }
 
     @Override
-    public List<Video> loadInBackground() {
+    public Movie loadInBackground() {
         try {
-            VideoList vList =  fetcher.fetch(movieId);
-            if (vList != null) {
-                data = vList.videos;
-                return data;
-            }
+            Movie movie = fetcher.fetch(movieId);
+            data = movie;
+            return data;
         } catch (IOException e) {
-            Log.e(Tags.REMOTE, String.format("There was an error fetching trailers for movie %d", movieId), e);
+            Log.e(Tags.REMOTE, String.format("There was an error fetching details for movie %d", movieId), e);
         }
         return null;
     }

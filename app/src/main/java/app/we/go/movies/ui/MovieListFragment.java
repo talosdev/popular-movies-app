@@ -25,21 +25,20 @@ import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.SpinnerAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import app.we.go.movies.R;
-import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
 import app.we.go.movies.data.MoviePoster;
 import app.we.go.movies.data.SortByCriterion;
+import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.remote.FetchPopularMoviesTask;
 import app.we.go.movies.remote.FetchPopularMoviesTask.FetchPopularMoviesParams;
 import app.we.go.movies.ui.activity.PreferencesActivity;
 import app.we.go.movies.ui.util.EndlessScrollListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import hugo.weaving.DebugLog;
 
 /**
@@ -204,9 +203,10 @@ public class MovieListFragment extends Fragment
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        long movieId = ((MoviePoster) gridView.getAdapter().getItem(position)).getMovieId();
+        MoviePoster moviePoster = (MoviePoster) gridView.getAdapter().getItem(position);
 
-        ((MovieSelectedCallback) getActivity()).onMovieSelected(movieId);
+
+        ((MovieSelectedCallback) getActivity()).onMovieSelected(moviePoster.getMovieId(), moviePoster.getPosterPath());
 
     }
 
