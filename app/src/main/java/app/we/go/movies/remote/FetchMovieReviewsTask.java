@@ -10,8 +10,10 @@ import app.we.go.movies.listener.MovieReviewsListener;
 import app.we.go.movies.remote.json.ReviewList;
 
 /**
+ * Not used anymore, use {@link ReviewsAsyncLoader} instead.
  * Created by apapad on 01/03/2016
  */
+@Deprecated
 public class FetchMovieReviewsTask extends AsyncTask<Long, Void, ReviewList> {
 
 

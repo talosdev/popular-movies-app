@@ -17,7 +17,6 @@ import app.we.go.movies.constants.Args;
 import app.we.go.movies.listener.MovieReviewsListener;
 import app.we.go.movies.remote.ReviewsAsyncLoader;
 import app.we.go.movies.remote.json.Review;
-import app.we.go.movies.ui.ReviewsArrayAdapter;
 import hugo.weaving.DebugLog;
 
 /**
