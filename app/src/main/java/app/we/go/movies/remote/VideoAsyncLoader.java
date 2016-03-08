@@ -18,6 +18,7 @@ public class VideoAsyncLoader extends AsyncTaskLoader<List<Video>> {
 
     private final long movieId;
     private VideosFetcher fetcher;
+    private List<Video> data;
 
     public VideoAsyncLoader(Context context, long id) {
         super(context);
@@ -26,11 +27,32 @@ public class VideoAsyncLoader extends AsyncTaskLoader<List<Video>> {
     }
 
     @Override
+    protected void onStartLoading() {
+        if (data != null) {
+            // Use cached data
+            deliverResult(data);
+        } else {
+            // We have no data, so kick off loading it
+            forceLoad();
+        }
+    }
+
+    @Override
+    public void deliverResult(List<Video> data) {
+        // We’ll save the data for later retrieval
+        this.data = data;
+        // We can do any pre-processing we want here
+        // Just remember this is on the UI thread so nothing lengthy!
+        super.deliverResult(data);
+    }
+
+    @Override
     public List<Video> loadInBackground() {
         try {
             VideoList vList =  fetcher.fetch(movieId);
             if (vList != null) {
-                return vList.videos;
+                data = vList.videos;
+                return data;
             }
         } catch (IOException e) {
             Log.e(Tags.REMOTE, String.format("There was an error fetching reviews for movie %d", movieId), e);

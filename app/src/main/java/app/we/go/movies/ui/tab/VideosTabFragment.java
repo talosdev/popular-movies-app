@@ -17,7 +17,6 @@ import java.util.List;
 
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.listener.MovieVideosListener;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.VideoAsyncLoader;
 import app.we.go.movies.remote.json.Video;
@@ -26,13 +25,9 @@ import hugo.weaving.DebugLog;
 /**
  * Created by apapad on 26/02/16.
  */
-public class VideosTabFragment extends ListFragment implements MovieVideosListener, LoaderManager.LoaderCallbacks, AdapterView.OnItemClickListener {
-
+public class VideosTabFragment extends ListFragment implements LoaderManager.LoaderCallbacks, AdapterView.OnItemClickListener {
 
     private URLBuilder urlBuilder;
-
-    private boolean loaderHasData;
-    public static final String BUNDLE_LOADER_HAS_DATA = "app.we.go.movies.videosTab.LOADER_HAS_DATA";
 
     public static VideosTabFragment newInstance(long movieId) {
         VideosTabFragment f = new VideosTabFragment();
@@ -41,13 +36,6 @@ public class VideosTabFragment extends ListFragment implements MovieVideosListen
         f.setArguments(b);
         Log.d("ZZ", "Args " + movieId);
         return f;
-    }
-
-    @DebugLog
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(BUNDLE_LOADER_HAS_DATA, loaderHasData);
     }
 
     @Override
@@ -70,8 +58,6 @@ public class VideosTabFragment extends ListFragment implements MovieVideosListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         urlBuilder = new URLBuilder();
-
-
     }
 
 
@@ -85,23 +71,9 @@ public class VideosTabFragment extends ListFragment implements MovieVideosListen
         getLoaderManager().initLoader(1, null, this);
 
         getListView().setOnItemClickListener(this);
-
-        // Check if there is a current movie saved in the bundle
-        if (savedInstanceState != null) {
-            loaderHasData = savedInstanceState.getBoolean(BUNDLE_LOADER_HAS_DATA);
-        }
-
-        // If the loader has no data, forceLoad
-        if (!loaderHasData) {
-            getLoaderManager().getLoader(1).forceLoad();
-        }
     }
 
-    @Override
-    public void onMovieVideosReceived(ArrayList<Video> videos) {
-        notifyAdapter(videos);
-    }
-
+    
     private void notifyAdapter(ArrayList<Video> videos) {
         ((ArrayAdapter) getListAdapter()).clear();
         ((ArrayAdapter) getListAdapter()).addAll(videos);
@@ -119,7 +91,6 @@ public class VideosTabFragment extends ListFragment implements MovieVideosListen
     @Override
     public void onLoadFinished(Loader loader, Object data) {
         if (data != null) {
-            loaderHasData = true;
             notifyAdapter((ArrayList<Video>) data);
         }
     }
