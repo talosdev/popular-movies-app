@@ -81,17 +81,14 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(1, null, this);
+
     }
 
     @DebugLog
     @Override
     public void onResume() {
         super.onResume();
-
-        if (currentMovie != null) {
-            updateUI(currentMovie);
-        }
+        getLoaderManager().restartLoader(1, null, this);
     }
 
     @DebugLog
@@ -146,6 +143,7 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
         return new MovieInfoLoader(getActivity(), getArguments().getLong(Args.ARG_MOVIE_ID));
     }
 
+    @DebugLog
     @Override
     public void onLoadFinished(Loader<Movie> loader, Movie data) {
         if (data != null) {
