@@ -20,17 +20,17 @@ public class TMDB {
     /**
      * The base url where the TMDB api can be reached
      */
-    public final static String BASE_URL = "https://api.themoviedb.org";
+    public final static String BASE_URL = "https://api.themoviedb.org/3/";
 
     /**
      * The URL for getting the list of popular movies
      */
-    public static final String URL_MOVIES = BASE_URL + "/3/discover/movie";
+    public static final String URL_MOVIES = BASE_URL + "discover/movie";
 
     /**
      * The URL for getting the details of a movie
      */
-    public static final String URL_MOVIE_DETAILS = BASE_URL + "/3/movie/";
+    public static final String URL_MOVIE_DETAILS = BASE_URL + "movie/";
     public static final String URL_MOVIE_REVIEWS_SUFFIX = "reviews";
     public static final String URL_MOVIE_TRAILERS_SUFFIX = "videos";
 

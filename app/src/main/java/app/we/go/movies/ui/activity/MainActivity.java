@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import app.we.go.movies.R;
-import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.constants.Fragments;
+import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.ui.MovieDetailsFragment;
 import hugo.weaving.DebugLog;
 

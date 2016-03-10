@@ -1,5 +1,6 @@
 package app.we.go.movies.ui.tab;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -15,11 +16,15 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
+import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.VideoAsyncLoader;
 import app.we.go.movies.remote.json.Video;
+import app.we.go.movies.ui.MovieApplication;
 import hugo.weaving.DebugLog;
 
 /**
@@ -30,7 +35,12 @@ import hugo.weaving.DebugLog;
 public class VideosTabFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<Video>>, AdapterView.OnItemClickListener {
 
     private static final int LOADER_VIDEOS = 3;
-    private URLBuilder urlBuilder;
+
+    @Inject
+    URLBuilder urlBuilder;
+
+    @Inject
+    TMDBService service;
 
     public static VideosTabFragment newInstance(long movieId) {
         VideosTabFragment f = new VideosTabFragment();
@@ -42,10 +52,15 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((MovieApplication) context.getApplicationContext()).getComponent().inject(this);
+    }
+
+    @Override
     @DebugLog
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        urlBuilder = new URLBuilder();
     }
 
     @Override
@@ -93,7 +108,7 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
     @DebugLog
     @Override
     public Loader<List<Video>> onCreateLoader(int id, Bundle args) {
-        return new VideoAsyncLoader(getActivity(),
+        return new VideoAsyncLoader(getActivity(), service,
                 getArguments().getLong(Args.ARG_MOVIE_ID));
     }
 

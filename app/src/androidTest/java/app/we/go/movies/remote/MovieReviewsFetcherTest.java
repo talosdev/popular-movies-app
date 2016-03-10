@@ -22,7 +22,7 @@ public class MovieReviewsFetcherTest {
 
     @Before
     public void setUp() {
-        fetcher = new MovieReviewsFetcher();
+        fetcher = new MovieReviewsFetcher(service);
     }
 
 

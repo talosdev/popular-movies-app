@@ -1,7 +1,6 @@
 package app.we.go.movies.remote;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.net.MalformedURLException;
@@ -85,34 +84,7 @@ public class URLBuilder {
 
     }
 
-    @NonNull
-    public  URL buildMovieDetailsUrl(long id) throws MalformedURLException {
-        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
-                appendEncodedPath(id + "").
-                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
 
-        return new URL(uri.toString());
-    }
-
-    @NonNull
-    public  URL buildMovieReviewsUrl(long id) throws MalformedURLException {
-        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
-                appendPath(id + "").
-                appendPath(TMDB.URL_MOVIE_REVIEWS_SUFFIX).
-                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
-
-        return new URL(uri.toString());
-    }
-
-    @NonNull
-    public  URL buildMovieVideosUrl(long id) throws MalformedURLException {
-        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
-                appendPath(id + "").
-                appendPath(TMDB.URL_MOVIE_TRAILERS_SUFFIX).
-                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
-
-        return new URL(uri.toString());
-    }
 
 
     public Uri buildYoutubeUri(String key)   {
