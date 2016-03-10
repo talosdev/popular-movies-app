@@ -2,7 +2,6 @@ package app.we.go.movies.remote;
 
 import java.io.IOException;
 
-import app.we.go.movies.BuildConfig;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.remote.json.MovieJSONParser;
 import retrofit2.Call;
@@ -22,7 +21,7 @@ public class MovieDetailsFetcher extends JSONFetcher {
 
     public Movie fetch(long id) throws IOException {
 
-        Call<Movie> call = service.getDetails(id, BuildConfig.TMDB_API_KEY);
+        Call<Movie> call = service.getDetails(id);
 
         Response<Movie> response = call.execute();
 
