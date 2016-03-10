@@ -8,10 +8,8 @@ import javax.inject.Singleton;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.remote.TMDBApiKeyInterceptor;
 import app.we.go.movies.remote.TMDBService;
-import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -26,13 +24,6 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public URLBuilder provideURLBuilder() {
-        return new URLBuilder();
-    }
-
-
-    @Provides
-    @Singleton
     public Gson provideGson() {
         return new GsonBuilder()
                 .setDateFormat(TMDB.DATE_FORMAT)
@@ -42,18 +33,16 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public TMDBService provideTMDBService(Gson gson, Interceptor apiKeyInterceptor) {
+    public TMDBService provideTMDBService(Gson gson, TMDBApiKeyInterceptor apiKeyInterceptor) {
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-// set your desired log level
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        // add your other interceptors …
         httpClient.addInterceptor(apiKeyInterceptor);
 
         // add logging as last interceptor
-        httpClient.addInterceptor(logging);  // <-- this is the important line!
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        httpClient.addInterceptor(logging);
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -65,11 +54,4 @@ public class ApplicationModule {
         return retrofit.create(TMDBService.class);
     }
 
-
-
-    @Provides
-    @Singleton
-    public Interceptor provideApiKeyInterceptor() {
-        return new TMDBApiKeyInterceptor();
-    }
 }

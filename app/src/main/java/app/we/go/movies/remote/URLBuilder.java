@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.inject.Inject;
+
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.data.SortByCriterion;
 
@@ -21,6 +23,7 @@ public class URLBuilder {
 
     private static final int[] POSTER_RESOLUTIONS = new int[]{92, 154, 185, 342, 500, 780};
 
+    @Inject
     public URLBuilder() {
     }
 

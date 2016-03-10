@@ -2,6 +2,8 @@ package app.we.go.movies.remote;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import app.we.go.movies.constants.TMDB;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -12,6 +14,11 @@ import okhttp3.Response;
  * Created by apapad on 10/03/16.
  */
 public class TMDBApiKeyInterceptor implements Interceptor {
+
+    @Inject
+    public TMDBApiKeyInterceptor() {
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request originalRequest = chain.request();
