@@ -3,6 +3,7 @@ package app.we.go.movies.remote;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import app.we.go.movies.constants.TMDB;
 import okhttp3.HttpUrl;
@@ -13,6 +14,7 @@ import okhttp3.Response;
 /**
  * Created by apapad on 10/03/16.
  */
+@Singleton
 public class TMDBApiKeyInterceptor implements Interceptor {
 
     @Inject

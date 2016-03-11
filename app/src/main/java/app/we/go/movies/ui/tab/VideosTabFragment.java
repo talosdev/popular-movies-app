@@ -20,11 +20,13 @@ import javax.inject.Inject;
 
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.dependency.VideoFragmentModule;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.VideoAsyncLoader;
+import app.we.go.movies.remote.VideosFetcher;
 import app.we.go.movies.remote.json.Video;
 import app.we.go.movies.ui.MovieApplication;
+import app.we.go.movies.ui.mvp.view.VideosView;
 import hugo.weaving.DebugLog;
 
 /**
@@ -32,7 +34,7 @@ import hugo.weaving.DebugLog;
  *
  * Created by apapad on 26/02/16.
  */
-public class VideosTabFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<Video>>, AdapterView.OnItemClickListener {
+public class VideosTabFragment extends ListFragment implements VideosView, LoaderManager.LoaderCallbacks<List<Video>>, AdapterView.OnItemClickListener {
 
     private static final int LOADER_VIDEOS = 3;
 
@@ -40,7 +42,7 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
     URLBuilder urlBuilder;
 
     @Inject
-    TMDBService service;
+    VideosFetcher fetcher;
 
     public static VideosTabFragment newInstance(long movieId) {
         VideosTabFragment f = new VideosTabFragment();
@@ -54,7 +56,10 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        ((MovieApplication) context.getApplicationContext()).getComponent().inject(this);
+        ((MovieApplication) context.getApplicationContext()).
+                getComponent().
+                subComponent(new VideoFragmentModule()).inject(this);
+        Log.d("ZZZ", "Fetcher is null: " + (fetcher==null));
     }
 
     @Override
@@ -108,7 +113,7 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
     @DebugLog
     @Override
     public Loader<List<Video>> onCreateLoader(int id, Bundle args) {
-        return new VideoAsyncLoader(getActivity(), service,
+        return new VideoAsyncLoader(getActivity(), fetcher,
                 getArguments().getLong(Args.ARG_MOVIE_ID));
     }
 

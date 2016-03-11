@@ -18,8 +18,8 @@ import javax.inject.Inject;
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.listener.MovieReviewsListener;
+import app.we.go.movies.remote.MovieReviewsFetcher;
 import app.we.go.movies.remote.ReviewsAsyncLoader;
-import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.ui.MovieApplication;
 import hugo.weaving.DebugLog;
@@ -36,7 +36,7 @@ import hugo.weaving.DebugLog;
 public class MovieReviewsTabFragment extends ListFragment implements MovieReviewsListener, LoaderManager.LoaderCallbacks<List<Review>> {
 
     @Inject
-    TMDBService service;
+    MovieReviewsFetcher fetcher;
 
     private static final String BUNDLE_KEY_REVIEWS = "app.we.go.movies.BUNDLE_REVIEWS";
     private static final int LOADER_REVIEWS = 2;
@@ -127,7 +127,7 @@ public class MovieReviewsTabFragment extends ListFragment implements MovieReview
 
     @Override
     public Loader<List<Review>> onCreateLoader(int id, Bundle args) {
-        return new ReviewsAsyncLoader(getActivity(), service,
+        return new ReviewsAsyncLoader(getActivity(), fetcher,
                 getArguments().getLong(Args.ARG_MOVIE_ID));    }
 
     @Override

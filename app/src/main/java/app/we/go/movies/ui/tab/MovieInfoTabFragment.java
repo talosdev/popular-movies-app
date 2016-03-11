@@ -21,8 +21,8 @@ import javax.inject.Inject;
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.listener.MovieInfoListener;
+import app.we.go.movies.remote.MovieDetailsFetcher;
 import app.we.go.movies.remote.MovieInfoLoader;
-import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.ui.MovieApplication;
 import hugo.weaving.DebugLog;
@@ -38,8 +38,9 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
     private TextView voteCountView;
 
     private Movie currentMovie;
+
     @Inject
-    TMDBService service;
+    MovieDetailsFetcher fetcher;
 
     public static MovieInfoTabFragment newInstance(long movieId) {
         MovieInfoTabFragment f = new MovieInfoTabFragment();
@@ -154,7 +155,7 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
 
     @Override
     public Loader<Movie> onCreateLoader(int id, Bundle args) {
-        return new MovieInfoLoader(getActivity(), service, getArguments().getLong(Args.ARG_MOVIE_ID));
+        return new MovieInfoLoader(getActivity(), fetcher, getArguments().getLong(Args.ARG_MOVIE_ID));
     }
 
     @DebugLog

@@ -14,13 +14,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by apapad on 26/11/15.
  */
 @RunWith(value = AndroidJUnit4.class)
-public class MovieDetailsFetcherTest  {
+public class MovieDetailsFetcherTest  extends BaseFetcherTest {
 
     private MovieDetailsFetcher fetcher;
 
+
     @Before
     public void setUp() {
-        fetcher = new MovieDetailsFetcher();
+        fetcher = new MovieDetailsFetcher(service);
     }
 
 

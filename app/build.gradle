@@ -68,6 +68,7 @@ dependencies {
         exclude module: 'support-annotations'
     }
     //   apt 'org.parceler:parceler:1.0.4'
+    compile 'junit:junit:4.12'
 }
 
 

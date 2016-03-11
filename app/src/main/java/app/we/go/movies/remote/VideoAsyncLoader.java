@@ -20,10 +20,10 @@ public class VideoAsyncLoader extends AsyncTaskLoader<List<Video>> {
     private VideosFetcher fetcher;
     private List<Video> data;
 
-    public VideoAsyncLoader(Context context, TMDBService service, long id) {
+    public VideoAsyncLoader(Context context, VideosFetcher fetcher, long id) {
         super(context);
         movieId = id;
-        fetcher = new VideosFetcher(service);
+        this.fetcher = fetcher;
     }
 
     @Override

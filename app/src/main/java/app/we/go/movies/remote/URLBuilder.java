@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.data.SortByCriterion;
@@ -14,6 +15,7 @@ import app.we.go.movies.data.SortByCriterion;
 /**
  * Created by apapad on 29/11/15.
  */
+@Singleton
 public class URLBuilder {
 
     private static final String PARAM_SORT_BY = "sort_by";

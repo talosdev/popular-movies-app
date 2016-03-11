@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by apapad on 2/03/16.
  */
 @RunWith(AndroidJUnit4.class)
-public class MovieVideosFetcherTest {
+public class MovieVideosFetcherTest extends BaseFetcherTest {
     private VideosFetcher fetcher;
     public static final String KEY_1 = "ZSzeFFsKEt4";
     public static final String NAME_1 = "Official Teaser";
@@ -28,7 +28,7 @@ public class MovieVideosFetcherTest {
 
     @Before
     public void setUp() {
-        fetcher = new VideosFetcher();
+        fetcher = new VideosFetcher(service);
     }
 
 

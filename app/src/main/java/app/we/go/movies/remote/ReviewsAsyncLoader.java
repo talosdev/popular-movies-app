@@ -20,10 +20,10 @@ public class ReviewsAsyncLoader extends AsyncTaskLoader<List<Review>> {
     private MovieReviewsFetcher fetcher;
     private List<Review> data;
 
-    public ReviewsAsyncLoader(Context context, TMDBService service, long id) {
+    public ReviewsAsyncLoader(Context context, MovieReviewsFetcher fetcher, long id) {
         super(context);
         movieId = id;
-        fetcher = new MovieReviewsFetcher(service);
+        this.fetcher = fetcher;
     }
 
     @Override

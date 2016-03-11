@@ -18,10 +18,10 @@ public class MovieInfoLoader extends AsyncTaskLoader<Movie> {
     private MovieDetailsFetcher fetcher;
     private Movie data;
 
-    public MovieInfoLoader(Context context, TMDBService service, long id) {
+    public MovieInfoLoader(Context context, MovieDetailsFetcher fetcher, long id) {
         super(context);
         movieId = id;
-        fetcher = new MovieDetailsFetcher(service);
+        this.fetcher = fetcher;
     }
 
     @Override

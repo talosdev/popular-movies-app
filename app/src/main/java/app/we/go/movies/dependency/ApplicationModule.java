@@ -30,7 +30,6 @@ public class ApplicationModule {
                 .create();
     }
 
-
     @Provides
     @Singleton
     public TMDBService provideTMDBService(Gson gson, TMDBApiKeyInterceptor apiKeyInterceptor) {
@@ -53,5 +52,6 @@ public class ApplicationModule {
 
         return retrofit.create(TMDBService.class);
     }
+
 
 }
