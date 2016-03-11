@@ -1,11 +1,12 @@
 package app.we.go.movies.remote;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import javax.inject.Inject;
 
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.data.SortByCriterion;
@@ -22,6 +23,7 @@ public class URLBuilder {
 
     private static final int[] POSTER_RESOLUTIONS = new int[]{92, 154, 185, 342, 500, 780};
 
+    @Inject
     public URLBuilder() {
     }
 
@@ -85,34 +87,7 @@ public class URLBuilder {
 
     }
 
-    @NonNull
-    public  URL buildMovieDetailsUrl(long id) throws MalformedURLException {
-        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
-                appendEncodedPath(id + "").
-                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
 
-        return new URL(uri.toString());
-    }
-
-    @NonNull
-    public  URL buildMovieReviewsUrl(long id) throws MalformedURLException {
-        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
-                appendPath(id + "").
-                appendPath(TMDB.URL_MOVIE_REVIEWS_SUFFIX).
-                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
-
-        return new URL(uri.toString());
-    }
-
-    @NonNull
-    public  URL buildMovieVideosUrl(long id) throws MalformedURLException {
-        Uri uri = Uri.parse(TMDB.URL_MOVIE_DETAILS).buildUpon().
-                appendPath(id + "").
-                appendPath(TMDB.URL_MOVIE_TRAILERS_SUFFIX).
-                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
-
-        return new URL(uri.toString());
-    }
 
 
     public Uri buildYoutubeUri(String key)   {

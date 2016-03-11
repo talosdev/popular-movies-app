@@ -1,5 +1,6 @@
 package app.we.go.movies.ui.tab;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -12,11 +13,15 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.listener.MovieReviewsListener;
 import app.we.go.movies.remote.ReviewsAsyncLoader;
+import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Review;
+import app.we.go.movies.ui.MovieApplication;
 import hugo.weaving.DebugLog;
 
 /**
@@ -30,19 +35,12 @@ import hugo.weaving.DebugLog;
  */
 public class MovieReviewsTabFragment extends ListFragment implements MovieReviewsListener, LoaderManager.LoaderCallbacks<List<Review>> {
 
+    @Inject
+    TMDBService service;
 
     private static final String BUNDLE_KEY_REVIEWS = "app.we.go.movies.BUNDLE_REVIEWS";
     private static final int LOADER_REVIEWS = 2;
     private ArrayList<Review> currentReviews;
-
-    @DebugLog
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.movie_details_review_tab, container, false);
-
-        return v;
-    }
 
     public static MovieReviewsTabFragment newInstance(long movieId) {
         MovieReviewsTabFragment f = new MovieReviewsTabFragment();
@@ -55,6 +53,22 @@ public class MovieReviewsTabFragment extends ListFragment implements MovieReview
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @DebugLog
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((MovieApplication) context.getApplicationContext()).getComponent().inject(this);
+    }
+
+    @DebugLog
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.movie_details_review_tab, container, false);
+
+        return v;
     }
 
 
@@ -110,9 +124,10 @@ public class MovieReviewsTabFragment extends ListFragment implements MovieReview
         adapter.notifyDataSetChanged();
     }
 
+
     @Override
     public Loader<List<Review>> onCreateLoader(int id, Bundle args) {
-        return new ReviewsAsyncLoader(getActivity(),
+        return new ReviewsAsyncLoader(getActivity(), service,
                 getArguments().getLong(Args.ARG_MOVIE_ID));    }
 
     @Override

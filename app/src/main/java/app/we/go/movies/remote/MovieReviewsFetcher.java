@@ -1,10 +1,11 @@
 package app.we.go.movies.remote;
 
 import java.io.IOException;
-import java.net.URL;
 
 import app.we.go.movies.remote.json.MovieReviewsJSONParser;
 import app.we.go.movies.remote.json.ReviewList;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Class that encapsulates the code for fetching the details for a movie from TMDB API
@@ -12,19 +13,18 @@ import app.we.go.movies.remote.json.ReviewList;
  */
 public class MovieReviewsFetcher extends JSONFetcher {
     private MovieReviewsJSONParser parser = new MovieReviewsJSONParser();
-    private URLBuilder urlBuilder;
+    private TMDBService service;
 
-    public MovieReviewsFetcher() {
-        urlBuilder = new URLBuilder();
-
+    public MovieReviewsFetcher(TMDBService service) {
+        this.service = service;
     }
 
     public ReviewList fetch(long id) throws IOException {
+       Call<ReviewList> call = service.getReviews(id);
 
-        URL url = urlBuilder.buildMovieReviewsUrl(id);
-        String jsonString = getJSON(url);
-        if (jsonString == null) return null;
-        return parser.parse(jsonString);
+        Response<ReviewList> response = call.execute();
+
+        return response.body();
     }
 
 }

@@ -1,26 +1,27 @@
 package app.we.go.movies.remote;
 
 import java.io.IOException;
-import java.net.URL;
 
 import app.we.go.movies.remote.json.VideoList;
-import app.we.go.movies.remote.json.VideosJSONParser;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Created by apapad on 2/03/16.
  */
-public class VideosFetcher  extends JSONFetcher {
-    private VideosJSONParser parser = new VideosJSONParser();
-    private URLBuilder urlBuilder = new URLBuilder();
+public class VideosFetcher extends JSONFetcher {
 
-    public VideosFetcher() {
+    private final TMDBService service;
 
+    public VideosFetcher(TMDBService service) {
+        this.service = service;
     }
 
     public VideoList fetch(long id) throws IOException {
-        URL url = urlBuilder.buildMovieVideosUrl(id);
-        String jsonString = getJSON(url);
-        if (jsonString == null) return null;
-        return parser.parse(jsonString);
+        Call<VideoList> call = service.getVideos(id);
+
+        Response<VideoList> response = call.execute();
+
+        return response.body();
     }
 }

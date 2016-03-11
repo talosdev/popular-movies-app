@@ -1,5 +1,6 @@
 package app.we.go.movies.ui.tab;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,11 +16,15 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
+import javax.inject.Inject;
+
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.listener.MovieInfoListener;
 import app.we.go.movies.remote.MovieInfoLoader;
+import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.ui.MovieApplication;
 import hugo.weaving.DebugLog;
 
 /**
@@ -33,6 +38,8 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
     private TextView voteCountView;
 
     private Movie currentMovie;
+    @Inject
+    TMDBService service;
 
     public static MovieInfoTabFragment newInstance(long movieId) {
         MovieInfoTabFragment f = new MovieInfoTabFragment();
@@ -48,10 +55,17 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
         super.onCreate(savedInstanceState);
         // TODO is this required?
         if (savedInstanceState != null) {
-            currentMovie = (Movie) savedInstanceState.getParcelable(Movie.BUNDLE_KEY);
+            currentMovie = savedInstanceState.getParcelable(Movie.BUNDLE_KEY);
         }
     }
 
+
+    @DebugLog
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((MovieApplication) context.getApplicationContext()).getComponent().inject(this);
+    }
 
     @DebugLog
     @Override
@@ -140,7 +154,7 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
 
     @Override
     public Loader<Movie> onCreateLoader(int id, Bundle args) {
-        return new MovieInfoLoader(getActivity(), getArguments().getLong(Args.ARG_MOVIE_ID));
+        return new MovieInfoLoader(getActivity(), service, getArguments().getLong(Args.ARG_MOVIE_ID));
     }
 
     @DebugLog

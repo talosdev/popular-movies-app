@@ -20,10 +20,10 @@ public class VideoAsyncLoader extends AsyncTaskLoader<List<Video>> {
     private VideosFetcher fetcher;
     private List<Video> data;
 
-    public VideoAsyncLoader(Context context, long id) {
+    public VideoAsyncLoader(Context context, TMDBService service, long id) {
         super(context);
         movieId = id;
-        fetcher = new VideosFetcher();
+        fetcher = new VideosFetcher(service);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class VideoAsyncLoader extends AsyncTaskLoader<List<Video>> {
     @Override
     public List<Video> loadInBackground() {
         try {
-            VideoList vList =  fetcher.fetch(movieId);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  VideoList vList =  fetcher.fetch(movieId);
             if (vList != null) {
                 data = vList.videos;
                 return data;
