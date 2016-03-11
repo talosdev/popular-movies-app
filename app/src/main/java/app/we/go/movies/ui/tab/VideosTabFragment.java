@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.dependency.VideoFragmentModule;
+import app.we.go.movies.mvp.VideosPresenter;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.VideoAsyncLoader;
 import app.we.go.movies.remote.VideosFetcher;
@@ -44,6 +45,9 @@ public class VideosTabFragment extends ListFragment implements VideosView, Loade
     @Inject
     VideosFetcher fetcher;
 
+    @Inject
+    VideosPresenter presenter;
+
     public static VideosTabFragment newInstance(long movieId) {
         VideosTabFragment f = new VideosTabFragment();
         Bundle b = new Bundle();
@@ -59,7 +63,7 @@ public class VideosTabFragment extends ListFragment implements VideosView, Loade
         ((MovieApplication) context.getApplicationContext()).
                 getComponent().
                 subComponent(new VideoFragmentModule()).inject(this);
-        Log.d("ZZZ", "Fetcher is null: " + (fetcher==null));
+        Log.d("ZZZ", "presenter is null: " + (presenter==null));
     }
 
     @Override
