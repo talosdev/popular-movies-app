@@ -51,7 +51,7 @@ public class GridViewArrayAdapter extends ArrayAdapter<MoviePoster> {
             // already in pixels
             int posterWidth = context.getResources().getDimensionPixelSize(R.dimen.poster_width_grid);
             String posterUrl = urlBuilder.buildPosterUrl(posterPath, posterWidth);
-            Log.v(Tags.REMOTE, String.format("Requesting poster image: %s", posterUrl));
+            Log.v(Tags.REMOTE, String.format("Requesting poster image: %s - %d", posterUrl, position));
 
             Picasso.
                     with(context).

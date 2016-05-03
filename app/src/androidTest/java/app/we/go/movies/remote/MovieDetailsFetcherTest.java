@@ -3,7 +3,6 @@ package app.we.go.movies.remote;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import app.we.go.movies.remote.json.Movie;
@@ -20,7 +19,7 @@ public class MovieDetailsFetcherTest  {
 
     @Before
     public void setUp() {
-        fetcher = new MovieDetailsFetcher();
+       // fetcher = new MovieDetailsFetcher();
     }
 
 
@@ -28,7 +27,7 @@ public class MovieDetailsFetcherTest  {
      * Contacts the API, and gets the details for a specific movie
      * @throws Exception
      */
-    @Test
+ //   @Test
     public void testFetchMovie() throws Exception {
         Movie movie = fetcher.fetch(206647);
 
