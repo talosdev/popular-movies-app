@@ -9,13 +9,19 @@
 
     <include layout="@layout/app_bar" />
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/movie_list_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        class="app.we.go.movies.ui.MovieListFragment"
+        android:id="@+id/movie_list_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="0dp"
+
         tools:layout="@layout/movie_list_fragment"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+        />
+
+
 </android.support.design.widget.CoordinatorLayout>
 
