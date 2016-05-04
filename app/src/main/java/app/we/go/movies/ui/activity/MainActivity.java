@@ -2,7 +2,6 @@ package app.we.go.movies.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Fragments;
@@ -10,7 +9,7 @@ import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.ui.MovieDetailsFragment;
 import hugo.weaving.DebugLog;
 
-public class MainActivity extends FragmentActivity implements MovieSelectedCallback {
+public class MainActivity extends ToolbarActivity implements MovieSelectedCallback {
 
     private boolean twoPane;
 
@@ -19,6 +18,9 @@ public class MainActivity extends FragmentActivity implements MovieSelectedCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        initToolbar(false);
 
         // The existence of the detail frame in the activity will tell us if we are on
         // mobile or on tablet

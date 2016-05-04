@@ -3,13 +3,12 @@ package app.we.go.movies.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import app.we.go.movies.R;
 import app.we.go.movies.ui.MovieDetailsFragment;
 import hugo.weaving.DebugLog;
 
-public class MovieDetailActivity extends FragmentActivity {
+public class MovieDetailActivity extends ToolbarActivity {
 
     private static final String EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID";
     private static final String EXTRA_POSTER_PATH = "EXTRA_POSTER_PATH";
@@ -20,6 +19,8 @@ public class MovieDetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_movie_detail);
+
+        initToolbar(true);
 
         long movieId = getIntent().getLongExtra(EXTRA_MOVIE_ID, 0L);
         String posterPath = getIntent().getStringExtra(EXTRA_POSTER_PATH);

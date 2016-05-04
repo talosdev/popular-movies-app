@@ -1,17 +1,17 @@
 package app.we.go.movies.ui;
 
 
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.LoaderManager;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -78,15 +78,13 @@ public class MovieListFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
 
-        getActivity().getActionBar().setDisplayShowTitleEnabled(false);
         // TODO check this deprecation stuff
-        getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+      //  getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.sortOptions,
                 android.R.layout.simple_spinner_dropdown_item);
 
-        getActivity().getActionBar().setListNavigationCallbacks(mSpinnerAdapter, this);
+       // getActivity().getActionBar().setListNavigationCallbacks(mSpinnerAdapter, this);
 
         if (currentSortBy == null) {
             SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -94,7 +92,7 @@ public class MovieListFragment extends Fragment
             Log.d(Tags.PREF, String.format("Loaded criterion %s from shared preferences", criterion));
             currentSortBy = SortByCriterion.valueOf(criterion);
             //TODO find a better way to get the index
-            getActivity().getActionBar().setSelectedNavigationItem(currentSortBy.getIndex());
+      //      getActivity().getActionBar().setSelectedNavigationItem(currentSortBy.getIndex());
         }
     }
 
@@ -110,6 +108,10 @@ public class MovieListFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // No need to call super because Fragment.onCreateView() return null
+
+
+        setHasOptionsMenu(true);
+
 
         gridView = (GridView) inflater.inflate(R.layout.movie_list_fragment, container, false);
         gridView.setOnItemClickListener(this);
@@ -296,6 +298,7 @@ public class MovieListFragment extends Fragment
         }
 
     }
+
 
     @Override
     public void onLoadFinished(Loader loader, Cursor data) {
