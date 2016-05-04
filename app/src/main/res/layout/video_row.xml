@@ -13,7 +13,6 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         >
 
-        <!--card_view:contentPadding="@dimen/card_padding"-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,11 +25,30 @@
                 style="@style/cardHeader"></TextView>
 
 
-            <TextView
-                android:id="@+id/videoDetails"
-                style="@style/cardContent">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="1"
+                style="@style/cardContent"
+                android:gravity="center_vertical">
 
-            </TextView>
+                <TextView
+                    android:id="@+id/videoDetails"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical">
+                </TextView>
+
+                <ImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:src="@drawable/ic_share"
+                    android:id="@+id/share_button"
+                    android:background="@null" />
+            </LinearLayout>
 
         </LinearLayout>
 

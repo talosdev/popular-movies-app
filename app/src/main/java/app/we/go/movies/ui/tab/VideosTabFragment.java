@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,8 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
 
     @Inject
     TMDBService service;
+
+
 
     public static VideosTabFragment newInstance(long movieId) {
         VideosTabFragment f = new VideosTabFragment();
@@ -95,6 +98,8 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
     }
 
 
+
+
     @DebugLog
     @Override
     public void onResume() {
@@ -128,6 +133,15 @@ public class VideosTabFragment extends ListFragment implements LoaderManager.Loa
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//        String videoKey = ((Video) getListAdapter().getItem(position)).key;
+//
+//        Intent i = new Intent(Intent.ACTION_VIEW);
+//        i.setData(urlBuilder.buildYoutubeUri(videoKey));
+//        startActivity(i);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
         String videoKey = ((Video) getListAdapter().getItem(position)).key;
 
         Intent i = new Intent(Intent.ACTION_VIEW);
