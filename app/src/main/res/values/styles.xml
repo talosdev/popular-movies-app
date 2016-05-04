@@ -8,21 +8,23 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/background_color</item>
         <item name="android:textColor">@color/color4</item>
-
+        <!-- options menu background -->
+        <item name="android:itemBackground">@color/colorPrimaryDark</item>
 
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay"  />
+    <style name="AppTheme.AppBarOverlay" />
 
-    <style name="AppTheme.PopupOverlay" />
+    <style name="AppTheme.PopupOverlay">
+    </style>
 
-    <style name="AppTheme.Toolbar" >
-        </style>
-
+    <style name="AppTheme.Toolbar">
+    </style>
 
 
     <style name="cardHeader">
@@ -31,6 +33,7 @@
         <item name="android:padding">@dimen/card_small_padding</item>
         <item name="android:background">@color/color3</item>
         <item name="android:textColor">@android:color/white</item>
+
     </style>
 
 
