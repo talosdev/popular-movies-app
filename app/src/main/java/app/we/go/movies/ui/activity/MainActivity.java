@@ -2,6 +2,7 @@ package app.we.go.movies.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,12 +22,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
-public class MainActivity extends ToolbarActivity implements MovieSelectedCallback, SortByChangedCallback {
+public class MainActivity extends BaseActivity implements MovieSelectedCallback, SortByChangedCallback {
 
     private boolean twoPane;
 
 
-    @Bind(R.id.spinner)
+    @Bind(R.id.sort_by_spinner)
     Spinner spinner;
 
 
@@ -85,7 +86,11 @@ public class MainActivity extends ToolbarActivity implements MovieSelectedCallba
 //        }
 
 
-        initToolbar(false);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         // The existence of the detail frame in the activity will tell us if we are on
         // mobile or on tablet
