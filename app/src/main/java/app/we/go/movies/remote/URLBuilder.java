@@ -22,6 +22,7 @@ public class URLBuilder {
     private static final int[] BACKDROP_RESOLUTIONS = new int[]{300, 780, 1280};
 
     private static final int[] POSTER_RESOLUTIONS = new int[]{92, 154, 185, 342, 500, 780};
+    private static final int MINIMUM_VOTES = 500;
 
     @Inject
     public URLBuilder() {
@@ -32,7 +33,8 @@ public class URLBuilder {
         Uri uri = Uri.parse(TMDB.URL_MOVIES).buildUpon().
                 appendQueryParameter(PARAM_SORT_BY, convertSortByCriterionToStringParameter(sortBy)).
                 appendQueryParameter(PARAM_PAGE, page + "").
-                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).build();
+                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).
+                appendQueryParameter(TMDB.PARAM_VOTE_COUNT_MINIMUM, MINIMUM_VOTES + "").build();
 
         URL url = new URL(uri.toString());
         return url;

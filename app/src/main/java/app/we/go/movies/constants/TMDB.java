@@ -58,4 +58,5 @@ public class TMDB {
 
     public static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch";
     public static final String YOUTUBE_VIDEO_PARAM = "v";
+    public static final String PARAM_VOTE_COUNT_MINIMUM = "vote_count.gte";
 }
