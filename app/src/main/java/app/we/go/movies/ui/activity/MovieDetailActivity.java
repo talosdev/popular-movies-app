@@ -3,16 +3,24 @@ package app.we.go.movies.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Spinner;
 
 import app.we.go.movies.R;
 import app.we.go.movies.ui.MovieDetailsFragment;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
-public class MovieDetailActivity extends FragmentActivity {
+public class MovieDetailActivity extends BaseActivity {
 
     private static final String EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID";
     private static final String EXTRA_POSTER_PATH = "EXTRA_POSTER_PATH";
+
+    @Bind(R.id.sort_by_spinner)
+    Spinner spinner;
+
 
     @DebugLog
     @Override
@@ -20,6 +28,16 @@ public class MovieDetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_movie_detail);
+
+        ButterKnife.bind(this);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        spinner.setVisibility(View.GONE);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         long movieId = getIntent().getLongExtra(EXTRA_MOVIE_ID, 0L);
         String posterPath = getIntent().getStringExtra(EXTRA_POSTER_PATH);

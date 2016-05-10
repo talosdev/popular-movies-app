@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/movie_list_fragment"
-        android:layout_width="0dp"
+    <include layout="@layout/app_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        class="app.we.go.movies.ui.MovieListFragment"
-        tools:layout="@layout/movie_list_fragment" />
+        android:orientation="horizontal">
 
-    <View style="@style/Divider"
-        />
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/movie_list_frame"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:padding="0dp"
+            tools:layout="@layout/movie_list_fragment"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
-    <FrameLayout
-        android:id="@+id/detail_frame"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"/>
+            />
+
+
+        <View style="@style/Divider" />
+
+        <FrameLayout
+            android:id="@+id/detail_frame"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="3" />
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

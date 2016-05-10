@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,8 @@ import app.we.go.movies.remote.MovieInfoLoader;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.ui.MovieApplication;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
 /**
@@ -32,12 +33,21 @@ import hugo.weaving.DebugLog;
  */
 public class MovieInfoTabFragment extends Fragment implements MovieInfoListener, LoaderManager.LoaderCallbacks<Movie> {
 
-    private TextView descriptionView;
-    private TextView releaseDateView;
-    private TextView voteAverageView;
-    private TextView voteCountView;
+    @Bind(R.id.releaseDate)
+    TextView releaseDateView;
+
+    @Bind(R.id.vote_average)
+    TextView voteAverageView;
+
+    @Bind(R.id.vote_count)
+    TextView voteCountView;
+
+    @Bind(R.id.movieDescription)
+    TextView descriptionView;
+
 
     private Movie currentMovie;
+
     @Inject
     TMDBService service;
 
@@ -80,13 +90,7 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
 
         View v = inflater.inflate(R.layout.movie_details_info_tab, container, false);
 
-        descriptionView = (TextView) v.findViewById(R.id.movieDescription);
-        if (descriptionView==null) {
-            Log.e("ERROR", "Bummer");
-        }
-        releaseDateView = (TextView) v.findViewById(R.id.releaseDate);
-        voteAverageView = (TextView) v.findViewById(R.id.vote_average);
-        voteCountView = (TextView) v.findViewById(R.id.vote_count);
+        ButterKnife.bind(this, v);
 
         return v;
     }

@@ -5,4 +5,5 @@ package app.we.go.movies.constants;
  */
 public class Fragments {
     public static final String MOVIE_DETAILS_FRAGMENT_TAG = "MDF_TAG" ;
+    public static final String MOVIE_LIST_FRAGMENT = "MLF_TAG";
 }

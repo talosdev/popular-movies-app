@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<color name="colorPrimary">#3F51B5</color>-->
-    <color name="colorPrimary">#4b29a2</color>
-    <color name="colorPrimaryDark">#512da8</color>
-    <color name="colorAccent">#7c4dff</color>
-    <color name="grid_list_item_background">#d1c4e9</color>
-    <color name="favorite_icon">#4b29a2</color>
-    <color name="colorSecondary">#d1c4e9</color>
+    <color name="colorPrimary">@color/color3</color>
+    <color name="colorPrimaryDark">@color/color1</color>
+    <color name="colorAccent">@color/color2</color>
+    <color name="colorSecondary">@color/color4</color>
+    <color name="favorite_icon">@color/color1</color>
+    <color name="background_color">@android:color/white</color>
+    <color name="grid_list_item_background">#227c4dff</color> <!-- this is color3 with alpha applied to it -->
+
+
+    <color name="color1">#4b29a2</color>
+    <color name="color2">#512da8</color>
+    <color name="color3">#7c4dff</color>
+    <color name="color4">#d1c4e9</color>
+    <color name="color5">#ccd1c4e9</color>
+    <color name="ribbon">#aa000000</color>
+
 </resources>
 
 <!-- The four colors of the logo:

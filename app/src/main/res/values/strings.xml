@@ -14,4 +14,5 @@
 
     <string name="empty_reviews">No reviews found.</string>
     <string name="empty_videos">No videos found.</string>
+    <string name="share_chooser_title">Share trailer`</string>
 </resources>
