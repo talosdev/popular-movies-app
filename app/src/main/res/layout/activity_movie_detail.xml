@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activity.MovieDetailActivity">
+    tools:context=".moviedetails.MovieDetailActivity">
 
     <include layout="@layout/app_bar" />
 
@@ -14,7 +14,7 @@
         android:id="@+id/detail_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activity.MovieDetailActivity"
+        tools:context=".moviedetails.MovieDetailActivity"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 

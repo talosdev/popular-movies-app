@@ -1,13 +1,11 @@
-package app.we.go.movies.ui.tab;
+package app.we.go.movies.moviedetails.tab;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +16,9 @@ import java.text.SimpleDateFormat;
 import javax.inject.Inject;
 
 import app.we.go.movies.R;
-import app.we.go.movies.constants.Args;
-import app.we.go.movies.listener.MovieInfoListener;
-import app.we.go.movies.remote.MovieInfoLoader;
-import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.moviedetails.HasMovieDetailsComponent;
+import app.we.go.movies.moviedetails.MovieDetailsContract;
 import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.ui.MovieApplication;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
@@ -31,7 +26,7 @@ import hugo.weaving.DebugLog;
 /**
  * Created by apapad on 26/02/16.
  */
-public class MovieInfoTabFragment extends Fragment implements MovieInfoListener, LoaderManager.LoaderCallbacks<Movie> {
+public class MovieInfoTabFragment extends Fragment implements MovieDetailsContract.InfoView {
 
     @Bind(R.id.releaseDate)
     TextView releaseDateView;
@@ -45,17 +40,14 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
     @Bind(R.id.movieDescription)
     TextView descriptionView;
 
-
-    private Movie currentMovie;
-
     @Inject
-    TMDBService service;
+    MovieDetailsContract.Presenter presenter;
 
-    public static MovieInfoTabFragment newInstance(long movieId) {
+
+
+    public static MovieInfoTabFragment newInstance() {
         MovieInfoTabFragment f = new MovieInfoTabFragment();
-        Bundle b = new Bundle();
-        b.putLong(Args.ARG_MOVIE_ID, movieId);
-        f.setArguments(b);
+
         return f;
     }
 
@@ -63,18 +55,17 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO is this required?
-        if (savedInstanceState != null) {
-            currentMovie = savedInstanceState.getParcelable(Movie.BUNDLE_KEY);
-        }
+
     }
 
 
-    @DebugLog
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        ((MovieApplication) context.getApplicationContext()).getComponent().inject(this);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
+
+        presenter.bindInfoView(this);
+
     }
 
     @DebugLog
@@ -95,40 +86,16 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
         return v;
     }
 
-    @DebugLog
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @DebugLog
-    @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().restartLoader(1, null, this);
-    }
-
-    @DebugLog
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(Movie.BUNDLE_KEY, currentMovie);
-    }
-
-
-    private void updateUI(Movie movie) {
+    public void displayInfo(Movie movie) {
         if (getView() == null) {
             return;
         }
 
         descriptionView.setText(movie.overview);
 
+        // TODO move this to presenter
         if (movie.releaseDate != null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String dateFormat = sharedPreferences.getString(
@@ -144,33 +111,5 @@ public class MovieInfoTabFragment extends Fragment implements MovieInfoListener,
 
         voteAverageView.setText(movie.voteAverage + "");
         voteCountView.setText("(" + movie.voteCount + " votes)");
-
-
-    }
-
-    @Override
-    public void onMovieInfoReceived(Movie movie) {
-        currentMovie = movie;
-        updateUI(movie);
-        ((MovieInfoListener) getParentFragment()).onMovieInfoReceived(movie);
-    }
-
-
-    @Override
-    public Loader<Movie> onCreateLoader(int id, Bundle args) {
-        return new MovieInfoLoader(getActivity(), service, getArguments().getLong(Args.ARG_MOVIE_ID));
-    }
-
-    @DebugLog
-    @Override
-    public void onLoadFinished(Loader<Movie> loader, Movie data) {
-        if (data != null) {
-            onMovieInfoReceived(data);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Movie> loader) {
-
     }
 }

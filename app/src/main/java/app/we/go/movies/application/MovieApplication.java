@@ -1,6 +1,7 @@
-package app.we.go.movies.ui;
+package app.we.go.movies.application;
 
 import android.app.Application;
+import android.content.Context;
 
 import app.we.go.movies.dependency.ApplicationComponent;
 import app.we.go.movies.dependency.ApplicationModule;
@@ -24,5 +25,16 @@ public class MovieApplication extends Application {
 
     public ApplicationComponent getComponent() {
         return component;
+    }
+
+
+    /**
+     * Static method that can be used by any class that isn't a Context, but
+     * does have access to Context object, in order to get the Application object.
+     * @param context
+     * @return
+     */
+    public static MovieApplication get(Context context) {
+        return (MovieApplication) context.getApplicationContext();
     }
 }

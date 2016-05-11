@@ -1,4 +1,4 @@
-package app.we.go.movies.ui;
+package app.we.go.movies.movielist;
 
 
 import android.content.Context;
@@ -183,7 +183,7 @@ public class MovieListFragment extends Fragment
 
     /**
      * Note that we need to save the current page that we are at, so that when loading back the bundle,
-     * we can correctly initialize the {@link app.we.go.movies.ui.MovieListFragment.MovieEndlessScrollListener}
+     * we can correctly initialize the {@link MovieListFragment.MovieEndlessScrollListener}
      *
      * @param outState
      */

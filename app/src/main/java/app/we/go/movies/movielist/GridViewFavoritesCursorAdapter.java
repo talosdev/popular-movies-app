@@ -1,4 +1,4 @@
-package app.we.go.movies.ui;
+package app.we.go.movies.movielist;
 
 import android.content.Context;
 import android.database.Cursor;

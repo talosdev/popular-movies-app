@@ -1,9 +1,10 @@
-package app.we.go.movies.ui;
+package app.we.go.movies.moviedetails;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -15,39 +16,56 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import javax.inject.Inject;
 
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
-import app.we.go.movies.listener.MovieInfoListener;
+import app.we.go.movies.moviedetails.tab.MovieDetailsPagerAdapter;
 import app.we.go.movies.remote.URLBuilder;
-import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.ui.tab.MovieDetailsPagerAdapter;
+import butterknife.Bind;
+import butterknife.BindDrawable;
+import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
-
-import static app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
 
 /**
  * Created by apapad on 3/01/16.
  */
-public class MovieDetailsFragment extends Fragment implements MovieInfoListener {
+public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.View{
 
 
-    public static final int ICON_FAV_SEL = R.drawable.ic_favorite_blue_24dp;
-    public static final int ICON_FAV_UNSEL = R.drawable.ic_favorite_border_blue_24dp;
 
     private long currentMovieId;
-    private String currentMoviePosterPath;
 
-    private boolean currentMovieIsFavorite;
-    private ImageView imageView;
+    @BindDrawable(R.drawable.ic_favorite_blue_24dp)
+    Drawable icon_favorite_selected;
 
-    private TextView titleView;
+    @BindDrawable(R.drawable.ic_favorite_border_blue_24dp)
+    Drawable icon_favorite_unselected;
+
+
+    @Bind(R.id.imageView)
+    ImageView imageView;
+
+    @Bind(R.id.movieTitle)
+    TextView titleView;
+
+    @Bind(R.id.details_pager)
+    ViewPager pager;
+
+    @Inject
+    MovieDetailsContract.Presenter presenter;
+
+    @Inject
+    Context context;
+
     private MenuItem favItem;
     private MovieDetailsPagerAdapter pagerAdapter;
-    private ViewPager pager;
+
 
     // private MovieInfoListener movieInfoListener;
     // Variable that is set to true when this fragment is headless (ie container==null)
@@ -74,8 +92,20 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
         getLoaderManager().enableDebugLogging(true);
         if (getArguments() != null) {
             currentMovieId = getArguments().getLong(Args.ARG_MOVIE_ID);
-            currentMoviePosterPath = getArguments().getString(Args.ARG_POSTER_PATH);
+
+
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
+
+        presenter.bindView(this);
+
+        presenter.checkFavorite(currentMovieId);
+        presenter.loadMovieInfo(currentMovieId);
     }
 
 
@@ -98,15 +128,15 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
         if (getArguments() != null) {
             View rootView = inflater.inflate(R.layout.movie_details_fragment, container, false);
 
-            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId);
+            ButterKnife.bind(this, rootView);
 
-            pager = (ViewPager) rootView.findViewById(R.id.details_pager);
+            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId, presenter);
+
             pager.setOffscreenPageLimit(2);
             pager.setAdapter(pagerAdapter);
 
-            imageView = (ImageView) rootView.findViewById(R.id.imageView);
             imageView.forceLayout();
-            titleView = (TextView) rootView.findViewById(R.id.movieTitle);
+
 
             return rootView;
         } else {
@@ -116,16 +146,37 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
     }
 
 
+
+
     @Override
-    public void onMovieInfoReceived(Movie movie) {
-        updateUI(movie);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.movie_actions, menu);
+
+        favItem = menu.findItem(R.id.menu_favorite);
+
     }
 
-    private void updateUI(Movie movie) {
-        titleView.setText(movie.title);
 
-        final Movie m = movie;
 
+
+    @Override
+    public void toggleFavorite(boolean isFavorite) {
+        favItem.setIcon(isFavorite ? icon_favorite_selected : icon_favorite_unselected);
+    }
+
+    @Override
+    public void displayError(@StringRes int errorResource) {
+        Toast.makeText(context, errorResource, Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public void displayTitle(String title) {
+        titleView.setText(title);
+    }
+
+    @Override
+    public void displayImage(final String imagePath) {
         // Hack to make sure that the imageView will have finished being laied out
         // when we try to load the image into it, otherwise the width and height are 0
         // especially when reloading from the bundle (after a configuration change, or back button)
@@ -134,11 +185,11 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
             public void run() {
                 int width = imageView.getWidth(); // in pixels
 
-                String backdropURL = URLBuilder.buildBackdropPath(m.backdropPath, width);
+                String backdropURL = URLBuilder.buildBackdropPath(imagePath, width);
 
                 Log.d(Tags.REMOTE, String.format("Requesting backdrop image: %s", backdropURL));
 
-                if (m.backdropPath != null) {
+                if (imagePath != null) {
                     Picasso.
                             with(getActivity()).
                             load(backdropURL).
@@ -154,87 +205,40 @@ public class MovieDetailsFragment extends Fragment implements MovieInfoListener 
                 }
             }
         });
+
+
+
     }
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.movie_actions, menu);
-
-        favItem = menu.findItem(R.id.menu_favorite);
-
-        Cursor c1 = getActivity().getContentResolver().query(
-                FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
-                null,
-                null,
-                null,
-                null);
-        setFavoriteActive(c1.moveToFirst());
-    }
-
-    /**
-     * Depending on the boolean value marks/unmarks the current movie as favorite and
-     * sets the correct icon.
-     *
-     * @param active
-     */
-    private void setFavoriteActive(boolean active) {
-        if (active) {
-            favItem.setIcon(ICON_FAV_SEL);
-            currentMovieIsFavorite = true;
-        } else {
-            favItem.setIcon(ICON_FAV_UNSEL);
-            currentMovieIsFavorite = false;
-        }
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_favorite:
-                // currentMovie hasn't been loaded yet
-                if (currentMovieId == 0) {
-                    return false;
-                }
-                if (currentMovieIsFavorite) {
-                    getActivity().getContentResolver().delete(
-                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
-                            null,
-                            null);
-                    setFavoriteActive(false);
-                } else {
-                    ContentValues cv = new ContentValues();
-                    cv.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, currentMoviePosterPath);
-                    getActivity().getContentResolver().insert(
-                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
-                            cv);
-                    setFavoriteActive(true);
-                }
-                break;
+                presenter.toggleFavorite(currentMovieId);
+
+//            case R.id.menu_favorite:
+//                // currentMovie hasn't been loaded yet
+//                if (currentMovieId == 0) {
+//                    return false;
+//                }
+//                if (currentMovieIsFavorite) {
+//                    getActivity().getContentResolver().delete(
+//                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
+//                            null,
+//                            null);
+//                    setFavoriteActive(false);
+//                } else {
+//                    ContentValues cv = new ContentValues();
+//                    cv.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, currentMoviePosterPath);
+//                    getActivity().getContentResolver().insert(
+//                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
+//                            cv);
+//                    setFavoriteActive(true);
+//                }
+//                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @DebugLog
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @DebugLog
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @DebugLog
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
 

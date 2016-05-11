@@ -1,0 +1,83 @@
+package app.we.go.movies.moviedetails;
+
+import android.support.annotation.StringRes;
+
+import java.util.List;
+
+import app.we.go.movies.common.BasePresenter;
+import app.we.go.movies.common.BaseView;
+import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.Review;
+import app.we.go.movies.remote.json.Video;
+
+/**
+ * Created by Aristides Papadopoulos (github:talosdev).
+ */
+public interface MovieDetailsContract {
+
+
+    interface View extends BaseView {
+
+        void toggleFavorite(boolean isFavorite);
+
+        void displayError(@StringRes int errorResource);
+
+        void displayTitle(String title);
+
+        void displayImage(String imagePath);
+    }
+
+    interface InfoView extends BaseView {
+        void displayInfo(Movie movie);
+    }
+
+    interface ReviewsView extends BaseView {
+        void displayReviews(List<Review> body);
+
+        void displayError(@StringRes int errorMessage);
+    }
+
+    interface VideosView extends BaseView {
+        void displayVideos(List<Video> videos);
+
+        void displayError(@StringRes int errorMessage);
+    }
+
+    /**
+     * This presenter is supposed to be bound to a {@link MovieDetailsContract.View} and a
+     * {@link MovieDetailsContract.InfoView}
+     */
+    interface Presenter extends BasePresenter<View> {
+
+        void bindInfoView(InfoView infoView);
+
+        void unbindInfoView();
+
+        void unbindAllViews();
+
+        InfoView getInfoView();
+
+        ReviewsView getReviewsView();
+
+        VideosView getVideosView();
+
+        void checkFavorite(long movieId);
+
+
+        void loadMovieInfo(long movieId);
+
+
+        void toggleFavorite(long movieId);
+    }
+
+
+
+
+    interface ReviewsPresenter extends BasePresenter<ReviewsView> {
+        void loadMovieReviews(long movieId);
+    }
+
+    interface VideosPresenter extends BasePresenter<VideosView> {
+        void loadMovieVideos(long movieId);
+    }
+}

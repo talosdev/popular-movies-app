@@ -1,4 +1,4 @@
-package app.we.go.movies.ui.activity;
+package app.we.go.movies.common;
 
 import android.support.v7.app.AppCompatActivity;
 

@@ -1,4 +1,4 @@
-package app.we.go.movies.ui.activity;
+package app.we.go.movies.moviedetails;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,18 +8,23 @@ import android.view.View;
 import android.widget.Spinner;
 
 import app.we.go.movies.R;
-import app.we.go.movies.ui.MovieDetailsFragment;
+import app.we.go.movies.application.MovieApplication;
+import app.we.go.movies.common.BaseActivity;
+import app.we.go.movies.moviedetails.dependency.MovieDetailsComponent;
+import app.we.go.movies.moviedetails.dependency.MovieDetailsModule;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
-public class MovieDetailActivity extends BaseActivity {
+public class MovieDetailActivity extends BaseActivity implements HasMovieDetailsComponent {
 
     private static final String EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID";
     private static final String EXTRA_POSTER_PATH = "EXTRA_POSTER_PATH";
 
     @Bind(R.id.sort_by_spinner)
     Spinner spinner;
+
+    private MovieDetailsComponent movieDetailsModule;
 
 
     @DebugLog
@@ -47,6 +52,9 @@ public class MovieDetailActivity extends BaseActivity {
 
             getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame, fragment).commit();
         }
+
+        movieDetailsModule = MovieApplication.get(this).getComponent().
+                plus(new MovieDetailsModule(this, movieId));
     }
 
 
@@ -88,7 +96,10 @@ public class MovieDetailActivity extends BaseActivity {
         super.onDestroy();
     }
 
+    @Override
+    public MovieDetailsComponent getComponent() {
+        return movieDetailsModule;
+    }
 
-//    public MovieInfoListener getMovieInfoListener() {
-//    }
+
 }

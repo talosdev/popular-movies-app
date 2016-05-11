@@ -1,4 +1,4 @@
-package app.we.go.movies.ui.activity;
+package app.we.go.movies.movielist;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +12,13 @@ import android.widget.SpinnerAdapter;
 
 import app.we.go.movies.R;
 import app.we.go.movies.SortByChangedCallback;
+import app.we.go.movies.common.BaseActivity;
 import app.we.go.movies.constants.Fragments;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.listener.MovieSelectedCallback;
-import app.we.go.movies.ui.MovieDetailsFragment;
-import app.we.go.movies.ui.MovieListFragment;
+import app.we.go.movies.moviedetails.MovieDetailsFragment;
+import app.we.go.movies.moviedetails.MovieDetailActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;

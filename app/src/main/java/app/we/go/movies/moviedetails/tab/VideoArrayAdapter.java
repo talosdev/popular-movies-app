@@ -1,4 +1,4 @@
-package app.we.go.movies.ui.tab;
+package app.we.go.movies.moviedetails.tab;
 
 import android.content.Context;
 import android.content.Intent;
