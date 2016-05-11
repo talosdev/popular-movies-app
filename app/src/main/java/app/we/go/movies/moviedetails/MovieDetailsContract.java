@@ -1,5 +1,6 @@
 package app.we.go.movies.moviedetails;
 
+import android.net.Uri;
 import android.support.annotation.StringRes;
 
 import java.util.List;
@@ -44,6 +45,8 @@ public interface MovieDetailsContract {
         void displayVideos(List<Video> videos);
 
         void displayError(@StringRes int errorMessage);
+
+        void openVideo(Uri videoUrl);
     }
 
     /**
@@ -77,5 +80,7 @@ public interface MovieDetailsContract {
 
     interface VideosPresenter extends BasePresenter<VideosView> {
         void loadMovieVideos(long movieId);
+
+        void openVideo(int position);
     }
 }

@@ -11,6 +11,7 @@ import app.we.go.movies.moviedetails.MovieDetailsPresenter;
 import app.we.go.movies.moviedetails.MovieReviewsPresenter;
 import app.we.go.movies.moviedetails.MovieVideosPresenter;
 import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
 
@@ -65,8 +66,9 @@ public class MovieDetailsModule {
 
     @Provides
     @ActivityScope
-    public MovieDetailsContract.VideosPresenter provideVideosPresenter(TMDBService service) {
-        return new MovieVideosPresenter(service);
+    public MovieDetailsContract.VideosPresenter provideVideosPresenter(TMDBService service,
+                                                                       URLBuilder urlBuilder) {
+        return new MovieVideosPresenter(service, urlBuilder);
     }
 }
 

@@ -1,5 +1,7 @@
 package app.we.go.movies.moviedetails;
 
+import android.net.Uri;
+
 import java.util.List;
 
 import app.we.go.movies.R;
@@ -7,6 +9,7 @@ import app.we.go.movies.common.AbstractPresenter;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.moviedetails.MovieDetailsContract.VideosView;
 import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.json.Video;
 import app.we.go.movies.remote.json.VideoList;
 import app.we.go.movies.util.LOG;
@@ -21,12 +24,15 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
 
 
     private final TMDBService service;
+    private URLBuilder urlBuilder;
 
     private List<Video> videos;
 
 
-    public MovieVideosPresenter(TMDBService service) {
+    public MovieVideosPresenter(TMDBService service,
+                                URLBuilder urlBuilder) {
         this.service = service;
+        this.urlBuilder = urlBuilder;
     }
 
 
@@ -55,6 +61,18 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
             }
 
         });
+    }
+
+    @Override
+    public void openVideo(int position) {
+        String videoKey = (videos.get(position)).key;
+
+
+        Uri videoUrl = urlBuilder.buildYoutubeUri(videoKey);
+
+        if (getBoundView() != null) {
+            getBoundView().openVideo(videoUrl);
+        }
     }
 
 

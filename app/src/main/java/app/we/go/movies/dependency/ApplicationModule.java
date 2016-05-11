@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.remote.TMDBApiKeyInterceptor;
 import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -52,6 +53,12 @@ public class ApplicationModule {
                 .build();
 
         return retrofit.create(TMDBService.class);
+    }
+
+    @Provides
+    @Singleton
+    public URLBuilder provideUrlBuilder() {
+        return new URLBuilder();
     }
 
 }

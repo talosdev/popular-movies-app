@@ -1,6 +1,7 @@
 package app.we.go.movies.moviedetails.tab;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ListFragment;
@@ -20,7 +21,6 @@ import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.moviedetails.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
-import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.json.Video;
 import hugo.weaving.DebugLog;
 
@@ -30,9 +30,6 @@ import hugo.weaving.DebugLog;
  */
 public class VideosTabFragment extends ListFragment implements MovieDetailsContract.VideosView {
 
-    // TODO move to presenter
-    @Inject
-    URLBuilder urlBuilder;
 
     @Inject
     MovieDetailsContract.VideosPresenter presenter;
@@ -73,17 +70,9 @@ public class VideosTabFragment extends ListFragment implements MovieDetailsContr
 
 
 
-
-
-
-    // TODO move to presenter
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        String videoKey = ((Video) getListAdapter().getItem(position)).key;
-
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(urlBuilder.buildYoutubeUri(videoKey));
-        startActivity(i);
+        presenter.openVideo(position);
     }
 
     @Override
@@ -95,6 +84,13 @@ public class VideosTabFragment extends ListFragment implements MovieDetailsContr
     @Override
     public void displayError(@StringRes int errorMessage) {
         // Do nothing, do not display the error message, just leave the empty list message
+    }
+
+    @Override
+    public void openVideo(Uri videoUrl) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(videoUrl);
+        startActivity(i);
     }
 
 
