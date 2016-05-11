@@ -3,6 +3,8 @@ package app.we.go.movies.moviedetails.dependency;
 import android.app.Activity;
 import android.content.Context;
 
+import javax.inject.Named;
+
 import app.we.go.movies.framework.ActivityScope;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
 import app.we.go.movies.moviedetails.MovieDetailsPresenter;
@@ -33,6 +35,18 @@ public class MovieDetailsModule {
     @ActivityScope
     public Context provideContext() {
         return activity;
+    }
+
+
+    /**
+     * This, at the moment is not used, as all views actually have a copy of the movieId.
+     * @return
+     */
+    @Provides
+    @ActivityScope
+    @Named("movieId")
+    public long provideMovieId() {
+        return movieId;
     }
 
 

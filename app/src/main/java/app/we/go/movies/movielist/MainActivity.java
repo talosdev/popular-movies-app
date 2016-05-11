@@ -17,15 +17,19 @@ import app.we.go.movies.constants.Fragments;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.listener.MovieSelectedCallback;
+import app.we.go.movies.moviedetails.MovieDetailsActivity;
 import app.we.go.movies.moviedetails.MovieDetailsFragment;
-import app.we.go.movies.moviedetails.MovieDetailActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
 public class MainActivity extends BaseActivity implements MovieSelectedCallback, SortByChangedCallback {
 
+
     private boolean twoPane;
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
 
     @Bind(R.id.sort_by_spinner)
@@ -86,8 +90,6 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
 //                    commit();
 //        }
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -150,7 +152,7 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
                     .commit();
         } else {
             // MOBILE
-            Intent intent = MovieDetailActivity.newIntent(this, movieId, posterPath);
+            Intent intent = MovieDetailsActivity.newIntent(this, movieId, posterPath);
             startActivity(intent);
         }
     }

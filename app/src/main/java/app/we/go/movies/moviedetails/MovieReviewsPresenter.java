@@ -43,7 +43,6 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
                     LOG.e(Tags.REMOTE, "Movies response was not successful for %d", movieId);
                     onError();
                 }
-
             }
 
             @Override

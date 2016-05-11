@@ -16,8 +16,7 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
     private TMDBService service;
 
     MovieDetailsContract.InfoView infoView;
-    MovieDetailsContract.ReviewsView reviewsView;
-    MovieDetailsContract.VideosView videosView;
+
 
     public MovieDetailsPresenter(TMDBService service) {
         this.service = service;
@@ -46,20 +45,6 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
         return infoView;
     }
 
-    @Override
-    public MovieDetailsContract.ReviewsView getReviewsView() {
-        return reviewsView;
-    }
-
-    @Override
-    public MovieDetailsContract.VideosView getVideosView() {
-        return videosView;
-    }
-
-    @Override
-    public void checkFavorite(long movieId) {
-
-    }
 
     @Override
     public void loadMovieInfo(long movieId) {
@@ -89,11 +74,16 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
     }
 
-
     private void onError() {
         if (getBoundView() != null) {
             getBoundView().displayError(R.string.error_network);
         }
+    }
+
+
+    @Override
+    public void checkFavorite(long movieId) {
+
     }
 
 

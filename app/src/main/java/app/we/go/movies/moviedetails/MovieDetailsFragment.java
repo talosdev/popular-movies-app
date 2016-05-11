@@ -35,8 +35,7 @@ import hugo.weaving.DebugLog;
 /**
  * Created by apapad on 3/01/16.
  */
-public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.View{
-
+public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.View {
 
 
     private long currentMovieId;
@@ -67,7 +66,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     private MovieDetailsPagerAdapter pagerAdapter;
 
 
-    // private MovieInfoListener movieInfoListener;
     // Variable that is set to true when this fragment is headless (ie container==null)
     // This might happen when changing from dual-pane to single-pane
     private boolean headless;
@@ -89,11 +87,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLoaderManager().enableDebugLogging(true);
         if (getArguments() != null) {
             currentMovieId = getArguments().getLong(Args.ARG_MOVIE_ID);
-
-
         }
     }
 
@@ -146,8 +141,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     }
 
 
-
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -156,8 +149,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         favItem = menu.findItem(R.id.menu_favorite);
 
     }
-
-
 
 
     @Override
@@ -205,7 +196,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
                 }
             }
         });
-
 
 
     }

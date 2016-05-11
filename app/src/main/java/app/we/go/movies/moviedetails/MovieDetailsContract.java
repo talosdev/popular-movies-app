@@ -11,6 +11,9 @@ import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.remote.json.Video;
 
 /**
+ * The MVP contract for the movie details feature.
+ * Consists of 3 presenters and 4 views (one presenter is bound to 2 views).
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public interface MovieDetailsContract {
@@ -44,7 +47,7 @@ public interface MovieDetailsContract {
     }
 
     /**
-     * This presenter is supposed to be bound to a {@link MovieDetailsContract.View} and a
+     * This presenter is supposed to be bound to both a {@link MovieDetailsContract.View} and a
      * {@link MovieDetailsContract.InfoView}
      */
     interface Presenter extends BasePresenter<View> {
@@ -57,9 +60,6 @@ public interface MovieDetailsContract {
 
         InfoView getInfoView();
 
-        ReviewsView getReviewsView();
-
-        VideosView getVideosView();
 
         void checkFavorite(long movieId);
 
@@ -69,8 +69,6 @@ public interface MovieDetailsContract {
 
         void toggleFavorite(long movieId);
     }
-
-
 
 
     interface ReviewsPresenter extends BasePresenter<ReviewsView> {
