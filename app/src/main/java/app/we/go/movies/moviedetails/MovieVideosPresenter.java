@@ -1,7 +1,5 @@
 package app.we.go.movies.moviedetails;
 
-import android.net.Uri;
-
 import java.util.List;
 
 import app.we.go.movies.R;
@@ -64,16 +62,21 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
     }
 
     @Override
-    public void openVideo(int position) {
-        String videoKey = (videos.get(position)).key;
-
-
-        Uri videoUrl = urlBuilder.buildYoutubeUri(videoKey);
-
+    public void onVideoClicked(String videoKey) {
         if (getBoundView() != null) {
-            getBoundView().openVideo(videoUrl);
+            getBoundView().openVideo(urlBuilder.buildYoutubeUri(videoKey));
         }
     }
+
+    @Override
+    public void onShareVideoClicked(String videoKey, String videoName) {
+        if (getBoundView() != null) {
+            getBoundView().shareVideo(urlBuilder.buildYoutubeUri(videoKey), videoName);
+        }
+    }
+
+
+
 
 
     private void onError() {

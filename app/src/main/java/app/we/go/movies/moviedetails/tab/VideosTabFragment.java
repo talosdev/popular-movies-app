@@ -1,5 +1,6 @@
 package app.we.go.movies.moviedetails.tab;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +28,16 @@ import hugo.weaving.DebugLog;
  *
  * Created by apapad on 26/02/16.
  */
-public class VideosTabFragment extends ListFragment implements MovieDetailsContract.VideosView {
+public class VideosTabFragment extends ListFragment implements MovieDetailsContract.VideosView,
+        VideoArrayAdapter.VideoClickListener{
 
 
     @Inject
     MovieDetailsContract.VideosPresenter presenter;
 
+
+    @Inject
+    Context context;
 
     public static VideosTabFragment newInstance(long movieId) {
         VideosTabFragment f = new VideosTabFragment();
@@ -63,17 +67,13 @@ public class VideosTabFragment extends ListFragment implements MovieDetailsContr
         presenter.bindView(this);
         presenter.loadMovieVideos(getArguments().getLong(Args.ARG_MOVIE_ID));
 
-        ArrayAdapter adapter = new VideoArrayAdapter(getActivity(), R.layout.video_row, new ArrayList<Video>(), getActivity().getLayoutInflater());
+        ArrayAdapter adapter = new VideoArrayAdapter(context, R.layout.video_row, new ArrayList<Video>(), getActivity().getLayoutInflater(), this);
         setListAdapter(adapter);
 
     }
 
 
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        presenter.openVideo(position);
-    }
 
     @Override
     public void displayVideos(List<Video> videos) {
@@ -93,5 +93,24 @@ public class VideosTabFragment extends ListFragment implements MovieDetailsContr
         startActivity(i);
     }
 
+    @Override
+    public void shareVideo(Uri videoUrl, String videoName) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(Intent.EXTRA_SUBJECT, videoName);
+        i.putExtra(Intent.EXTRA_TEXT, videoUrl);
+        context.startActivity(Intent.createChooser(i,
+               context.getString(R.string.share_chooser_title)));
+    }
 
+
+    @Override
+    public void onVideoDetailsClick(String videoKey) {
+        presenter.onVideoClicked(videoKey);
+    }
+
+    @Override
+    public void onVideoShareClick(String videoKey, String videoName) {
+        presenter.onShareVideoClicked(videoKey, videoName);
+    }
 }

@@ -7,10 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.Collection;
 import java.util.List;
 
 import app.we.go.movies.R;
 import app.we.go.movies.remote.json.Review;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by apapad on 1/03/16.
@@ -19,42 +22,52 @@ public class ReviewsArrayAdapter extends ArrayAdapter<Review> {
 
 
     private final LayoutInflater inflater;
-    private final int resource;
+    private final int rowLayout;
     private final List<Review> reviews;
 
-    public ReviewsArrayAdapter(Context context, int resource, List<Review> reviews, LayoutInflater layoutInflater){
-        super(context, resource, reviews);
+    public ReviewsArrayAdapter(Context context, int rowLayout, List<Review> reviews, LayoutInflater layoutInflater){
+        super(context, rowLayout, reviews);
         this.inflater = layoutInflater;
-        this.resource = resource;
+        this.rowLayout = rowLayout;
         this.reviews = reviews;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
-        ViewHolder view;
+        ViewHolder viewHolder;
 
         if(rowView == null){
-                rowView = inflater.inflate(resource, parent, false);
-            view = new ViewHolder();
-            view.reviewAuthor = (TextView) rowView.findViewById(R.id.reviewAuthor);
-            view.reviewContent = (TextView) rowView.findViewById(R.id.reviewContent);
+                rowView = inflater.inflate(rowLayout, parent, false);
+            viewHolder = new ViewHolder(rowView);
 
-            rowView.setTag(view);
+            rowView.setTag(viewHolder);
         } else {
-            view = (ViewHolder) rowView.getTag();
+            viewHolder = (ViewHolder) rowView.getTag();
         }
 
         Review r = reviews.get(position);
-        view.reviewAuthor.setText(r.author);
-        view.reviewContent.setText(r.content);
+        viewHolder.reviewAuthor.setText(r.author);
+        viewHolder.reviewContent.setText(r.content);
 
         return rowView;
 
     }
 
     protected static class ViewHolder{
+        @Bind(R.id.reviewAuthor)
         protected TextView reviewAuthor;
+
+        @Bind(R.id.reviewContent)
         protected TextView reviewContent;
+
+        public ViewHolder(View rowView) {
+            ButterKnife.bind(this, rowView);
+        }
+    }
+
+    @Override
+    public void addAll(Collection<? extends Review> collection) {
+        super.addAll(collection);
     }
 }

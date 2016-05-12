@@ -47,6 +47,8 @@ public interface MovieDetailsContract {
         void displayError(@StringRes int errorMessage);
 
         void openVideo(Uri videoUrl);
+
+        void shareVideo(Uri videoUrl, String videoName);
     }
 
     /**
@@ -70,7 +72,7 @@ public interface MovieDetailsContract {
         void loadMovieInfo(long movieId);
 
 
-        void toggleFavorite(long movieId);
+        void onFavoriteClick(long movieId);
     }
 
 
@@ -81,6 +83,8 @@ public interface MovieDetailsContract {
     interface VideosPresenter extends BasePresenter<VideosView> {
         void loadMovieVideos(long movieId);
 
-        void openVideo(int position);
+        void onVideoClicked(String videoKey);
+
+        void onShareVideoClicked(String videoKey, String videoName);
     }
 }

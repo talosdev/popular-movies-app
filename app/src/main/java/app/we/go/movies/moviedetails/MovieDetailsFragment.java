@@ -204,7 +204,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_favorite:
-                presenter.toggleFavorite(currentMovieId);
+                presenter.onFavoriteClick(currentMovieId);
 
 //            case R.id.menu_favorite:
 //                // currentMovie hasn't been loaded yet

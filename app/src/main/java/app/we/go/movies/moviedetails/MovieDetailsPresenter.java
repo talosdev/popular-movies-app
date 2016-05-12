@@ -89,7 +89,7 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
 
     @Override
-    public void toggleFavorite(long movieId) {
+    public void onFavoriteClick(long movieId) {
 
     }
 
