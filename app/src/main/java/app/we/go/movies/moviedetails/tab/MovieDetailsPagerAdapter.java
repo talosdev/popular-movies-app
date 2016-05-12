@@ -6,8 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import app.we.go.movies.listener.MovieInfoListener;
-import app.we.go.movies.moviedetails.MovieDetailsContract;
 import hugo.weaving.DebugLog;
 
 /**
@@ -17,16 +15,14 @@ public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_TABS = 3;
     private final long movieId;
-    private MovieDetailsContract.Presenter presenter;
     private Fragment[] tabFragments = new Fragment[NUM_TABS];
     // TODO get from resources
     public static final String[] TAB_TITLES = new String[]{"INFO", "REVIEWS", "VIDEOS"};
 
 
-    public MovieDetailsPagerAdapter(FragmentManager fm, long movieId, MovieDetailsContract.Presenter presenter) {
+    public MovieDetailsPagerAdapter(FragmentManager fm, long movieId) {
         super(fm);
         this.movieId = movieId;
-        this.presenter = presenter;
         Log.d("ZZZ", "Constructor: " + tabFragments.toString());
        }
 
@@ -77,10 +73,6 @@ public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
         return TAB_TITLES[position];
     }
 
-
-    public MovieInfoListener getMovieInfoListener() {
-        return (MovieInfoListener) tabFragments[0];
-    }
 
 }
 

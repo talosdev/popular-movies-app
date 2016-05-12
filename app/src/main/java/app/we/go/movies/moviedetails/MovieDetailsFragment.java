@@ -125,7 +125,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
             ButterKnife.bind(this, rootView);
 
-            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId, presenter);
+            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId);
 
             pager.setOffscreenPageLimit(2);
             pager.setAdapter(pagerAdapter);
