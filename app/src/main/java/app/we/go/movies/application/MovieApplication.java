@@ -3,6 +3,7 @@ package app.we.go.movies.application;
 import android.app.Application;
 import android.content.Context;
 
+import app.we.go.movies.dependency.ApplicationAndroidModule;
 import app.we.go.movies.dependency.ApplicationComponent;
 import app.we.go.movies.dependency.ApplicationModule;
 import app.we.go.movies.dependency.DaggerApplicationComponent;
@@ -20,6 +21,8 @@ public class MovieApplication extends Application {
         component = DaggerApplicationComponent.
                 builder().
                 applicationModule(new ApplicationModule()).
+                applicationAndroidModule(new ApplicationAndroidModule(this)).
+
                 build();
     }
 

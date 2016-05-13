@@ -33,6 +33,7 @@ public interface MovieDetailsContract {
 
     interface InfoView extends BaseView {
         void displayInfo(Movie movie);
+        void displayFormattedDate(String date);
     }
 
     interface ReviewsView extends BaseView {

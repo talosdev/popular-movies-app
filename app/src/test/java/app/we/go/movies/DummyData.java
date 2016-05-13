@@ -1,6 +1,8 @@
 package app.we.go.movies;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import app.we.go.movies.remote.json.Movie;
@@ -43,6 +45,11 @@ public class DummyData {
 
     private static final int NUM_REVIEWS = 3;
 
+    public static final Date DUMMY_MOVIE_DATE = Calendar.getInstance().getTime();
+    public static final String DUMMY_MOVIE_DATE_STR = "2015-01-01";
+
+
+
     static {
         DUMMY_MOVIE = new Movie();
         DUMMY_MOVIE.setId(DUMMY_MOVIE_ID);
@@ -52,6 +59,7 @@ public class DummyData {
         DUMMY_MOVIE.setVoteCount(DUMMY_MOVIE_VOTES);
         DUMMY_MOVIE.setVoteAverage(DUMMY_MOVIE_VOTE_AVG);
         DUMMY_MOVIE.setBackdropPath(DUMMY_MOVIE_BACKDROP_PATH);
+        DUMMY_MOVIE.setReleaseDate(DUMMY_MOVIE_DATE);
 
 
         List<Video> videos = new ArrayList<>();

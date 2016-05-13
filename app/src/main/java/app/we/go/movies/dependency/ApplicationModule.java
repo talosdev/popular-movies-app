@@ -26,6 +26,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApplicationModule {
 
 
+    public ApplicationModule() {
+    }
+
     @Provides
     @Singleton
     public Gson provideGson() {
@@ -63,8 +66,6 @@ public class ApplicationModule {
 
         return httpClient.build();
     }
-
-
 
 
 

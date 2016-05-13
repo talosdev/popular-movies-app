@@ -1,9 +1,12 @@
 package app.we.go.movies.movies.remote;
 
+import android.content.Context;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -36,6 +39,9 @@ public class TMDBServiceTest {
 
     private static TMDBRetrofitService service;
     private static TMDBErrorParser errorParser;
+
+    @Mock
+    Context context;
 
     @BeforeClass
     public static void setUpClass() {

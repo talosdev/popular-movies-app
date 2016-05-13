@@ -1,17 +1,12 @@
 package app.we.go.movies.moviedetails.tab;
 
-import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 
@@ -96,20 +91,14 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
         descriptionView.setText(movie.getOverview());
 
         // TODO move this to presenter
-        if (movie.getReleaseDate() != null) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String dateFormat = sharedPreferences.getString(
-                    getResources().getString(R.string.pref_dateFormat_key),
-                    getResources().getString(R.string.pref_dateFormat_value_a));
-            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 
-            releaseDateView.setText(sdf.format(movie.getReleaseDate()));
-        } else {
-            releaseDateView.setText(getResources().getString(R.string.unavailable));
-            releaseDateView.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-        }
 
         voteAverageView.setText(movie.getVoteAverage() + "");
         voteCountView.setText("(" + movie.getVoteCount() + " votes)");
+    }
+
+    @Override
+    public void displayFormattedDate(String date) {
+        releaseDateView.setText(date);
     }
 }

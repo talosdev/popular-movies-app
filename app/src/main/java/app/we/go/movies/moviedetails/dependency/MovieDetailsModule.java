@@ -5,6 +5,7 @@ import android.content.Context;
 
 import javax.inject.Named;
 
+import app.we.go.movies.SharedPreferencesHelper;
 import app.we.go.movies.framework.ActivityScope;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
 import app.we.go.movies.moviedetails.MovieDetailsPresenter;
@@ -51,10 +52,13 @@ public class MovieDetailsModule {
     }
 
 
+
+
     @Provides
     @ActivityScope
-    public MovieDetailsContract.Presenter providePresenter(TMDBService service) {
-        return new MovieDetailsPresenter(service);
+    public MovieDetailsContract.Presenter providePresenter(TMDBService service,
+                                                           SharedPreferencesHelper sharedPrefsHelper) {
+        return new MovieDetailsPresenter(service, sharedPrefsHelper);
     }
 
 

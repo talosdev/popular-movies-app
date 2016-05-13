@@ -6,11 +6,14 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import app.we.go.movies.DummyData;
 import app.we.go.movies.R;
+import app.we.go.movies.SharedPreferencesHelper;
 import app.we.go.movies.remote.TMDBService;
 
 import static app.we.go.movies.DummyData.DUMMY_MOVIE;
 import static app.we.go.movies.DummyData.DUMMY_MOVIE_BACKDROP_PATH;
+import static app.we.go.movies.DummyData.DUMMY_MOVIE_DATE_STR;
 import static app.we.go.movies.DummyData.DUMMY_MOVIE_ID;
 import static app.we.go.movies.DummyData.DUMMY_MOVIE_TITLE;
 import static app.we.go.movies.DummyData.INEXISTENT_MOVIE_ID;
@@ -19,6 +22,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -32,6 +36,9 @@ public class MovieDetailsPresenterTest {
     @Mock
     MovieDetailsContract.InfoView infoView;
 
+    @Mock
+    SharedPreferencesHelper sharedPreferencesHelper;
+
     private MovieDetailsPresenter presenter;
 
 
@@ -39,10 +46,12 @@ public class MovieDetailsPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
+        when(sharedPreferencesHelper.formatDate(DummyData.DUMMY_MOVIE_DATE)).thenReturn(DummyData.DUMMY_MOVIE_DATE_STR);
+
 
         TMDBService service = new MockTMDBService();
 
-        presenter = new MovieDetailsPresenter(service);
+        presenter = new MovieDetailsPresenter(service, sharedPreferencesHelper);
         presenter.bindView(view);
         presenter.bindInfoView(infoView);
 
@@ -63,6 +72,8 @@ public class MovieDetailsPresenterTest {
         verify(view).displayImage(eq(DUMMY_MOVIE_BACKDROP_PATH));
 
         verify(infoView).displayInfo(DUMMY_MOVIE);
+        verify(infoView).displayFormattedDate(DUMMY_MOVIE_DATE_STR);
+
 
         verifyNoMoreInteractions(view);
         verifyNoMoreInteractions(infoView);
