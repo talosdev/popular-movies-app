@@ -40,19 +40,28 @@ public class VideosJSONParserTest {
     @Test
     public void testParseReviews() throws Exception {
         VideoList videoList = parser.parse(json);
-        List<Video> videos = videoList.videos;
+        List<Video> videos = videoList.getVideos();
 
         assertThat(videos.size()).isEqualTo(2);
 
         Video firstVideo = videos.get(0);
-        assertThat(firstVideo.key).isEqualTo(KEY_1);
-        assertThat(firstVideo.name).isEqualTo(NAME_1);
-        assertThat(firstVideo.type).isEqualTo(TYPE_1);
+        assertThat(firstVideo.getKey()).isEqualTo(KEY_1);
+        assertThat(firstVideo.getName()).isEqualTo(NAME_1);
+        assertThat(firstVideo.getType()).isEqualTo(TYPE_1);
 
         Video secondVideo = videos.get(1);
-        assertThat(secondVideo.key).isEqualTo(KEY_2);
-        assertThat(secondVideo.name).isEqualTo(NAME_2);
-        assertThat(secondVideo.type).isEqualTo(TYPE_2);
+        assertThat(secondVideo.getKey()).isEqualTo(KEY_2);
+        assertThat(secondVideo.getName()).isEqualTo(NAME_2);
+        assertThat(secondVideo.getType()).isEqualTo(TYPE_2);
+
+    }
+
+    @Test
+    public void testBackAndForth() throws Exception {
+        VideoList videosList = parser.parse(json);
+        String newJson = parser.toJson(videosList);
+        VideoList parsedVideoList = parser.parse(newJson);
+        assertThat(parsedVideoList.getVideos()).containsOnlyElementsOf(videosList.getVideos());
 
     }
 }

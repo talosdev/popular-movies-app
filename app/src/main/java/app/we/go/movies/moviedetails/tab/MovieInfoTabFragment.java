@@ -93,23 +93,23 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
             return;
         }
 
-        descriptionView.setText(movie.overview);
+        descriptionView.setText(movie.getOverview());
 
         // TODO move this to presenter
-        if (movie.releaseDate != null) {
+        if (movie.getReleaseDate() != null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String dateFormat = sharedPreferences.getString(
                     getResources().getString(R.string.pref_dateFormat_key),
                     getResources().getString(R.string.pref_dateFormat_value_a));
             SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 
-            releaseDateView.setText(sdf.format(movie.releaseDate));
+            releaseDateView.setText(sdf.format(movie.getReleaseDate()));
         } else {
             releaseDateView.setText(getResources().getString(R.string.unavailable));
             releaseDateView.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
         }
 
-        voteAverageView.setText(movie.voteAverage + "");
-        voteCountView.setText("(" + movie.voteCount + " votes)");
+        voteAverageView.setText(movie.getVoteAverage() + "");
+        voteCountView.setText("(" + movie.getVoteCount() + " votes)");
     }
 }

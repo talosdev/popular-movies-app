@@ -58,8 +58,8 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
                         getInfoView().displayInfo(movie);
                     }
                     if (getBoundView() != null) {
-                        getBoundView().displayTitle(movie.title);
-                        getBoundView().displayImage(movie.backdropPath);
+                        getBoundView().displayTitle(movie.getTitle());
+                        getBoundView().displayImage(movie.getBackdropPath());
                     }
                 } else {
                     onError();

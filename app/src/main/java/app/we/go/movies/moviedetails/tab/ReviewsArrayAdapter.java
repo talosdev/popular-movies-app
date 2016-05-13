@@ -47,8 +47,8 @@ public class ReviewsArrayAdapter extends ArrayAdapter<Review> {
         }
 
         Review r = reviews.get(position);
-        viewHolder.reviewAuthor.setText(r.author);
-        viewHolder.reviewContent.setText(r.content);
+        viewHolder.reviewAuthor.setText(r.getAuthor());
+        viewHolder.reviewContent.setText(r.getContent());
 
         return rowView;
 

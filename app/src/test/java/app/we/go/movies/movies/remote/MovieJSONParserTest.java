@@ -1,17 +1,19 @@
 package app.we.go.movies.remote;
 
-import app.we.go.movies.TestUtils;
-import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.remote.json.MovieJSONParser;
-import app.we.go.movies.remote.json.MovieList;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import app.we.go.movies.DummyData;
+import app.we.go.movies.TestData;
+import app.we.go.movies.TestUtils;
+import app.we.go.movies.constants.TMDB;
+import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.MovieJSONParser;
+import app.we.go.movies.remote.json.MovieList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -22,14 +24,11 @@ import static org.junit.Assert.assertNotNull;
  */
 public class MovieJSONParserTest {
 
-    private String json="{\"adult\":false,\"backdrop_path\":\"/wVTYlkKPKrljJfugXN7UlLNjtuJ.jpg\",\"genre_ids\":[28,12,80],\"id\":206647,\"original_language\":\"en\",\"original_title\":\"Spectre\",\"overview\":\"A cryptic message from Bond’s past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.\",\"release_date\":\"2015-11-06\",\"poster_path\":\"/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg\",\"popularity\":57.231904,\"title\":\"Spectre\",\"video\":false,\"vote_average\":6.7,\"vote_count\":453}";
-    private String jsonEmptyDate="{\"adult\":false,\"backdrop_path\":\"/wVTYlkKPKrljJfugXN7UlLNjtuJ.jpg\",\"genre_ids\":[28,12,80],\"id\":206647,\"original_language\":\"en\",\"original_title\":\"Spectre\",\"overview\":\"A cryptic message from Bond’s past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.\",\"release_date\":\"\",\"poster_path\":\"/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg\",\"popularity\":57.231904,\"title\":\"Spectre\",\"video\":false,\"vote_average\":6.7,\"vote_count\":453}";
-    private String OVERVIEW = "A cryptic message from Bond’s past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.";
     private static MovieJSONParser parser;
 
     @Test
     public void testParseMovie() throws Exception {
-        Movie parsedMovie = parser.parseMovie(json);
+        Movie parsedMovie = parser.parseMovie(TestData.MOVIE_JSON);
         verifyMovie(parsedMovie);
     }
 
@@ -56,32 +55,41 @@ public class MovieJSONParserTest {
         verifyMovie(firstMovie);
 
         // Verify some fields from the other movies
-        assertEquals("Jurassic World", movieList.movies.get(1).title);
-        assertEquals(1162, movieList.movies.get(19).voteCount);
+        assertEquals("Jurassic World", movieList.movies.get(1).getTitle());
+        assertEquals(1162, movieList.movies.get(19).getVoteCount());
 
     }
 
 
     private void verifyMovie(Movie movie) throws ParseException {
         assertNotNull(movie);
-        assertEquals("Spectre", movie.title);
+        assertEquals("Spectre", movie.getTitle());
 
         SimpleDateFormat sdf = new SimpleDateFormat(TMDB.DATE_FORMAT);
-        assertThat(movie.releaseDate).isInSameDayAs(sdf.parse("2015-11-06"));
+        assertThat(movie.getReleaseDate()).isInSameDayAs(sdf.parse(TestData.MOVIE_RELEASE_DATE));
 
-        assertEquals(206647, movie.id);
-        assertEquals(6.7f, movie.voteAverage, TestUtils.EPSILON);
-        assertEquals(453, movie.voteCount);
-        assertEquals(57.231904f, movie.popularity, TestUtils.EPSILON);
-        assertEquals("/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg", movie.posterPath);
-        assertEquals("/wVTYlkKPKrljJfugXN7UlLNjtuJ.jpg", movie.backdropPath);
-        assertEquals(OVERVIEW, movie.overview);
+        assertEquals(206647, movie.getId());
+        assertEquals(6.7f, movie.getVoteAverage(), TestUtils.EPSILON);
+        assertEquals(453, movie.getVoteCount());
+        assertEquals(57.231904f, movie.getPopularity(), TestUtils.EPSILON);
+        assertEquals("/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg", movie.getPosterPath());
+        assertEquals("/wVTYlkKPKrljJfugXN7UlLNjtuJ.jpg", movie.getBackdropPath());
+        assertEquals(TestData.MOVIE_OVERVIEW, movie.getOverview());
     }
 
     @Test
     public void testEmptyDate() throws Exception{
-        Movie parsedMovie = parser.parseMovie(json);
+        Movie parsedMovie = parser.parseMovie(TestData.MOVIE_JSON_EMPTY_DATE);
         assertThat(parsedMovie).isNotNull();
-        assertThat(parsedMovie.title).isEqualTo("Spectre");
+        assertThat(parsedMovie.getTitle()).isEqualTo("Spectre");
+        assertThat(parsedMovie.getReleaseDate()).isNull();
+    }
+
+    @Test
+    public void testBackAndForth() throws Exception {
+        String json = parser.toJson(DummyData.DUMMY_MOVIE);
+        Movie m = parser.parseMovie(json);
+        assertThat(m).isEqualToComparingFieldByField(DummyData.DUMMY_MOVIE);
+        assertThat(m).isEqualTo(DummyData.DUMMY_MOVIE);
     }
 }

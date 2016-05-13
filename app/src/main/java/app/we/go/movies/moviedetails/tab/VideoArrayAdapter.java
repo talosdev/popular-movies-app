@@ -53,9 +53,9 @@ public class VideoArrayAdapter extends ArrayAdapter {
         }
 
         Video v = videos.get(position);
-        viewHolder.videoName.setText(v.name);
-        viewHolder.videoDetails.setText(v.type + " [" + v.site + "]");
-        viewHolder.videoKey = v.key;
+        viewHolder.videoName.setText(v.getName());
+        viewHolder.videoDetails.setText(v.getType() + " [" + v.getSite() + "]");
+        viewHolder.videoKey = v.getKey();
 
         return rowView;
 

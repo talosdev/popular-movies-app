@@ -12,18 +12,25 @@ public class ReviewList {
     public ReviewList() {
     }
 
-    public long id;
+    private long id;
 
-    public int page;
+    private int page;
 
     @SerializedName("results")
-    public ArrayList<Review> reviews;
+    private ArrayList<Review> reviews;
 
     @SerializedName("total_pages")
-    public int totalPages;
+    private int totalPages;
 
 
     @SerializedName("total_results")
-    public int totalResults;
+    private int totalResults;
 
+    public ArrayList<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(ArrayList<Review> reviews) {
+        this.reviews = reviews;
+    }
 }

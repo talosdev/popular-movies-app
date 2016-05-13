@@ -21,4 +21,12 @@ public class VideosJSONParser {
         return list;
     }
 
+    public String toJson(Video video) {
+        return gson.toJson(video);
+    }
+
+    public String toJson(VideoList videoList) {
+        return gson.toJson(videoList);
+    }
+
 }

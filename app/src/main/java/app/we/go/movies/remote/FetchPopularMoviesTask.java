@@ -4,15 +4,15 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.data.MoviePoster;
 import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.remote.json.MovieList;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by apapad on 13/11/15.
@@ -75,9 +75,9 @@ public class FetchPopularMoviesTask extends
     private List<MoviePoster> getPosterURLs(MovieList movieList) {
         List<MoviePoster> urls = new ArrayList<>(movieList.movies.size());
         for (Movie movie:movieList.movies) {
-            String poster = movie.posterPath;
+            String poster = movie.getPosterPath();
 
-            urls.add(new MoviePoster(movie.id, poster));
+            urls.add(new MoviePoster(movie.getId(), poster));
         }
         return urls;
     }

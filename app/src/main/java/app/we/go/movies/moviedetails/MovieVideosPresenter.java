@@ -43,7 +43,7 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
             public void onResponse(Call<VideoList> call, Response<VideoList> response) {
                 if (getBoundView() != null) {
                     if (response.isSuccess()) {
-                        videos = response.body().videos;
+                        videos = response.body().getVideos();
                         getBoundView().displayVideos(videos);
                     } else {
                         LOG.e(Tags.REMOTE, "Videos response was not successful for %d", movieId);

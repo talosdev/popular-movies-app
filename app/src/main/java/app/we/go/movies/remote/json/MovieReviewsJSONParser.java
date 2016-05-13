@@ -21,4 +21,13 @@ public class MovieReviewsJSONParser {
         return list;
     }
 
+
+    public String toJson(Review review) {
+        return gson.toJson(review);
+    }
+
+    public String toJson(ReviewList reviewList) {
+        return gson.toJson(reviewList);
+    }
+
 }

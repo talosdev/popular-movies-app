@@ -2,6 +2,7 @@ package app.we.go.movies.remote.json;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 /**
  * Created by apapad on 1/03/16.
@@ -12,14 +13,46 @@ public class Review implements Parcelable {
 
     }
 
-    public String id;
+    private String id;
 
-    public String author;
+    private String author;
 
-    public String content;
+    private String content;
 
-    public String url;
+    private String url;
 
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     @Override
     public int describeContents() {
@@ -50,4 +83,29 @@ public class Review implements Parcelable {
             return new Review[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Review)) return false;
+
+        Review review = (Review) o;
+
+        if (!getId().equals(review.getId())) return false;
+        if (getAuthor() != null ? !getAuthor().equals(review.getAuthor()) : review.getAuthor() != null)
+            return false;
+        if (getContent() != null ? !getContent().equals(review.getContent()) : review.getContent() != null)
+            return false;
+        return getUrl() != null ? getUrl().equals(review.getUrl()) : review.getUrl() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + (getAuthor() != null ? getAuthor().hashCode() : 0);
+        result = 31 * result + (getContent() != null ? getContent().hashCode() : 0);
+        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        return result;
+    }
 }

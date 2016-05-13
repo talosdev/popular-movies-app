@@ -36,7 +36,7 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
             public void onResponse(Call<ReviewList> call, Response<ReviewList> response) {
                 if (response.isSuccess()) {
                     if (getBoundView() != null) {
-                        reviews = response.body().reviews;
+                        reviews = response.body().getReviews();
                         getBoundView().displayReviews(reviews);
                     }
                 } else {
