@@ -8,7 +8,9 @@ import javax.inject.Singleton;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.remote.TMDBApiKeyInterceptor;
 import app.we.go.movies.remote.TMDBErrorParser;
+import app.we.go.movies.remote.TMDBRetrofitService;
 import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.remote.TMDBServiceImpl;
 import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
@@ -63,11 +65,25 @@ public class ApplicationModule {
     }
 
 
+
+
+
     @Provides
     @Singleton
-    public TMDBService provideTMDBService(Retrofit retrofit) {
-        return retrofit.create(TMDBService.class);
+    public TMDBRetrofitService provideTMDBRetrofitService(Retrofit retrofit) {
+        return retrofit.create(TMDBRetrofitService.class);
     }
+
+
+
+    @Provides
+    @Singleton
+    public TMDBService provideTMDBService(TMDBRetrofitService retrofitService,
+                                          TMDBErrorParser parser) {
+        return new TMDBServiceImpl(retrofitService, parser);
+
+    }
+
 
     @Provides
     @Singleton

@@ -16,9 +16,10 @@ import retrofit2.Retrofit;
 public class TMDBErrorParser {
 
     Retrofit retrofit;
+    private final Converter<ResponseBody, TMDBError> converter;
 
 
-    Converter<ResponseBody, TMDBError> converter;
+    private final Converter<TMDBError, String> stringConverter;
 
 
     public TMDBErrorParser(Retrofit retrofit) {
@@ -26,6 +27,8 @@ public class TMDBErrorParser {
 
         converter = retrofit
                 .responseBodyConverter(TMDBError.class, new Annotation[0]);
+
+        stringConverter = retrofit.stringConverter(TMDBError.class, new Annotation[0]);
     }
 
     public TMDBError parse(ResponseBody errorResponseBody) {
@@ -38,6 +41,14 @@ public class TMDBErrorParser {
 
     }
 
+    public String toJson(TMDBError error) {
+        try {
+            return stringConverter.convert(error);
+        } catch (IOException e) {
+            LOG.e(Tags.REMOTE, e, "Could not convert error to Json: %s", error.toString());
+            return null;
+        }
+    }
 
 
 }

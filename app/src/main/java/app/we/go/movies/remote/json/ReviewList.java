@@ -2,7 +2,7 @@ package app.we.go.movies.remote.json;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by apapad on 1/03/16.
@@ -17,7 +17,7 @@ public class ReviewList {
     private int page;
 
     @SerializedName("results")
-    private ArrayList<Review> reviews;
+    private List<Review> reviews;
 
     @SerializedName("total_pages")
     private int totalPages;
@@ -26,11 +26,11 @@ public class ReviewList {
     @SerializedName("total_results")
     private int totalResults;
 
-    public ArrayList<Review> getReviews() {
+    public List<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(ArrayList<Review> reviews) {
+    public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
 }

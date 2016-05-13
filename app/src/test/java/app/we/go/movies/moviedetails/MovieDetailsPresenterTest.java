@@ -6,16 +6,19 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import app.we.go.movies.R;
 import app.we.go.movies.remote.TMDBService;
 
 import static app.we.go.movies.DummyData.DUMMY_MOVIE;
 import static app.we.go.movies.DummyData.DUMMY_MOVIE_BACKDROP_PATH;
 import static app.we.go.movies.DummyData.DUMMY_MOVIE_ID;
 import static app.we.go.movies.DummyData.DUMMY_MOVIE_TITLE;
+import static app.we.go.movies.DummyData.INEXISTENT_MOVIE_ID;
 import static app.we.go.movies.DummyData.MOVIE_ID_CAUSES_SERVER_ERROR;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -61,15 +64,18 @@ public class MovieDetailsPresenterTest {
 
         verify(infoView).displayInfo(DUMMY_MOVIE);
 
+        verifyNoMoreInteractions(view);
+        verifyNoMoreInteractions(infoView);
+
     }
 
     @Test
     public void testLoadInfoWithWrongData() throws Exception {
-//
-//        presenter.loadMovieInfo(INEXISTENT_MOVIE_ID);
-//
-//        verify(view).displayError(anyInt());
 
+        presenter.loadMovieInfo(INEXISTENT_MOVIE_ID);
+
+        verify(view).displayError(R.string.error_network);
+        verifyNoMoreInteractions(view);
     }
 
 
@@ -79,6 +85,7 @@ public class MovieDetailsPresenterTest {
         presenter.loadMovieInfo(MOVIE_ID_CAUSES_SERVER_ERROR);
 
         verify(view).displayError(anyInt());
+        verifyNoMoreInteractions(view);
 
     }
 

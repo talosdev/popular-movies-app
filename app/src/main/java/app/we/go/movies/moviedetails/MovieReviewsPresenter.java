@@ -4,11 +4,10 @@ import java.util.List;
 
 import app.we.go.movies.R;
 import app.we.go.movies.common.AbstractPresenter;
-import app.we.go.movies.constants.Tags;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.remote.json.ReviewList;
-import app.we.go.movies.util.LOG;
+import app.we.go.movies.remote.json.TMDBError;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,14 +39,16 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
                         getBoundView().displayReviews(reviews);
                     }
                 } else {
-                    LOG.e(Tags.REMOTE, "Movies response was not successful for %d", movieId);
+                    // If we want to access the error:
+                    TMDBError error = service.parse(response.errorBody());
+
+
                     onError();
                 }
             }
 
             @Override
             public void onFailure(Call<ReviewList> call, Throwable t) {
-                LOG.e(Tags.REMOTE, t, "Call for getting reviews for %d failed", movieId);
                 onError();
             }
 

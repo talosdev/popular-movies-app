@@ -6,7 +6,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import app.we.go.movies.TestData;
@@ -14,7 +13,7 @@ import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.dependency.ApplicationModule;
 import app.we.go.movies.remote.TMDBApiKeyInterceptor;
 import app.we.go.movies.remote.TMDBErrorParser;
-import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.remote.TMDBRetrofitService;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.remote.json.ReviewList;
@@ -35,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class TMDBServiceTest {
 
-    private static TMDBService service;
+    private static TMDBRetrofitService service;
     private static TMDBErrorParser errorParser;
 
     @BeforeClass
@@ -46,7 +45,7 @@ public class TMDBServiceTest {
                 module.provideOkHttpClient(new TMDBApiKeyInterceptor()));
 
 
-        service = module.provideTMDBService(retrofit);
+        service = module.provideTMDBRetrofitService(retrofit);
 
         errorParser = module.provideTMDBErrorParser(retrofit);
     }
@@ -84,8 +83,6 @@ public class TMDBServiceTest {
 
 
 
-
-
     @Test
     public void testGetVideos() throws Exception {
 
@@ -116,7 +113,7 @@ public class TMDBServiceTest {
 
         assertThat(response.isSuccess()).isTrue();
         ReviewList body = response.body();
-        ArrayList<Review> reviews = body.getReviews();
+        List<Review> reviews = body.getReviews();
 
 
         assertThat(reviews.size()).isGreaterThanOrEqualTo(2);

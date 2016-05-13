@@ -4,13 +4,12 @@ import java.util.List;
 
 import app.we.go.movies.R;
 import app.we.go.movies.common.AbstractPresenter;
-import app.we.go.movies.constants.Tags;
 import app.we.go.movies.moviedetails.MovieDetailsContract.VideosView;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
+import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.Video;
 import app.we.go.movies.remote.json.VideoList;
-import app.we.go.movies.util.LOG;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,7 +45,8 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
                         videos = response.body().getVideos();
                         getBoundView().displayVideos(videos);
                     } else {
-                        LOG.e(Tags.REMOTE, "Videos response was not successful for %d", movieId);
+                        TMDBError error = service.parse(response.errorBody());
+
                         onError();
                     }
                 }
@@ -54,7 +54,6 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
 
             @Override
             public void onFailure(Call<VideoList> call, Throwable t) {
-                LOG.e(Tags.REMOTE, t, "Call for getting videos for %d failed", movieId);
                 onError();
             }
 

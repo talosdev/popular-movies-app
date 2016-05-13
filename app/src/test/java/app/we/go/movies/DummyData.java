@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.Review;
+import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.Video;
 import app.we.go.movies.remote.json.VideoList;
 
@@ -34,9 +36,12 @@ public class DummyData {
     public static final String DUMMY_MOVIE_BACKDROP_PATH = "dummy/movie/backdrop/path";
 
     public static final VideoList VIDEOS = new VideoList();
+    public static final ReviewList REVIEWS = new ReviewList();
 
 
     private static final int NUM_VIDEOS = 4;
+
+    private static final int NUM_REVIEWS = 3;
 
     static {
         DUMMY_MOVIE = new Movie();
@@ -63,5 +68,19 @@ public class DummyData {
         }
 
         VIDEOS.setVideos(videos);
+
+
+        List<Review> reviews = new ArrayList<>();
+
+        for (int i=0; i<NUM_REVIEWS; i++) {
+            Review r = new Review();
+            r.setId("00000" + i);
+            r.setAuthor("Author " + i);
+            r.setContent("This was a great movie " + i);
+
+            reviews.add(r);
+        }
+
+        REVIEWS.setReviews(reviews);
     }
 }
