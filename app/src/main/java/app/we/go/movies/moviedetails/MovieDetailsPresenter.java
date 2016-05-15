@@ -53,6 +53,8 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
     @Override
     public void loadMovieInfo(long movieId) {
         Call<Movie> call = service.getDetails(movieId);
+       // EspressoIdlingResource.increment(); // App is busy until further notice
+
         call.enqueue(new Callback<Movie>() {
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {

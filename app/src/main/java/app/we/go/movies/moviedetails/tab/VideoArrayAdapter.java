@@ -92,8 +92,8 @@ public class VideoArrayAdapter extends ArrayAdapter {
     }
 
     /**
-     * Listener interface that the container of the list should implement so that it can
-     * be notified about actions inside the item view, and handle them appropriately.
+     * Listener interface that the container of the list should implement (or provide an implementation of)
+     * so that it can be notified about actions inside the item view, and handle them appropriately.
      */
     public interface VideoClickListener {
         void onVideoDetailsClick(String videoKey);

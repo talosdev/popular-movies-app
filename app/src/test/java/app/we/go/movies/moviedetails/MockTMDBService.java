@@ -30,8 +30,9 @@ public class MockTMDBService implements TMDBService {
     private final ResponseBody errorBody;
 
     public MockTMDBService() {
+        // Using the Dagger module to get the same Gson instance as in production code
+        // This is not absolutely necessary though...
         ApplicationModule module = new ApplicationModule();
-
         Gson gson = module.provideGson();
 
         TMDBError tmdbError = new TMDBError();

@@ -84,14 +84,7 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
 
     @Override
     public void displayInfo(Movie movie) {
-        if (getView() == null) {
-            return;
-        }
-
         descriptionView.setText(movie.getOverview());
-
-        // TODO move this to presenter
-
 
         voteAverageView.setText(movie.getVoteAverage() + "");
         voteCountView.setText("(" + movie.getVoteCount() + " votes)");
