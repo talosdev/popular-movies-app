@@ -23,7 +23,7 @@ dependencies:
 test:
   override:
    # start the emulator
-   - emulator -avd circleci-android21 -no-audio -no-window:
+   - emulator -avd circleci-android22 -no-audio -no-window:
        background: true
        parallel: true
    # execute the local junit tests as we wait for the emulator to boot
