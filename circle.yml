@@ -35,10 +35,12 @@ test:
    # block until the emulator has booted
    - circle-android wait-for-boot
 
+   # unlock screen
+   # https://discuss.circleci.com/t/android-test-fails-with-a-failure-to-get-the-focus-of-root-view/139
    - adb shell input keyevent 82
 
    # execute the android tests (instrumentation)
-   - (./gradlew connectedAndroidTest):
+   - ADB_INSTALL_TIMEOUT=10 ./gradlew connectedAndroidTest
       timeout: 1200
 
    # copy the build outputs to artifacts
