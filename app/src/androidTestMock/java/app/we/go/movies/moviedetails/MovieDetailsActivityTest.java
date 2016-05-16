@@ -51,11 +51,11 @@ public class MovieDetailsActivityTest {
 
     @Test
     public void testDetailsAreDisplayed() throws Exception {
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e ) {
-
-        }
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e ) {
+//
+//        }
 
 
         onView(withId(R.id.movieTitle)).check(matches(isDisplayed()));

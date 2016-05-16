@@ -3,6 +3,7 @@ package app.we.go.movies.remote;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -32,7 +33,7 @@ public class PopularMoviesFetcherTest {
      * that they are ordered as expected
      * @throws Exception
      */
-    @Test
+//    @Test
     public void testFetchMoviesPopularity() throws Exception {
         List<Movie> movies = fetcher.fetch(SortByCriterion.POPULARITY, 1).movies;
 
@@ -51,7 +52,7 @@ public class PopularMoviesFetcherTest {
      * that they are ordered as expected
      * @throws Exception
      */
-    @Test
+ //   @Test
     public void testFetchMoviesVote() throws Exception {
         List<Movie> movies = fetcher.fetch(SortByCriterion.VOTE, 1).movies;
 
@@ -67,6 +68,7 @@ public class PopularMoviesFetcherTest {
      * Gets two different pages and makes sure they are distinct
      * @throws Exception
      */
+    @Ignore
     @Test
     public void testFetchWithPaging() throws Exception {
         List<Movie> movies1 = fetcher.fetch(SortByCriterion.POPULARITY, 1).movies;

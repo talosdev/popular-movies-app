@@ -1,4 +1,4 @@
-package app.we.go.movies.movies.remote;
+package app.we.go.movies.remote;
 
 import android.content.Context;
 
@@ -14,9 +14,7 @@ import java.util.List;
 import app.we.go.movies.TestData;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.dependency.ApplicationModule;
-import app.we.go.movies.remote.TMDBApiKeyInterceptor;
-import app.we.go.movies.remote.TMDBErrorParser;
-import app.we.go.movies.remote.TMDBRetrofitService;
+import app.we.go.movies.dependency.ServiceModule;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.remote.json.ReviewList;
@@ -46,8 +44,9 @@ public class TMDBServiceTest {
     @BeforeClass
     public static void setUpClass() {
         // Get the real service instance from the dagger module
-        ApplicationModule module = new ApplicationModule();
-        Retrofit retrofit = module.provideRetrofit(module.provideGson(),
+        ServiceModule module = new ServiceModule();
+        ApplicationModule appModule = new ApplicationModule();
+        Retrofit retrofit = module.provideRetrofit(appModule.provideGson(),
                 module.provideOkHttpClient(new TMDBApiKeyInterceptor()));
 
 

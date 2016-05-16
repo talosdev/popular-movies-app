@@ -1,4 +1,4 @@
-package app.we.go.movies;
+package app.we.go.movies.remote;
 
 import java.util.ArrayList;
 import java.util.Calendar;

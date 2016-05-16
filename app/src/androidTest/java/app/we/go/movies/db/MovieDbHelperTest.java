@@ -1,13 +1,11 @@
 package app.we.go.movies.db;
 
-import app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
-
-import org.junit.Test;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
 
 /**
  * Created by apapad on 2016-01-14.
@@ -48,13 +46,13 @@ public class MovieDbHelperTest extends AbstractSchemaValidatorATC<MovieDbHelper>
     // within Android Studio.
 
     @Override
-    @Test
+  ///  @Test
     public void testTablesExist() throws Exception {
         super.testTablesExist();
     }
 
     @Override
-    @Test
+  //  @Test
     public void testTableColumns() throws Exception {
         super.testTableColumns();
     }

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
-import app.we.go.movies.DummyData;
+import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.dependency.ApplicationModule;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Movie;
@@ -25,11 +25,11 @@ import retrofit2.mock.Calls;
  *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MockTMDBService implements TMDBService {
+public class UnusedMockTMDBService implements TMDBService {
 
     private final ResponseBody errorBody;
 
-    public MockTMDBService() {
+    public UnusedMockTMDBService() {
         // Using the Dagger module to get the same Gson instance as in production code
         // This is not absolutely necessary though...
         ApplicationModule module = new ApplicationModule();
