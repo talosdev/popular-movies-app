@@ -27,7 +27,10 @@ test:
        background: true
        parallel: true
    # execute the local junit tests as we wait for the emulator to boot
-   - (./gradlew test)
+   # we are explicitely specifying the gradle targets here, because with the command
+   # ./gradlew test, the tests would be executed for all 3 variants, and prodRelease
+   # is not needed at that point.
+   - (./gradlew testMockDebugUnitTest testProdDebugUnitTest)
 
    # block until the emulator has booted
    - circle-android wait-for-boot
@@ -45,4 +48,4 @@ test:
    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
    # local junit
    - cp -r app/build/reports/tests/debug/* $CIRCLE_TEST_REPORTS
-   - cp -r app/build/test-results/* $CIRCLE_TEST_REPORTS
+   - cp -r app/build/test-results/mockDebug app/build/test-results/prodDebug $CIRCLE_TEST_REPORTS
