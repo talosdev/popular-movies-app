@@ -45,3 +45,4 @@ test:
    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
    # local junit
    - cp -r app/build/reports/tests/debug/* $CIRCLE_TEST_REPORTS
+   - cp -r app/build/test-results/* $CIRCLE_TEST_REPORTS
