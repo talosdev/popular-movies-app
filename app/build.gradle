@@ -26,6 +26,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
+        debug {
+            // Run code coverage reports by default on debug builds.
+            testCoverageEnabled = true
+        }
+
 
         buildTypes.each {
             it.buildConfigField 'String', 'TMDB_API_KEY', "\"$System.env.TMDB_API_KEY\""
