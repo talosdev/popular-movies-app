@@ -66,7 +66,10 @@ public class MovieDetailsActivityTest {
 
         onView(withId(R.id.details_pager)).perform(swipeLeft());
 
-        onView(withId(R.id.reviews_list)).check(matches(Matchers.withListSize(2)));
+        onView(withId(R.id.reviews_list)).check(matches(Matchers.withListSize(DummyData.REVIEWS.getReviews().size())));
+        onView(withId(R.id.videos_list)).check(matches(Matchers.withListSize(DummyData.VIDEOS.getVideos().size())));
+
+
 //
 //        onData(instanceOf(Review.class))
 //                .inAdapterView(allOf(withId(android.R.id.list), isDisplayed()))
