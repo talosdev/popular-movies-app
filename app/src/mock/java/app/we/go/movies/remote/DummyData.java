@@ -3,6 +3,7 @@ package app.we.go.movies.remote;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import app.we.go.movies.remote.json.Movie;
@@ -18,9 +19,8 @@ public class DummyData {
 
     public static final String MOCK_BASE_URL = "http://www.example.com";
     public static Movie DUMMY_MOVIE;
-
-
     public static final long INEXISTENT_MOVIE_ID = 9999L;
+
 
     public static final long MOVIE_ID_CAUSES_SERVER_ERROR = 666L;
 
@@ -36,6 +36,8 @@ public class DummyData {
 
     public static final String DUMMY_MOVIE_BACKDROP_PATH = "dummy/movie/backdrop/path";
 
+    public static final String DUMMY_MOVIE_POSTER_PATH = "dummy/movie/poster/path";
+
 
     public static final VideoList VIDEOS = new VideoList();
     public static final ReviewList REVIEWS = new ReviewList();
@@ -45,7 +47,7 @@ public class DummyData {
 
     private static final int NUM_REVIEWS = 3;
 
-    public static final Date DUMMY_MOVIE_DATE = Calendar.getInstance().getTime();
+    public static final Date DUMMY_MOVIE_DATE;
     public static final String DUMMY_MOVIE_DATE_STR = "2015-01-01";
 
 
@@ -59,7 +61,19 @@ public class DummyData {
         DUMMY_MOVIE.setVoteCount(DUMMY_MOVIE_VOTES);
         DUMMY_MOVIE.setVoteAverage(DUMMY_MOVIE_VOTE_AVG);
         DUMMY_MOVIE.setBackdropPath(DUMMY_MOVIE_BACKDROP_PATH);
+
+
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 01);
+        cal.set(Calendar.YEAR, 2015);
+        cal.set(Calendar.MONTH, Calendar.JANUARY);
+        DUMMY_MOVIE_DATE = cal.getTime();
+
+
+
         DUMMY_MOVIE.setReleaseDate(DUMMY_MOVIE_DATE);
+
+
 
 
         List<Video> videos = new ArrayList<>();

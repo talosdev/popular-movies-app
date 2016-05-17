@@ -50,7 +50,7 @@ public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
         Fragment f = null;
         switch (position) {
             case 0:
-                f = MovieInfoTabFragment.newInstance();
+                f = MovieInfoTabFragment.newInstance(movieId);
                 break;
             case 1:
                 f = MovieReviewsTabFragment.newInstance(movieId);

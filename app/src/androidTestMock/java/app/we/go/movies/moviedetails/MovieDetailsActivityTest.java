@@ -3,26 +3,25 @@ package app.we.go.movies.moviedetails;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import app.we.go.movies.R;
-import app.we.go.movies.TestData;
+import app.we.go.movies.remote.DummyData;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-@RunWith(AndroidJUnit4.class)
 public class MovieDetailsActivityTest {
 
     @Rule
@@ -33,15 +32,12 @@ public class MovieDetailsActivityTest {
 
     @Before
     public void intentWithStubbedNoteId() {
-
-
         // Lazily start the Activity from the ActivityTestRule this time to inject the start Intent
         Intent intent = MovieDetailsActivity.newIntent(
                 InstrumentationRegistry.getInstrumentation().getTargetContext(),
-                TestData.MOVIE_ID, TestData.MOVIE_POSTER_PATH);
+                DummyData.DUMMY_MOVIE_ID, DummyData.DUMMY_MOVIE_POSTER_PATH);
         testRule.launchActivity(intent);
 
-//        registerIdlingResource();
     }
 
     @After
@@ -51,17 +47,20 @@ public class MovieDetailsActivityTest {
 
     @Test
     public void testDetailsAreDisplayed() throws Exception {
-//        try {
-//            Thread.sleep(10000);
-//        } catch (InterruptedException e ) {
-//
-//        }
 
+        onView(withId(R.id.movieTitle)).check(matches(withText(DummyData.DUMMY_MOVIE_TITLE)));
 
-        onView(withId(R.id.movieTitle)).check(matches(isDisplayed()));
         onView(withId(R.id.synopsis_title)).check(matches(isDisplayed()));
+        onView(withId(R.id.synopsis)).check(matches(withText(DummyData.DUMMY_MOVIE_DESCRIPTION)));
+
+
         onView(withId(R.id.release_date_title)).check(matches(isDisplayed()));
-        onView(withId(R.id.score_title)).check(matches(isDisplayed()));
+        onView(withId(R.id.release_date)).check(matches(withText(DummyData.DUMMY_MOVIE_DATE_STR)));
+
+
+        onView(withId(R.id.vote_average_title)).check(matches(isDisplayed()));
+        onView(withId(R.id.vote_average)).check(matches(withText("" + DummyData.DUMMY_MOVIE_VOTE_AVG)));
+        onView(withId(R.id.vote_count)).check(matches(withText(CoreMatchers.containsString("" + DummyData.DUMMY_MOVIE_VOTES))));
 
     }
 }

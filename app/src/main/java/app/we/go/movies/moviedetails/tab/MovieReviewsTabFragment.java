@@ -3,7 +3,6 @@ package app.we.go.movies.moviedetails.tab;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,6 @@ public class MovieReviewsTabFragment extends ListFragment implements MovieDetail
         Bundle b = new Bundle();
         b.putLong(Args.ARG_MOVIE_ID, movieId);
         f.setArguments(b);
-        Log.d("ZZ", "Args " + movieId);
         return f;
     }
 
@@ -48,26 +46,30 @@ public class MovieReviewsTabFragment extends ListFragment implements MovieDetail
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.movie_details_review_tab, container, false);
-
-        return v;
+        return inflater.inflate(R.layout.movie_details_review_tab, container, false);
     }
 
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
+
+        presenter.bindView(this);
+
+        ArrayAdapter adapter = new ReviewsArrayAdapter(getActivity(), R.layout.review_row, new ArrayList<Review>(), getActivity().getLayoutInflater());
+        setListAdapter(adapter);
+        getListView().setOnItemClickListener(null);
+    }
 
     @DebugLog
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
-        presenter.bindView(this);
+
         presenter.loadMovieReviews(getArguments().getLong(Args.ARG_MOVIE_ID));
-
-
-        ArrayAdapter adapter = new ReviewsArrayAdapter(getActivity(), R.layout.review_row, new ArrayList<Review>(), getActivity().getLayoutInflater());
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(null);
-
     }
 
 

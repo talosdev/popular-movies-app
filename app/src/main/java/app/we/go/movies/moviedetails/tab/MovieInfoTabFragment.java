@@ -11,6 +11,7 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import app.we.go.movies.R;
+import app.we.go.movies.constants.Args;
 import app.we.go.movies.moviedetails.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
 import app.we.go.movies.remote.json.Movie;
@@ -23,7 +24,7 @@ import hugo.weaving.DebugLog;
  */
 public class MovieInfoTabFragment extends Fragment implements MovieDetailsContract.InfoView {
 
-    @Bind(R.id.releaseDate)
+    @Bind(R.id.release_date)
     TextView releaseDateView;
 
     @Bind(R.id.vote_average)
@@ -32,17 +33,18 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     @Bind(R.id.vote_count)
     TextView voteCountView;
 
-    @Bind(R.id.movieDescription)
+    @Bind(R.id.synopsis)
     TextView descriptionView;
 
     @Inject
     MovieDetailsContract.Presenter presenter;
 
 
-
-    public static MovieInfoTabFragment newInstance() {
+    public static MovieInfoTabFragment newInstance(long movieId) {
         MovieInfoTabFragment f = new MovieInfoTabFragment();
-
+        Bundle b = new Bundle();
+        b.putLong(Args.ARG_MOVIE_ID, movieId);
+        f.setArguments(b);
         return f;
     }
 
@@ -57,9 +59,7 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
 
-        presenter.bindInfoView(this);
 
     }
 
@@ -68,19 +68,28 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // TODO review this
         // container might be null when there is a configuration change from
         // two-pane to one-pane, and this fragment is reloaded, but without container
         if (container == null) {
             return null;
+        } else {
+            return inflater.inflate(R.layout.movie_details_info_tab, container, false);
         }
-
-        View v = inflater.inflate(R.layout.movie_details_info_tab, container, false);
-
-        ButterKnife.bind(this, v);
-
-        return v;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ButterKnife.bind(this, view);
+
+        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
+
+        presenter.bindInfoView(this);
+        presenter.loadMovieInfo(getArguments().getLong(Args.ARG_MOVIE_ID));
+
+    }
 
     @Override
     public void displayInfo(Movie movie) {

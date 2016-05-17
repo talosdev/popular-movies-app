@@ -95,14 +95,17 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
 
-        presenter.bindView(this);
 
-        presenter.checkFavorite(currentMovieId);
-        presenter.loadMovieInfo(currentMovieId);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        presenter.checkFavorite(currentMovieId);
+   //     presenter.loadMovieInfo(currentMovieId);
+    }
 
     @DebugLog
     @Override
@@ -115,31 +118,39 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
             headless = true;
         }
 
-        setHasOptionsMenu(true);
-
         // Do not inflate the layout, if there are no arguments, for example
         // when the application is opened in two-pane mode, and so there is no
         // current movie selected to show in the details pane.
         if (getArguments() != null) {
-            View rootView = inflater.inflate(R.layout.movie_details_fragment, container, false);
+            return inflater.inflate(R.layout.movie_details_fragment, container, false);
 
-            ButterKnife.bind(this, rootView);
-
-            pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId);
-
-            pager.setOffscreenPageLimit(2);
-            pager.setAdapter(pagerAdapter);
-
-            imageView.forceLayout();
-
-
-            return rootView;
         } else {
             return null;
         }
 
     }
 
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setHasOptionsMenu(true);
+
+        ButterKnife.bind(this, view);
+        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
+
+        presenter.bindView(this);
+
+        pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId);
+
+        pager.setOffscreenPageLimit(2);
+        pager.setAdapter(pagerAdapter);
+
+        imageView.forceLayout();
+
+
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

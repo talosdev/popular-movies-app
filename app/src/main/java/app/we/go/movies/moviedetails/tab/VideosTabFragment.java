@@ -58,18 +58,27 @@ public class VideosTabFragment extends ListFragment implements MovieDetailsContr
         return v;
     }
 
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
+
+
+        presenter.bindView(this);
+
+        ArrayAdapter adapter = new VideoArrayAdapter(context, R.layout.video_row, new ArrayList<Video>(), getActivity().getLayoutInflater(), this);
+        setListAdapter(adapter);
+    }
+
     @DebugLog
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
-        presenter.bindView(this);
+
         presenter.loadMovieVideos(getArguments().getLong(Args.ARG_MOVIE_ID));
-
-        ArrayAdapter adapter = new VideoArrayAdapter(context, R.layout.video_row, new ArrayList<Video>(), getActivity().getLayoutInflater(), this);
-        setListAdapter(adapter);
-
     }
 
 
