@@ -17,9 +17,8 @@ import app.we.go.movies.remote.json.VideoList;
 public class DummyData {
 
     public static final String MOCK_BASE_URL = "http://www.example.com";
-
-
     public static Movie DUMMY_MOVIE;
+
 
     public static final long INEXISTENT_MOVIE_ID = 9999L;
 
@@ -36,6 +35,7 @@ public class DummyData {
     public static final float DUMMY_MOVIE_VOTE_AVG = 4.5f;
 
     public static final String DUMMY_MOVIE_BACKDROP_PATH = "dummy/movie/backdrop/path";
+
 
     public static final VideoList VIDEOS = new VideoList();
     public static final ReviewList REVIEWS = new ReviewList();
