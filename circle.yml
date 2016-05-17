@@ -8,6 +8,7 @@ general:
 
 machine:
     environment:
+        PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-2.9/bin:$PATH"
         TERM: "dumb"
         ADB_INSTALL_TIMEOUT: "10"
         GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
@@ -17,6 +18,7 @@ dependencies:
   cache_directories:
     - /home/ubuntu/.android
   override:
+        - wget "https://services.gradle.org/distributions/gradle-2.9-bin.zip"; unzip gradle-2.9-bin.zip
         - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-23"
         - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.2"
 
@@ -43,7 +45,7 @@ test:
    - adb shell input keyevent 82
 
    # execute the android tests (instrumentation)
-   - (./gradlew connectedAndroidTest):
+   - (./gradlew connectedAndroidTest -PdisablePreDex):
       timeout: 6000
 
    # copy the build outputs to artifacts
