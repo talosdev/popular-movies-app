@@ -68,7 +68,7 @@ public class MovieJSONParserTest {
         assertEquals("Spectre", movie.getTitle());
 
         SimpleDateFormat sdf = new SimpleDateFormat(TMDB.DATE_FORMAT);
-        assertThat(movie.getReleaseDate()).isInSameDayAs(sdf.parse(TestData.MOVIE_RELEASE_DATE));
+        assertThat(movie.getReleaseDate()).isInSameDayAs(sdf.parse(TestData.MOVIE_RELEASE_DATE_STR));
 
         assertEquals(206647, movie.getId());
         assertEquals(6.7f, movie.getVoteAverage(), TestUtils.EPSILON);

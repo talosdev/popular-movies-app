@@ -78,7 +78,7 @@ public class TMDBServiceTest {
         assertThat(m.getTitle()).isEqualTo(TestData.MOVIE_TITLE);
         assertThat(m.getReleaseDate()).
                 withDateFormat(new SimpleDateFormat(TMDB.DATE_FORMAT)).
-                isEqualTo(TestData.MOVIE_RELEASE_DATE);
+                isEqualTo(TestData.MOVIE_RELEASE_DATE_STR);
         assertThat(m.getVoteAverage()).isGreaterThan(0.0f).isLessThan(10.0f);
         assertThat(m.getVoteCount()).isGreaterThan(1L);
         assertThat(m.getPopularity()).isGreaterThan(0.0f);

@@ -59,7 +59,7 @@ public class VideosPresenterTest {
 
     @Test
     public void testLoadVideos() throws Exception {
-        presenter.loadMovieVideos(DummyData.DUMMY_MOVIE_ID);
+        presenter.loadMovieVideos(DummyData.MOVIE_ID);
 
         verify(view).displayVideos(eq(DummyData.VIDEOS.getVideos()));
         verifyNoMoreInteractions(view);

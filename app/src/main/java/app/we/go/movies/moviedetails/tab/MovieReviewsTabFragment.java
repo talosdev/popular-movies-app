@@ -2,11 +2,13 @@ package app.we.go.movies.moviedetails.tab;
 
 import android.os.Bundle;
 import android.support.annotation.StringRes;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +20,29 @@ import app.we.go.movies.constants.Args;
 import app.we.go.movies.moviedetails.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
 import app.we.go.movies.remote.json.Review;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
 /**
  *
  * Created by apapad on 26/02/16.
  */
-public class MovieReviewsTabFragment extends ListFragment implements MovieDetailsContract.ReviewsView {
+public class MovieReviewsTabFragment extends Fragment implements MovieDetailsContract.ReviewsView {
 
 
     @Inject
     MovieDetailsContract.ReviewsPresenter presenter;
+
+    @Bind(R.id.reviews_list)
+    ListView listView;
+
+    @Bind(R.id.reviews_list_empty)
+    TextView emptyView;
+
+
+    private ArrayAdapter<Review> adapter;
+
 
     public MovieReviewsTabFragment() {
     }
@@ -54,13 +68,15 @@ public class MovieReviewsTabFragment extends ListFragment implements MovieDetail
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ButterKnife.bind(this, view);
         ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
 
         presenter.bindView(this);
 
-        ArrayAdapter adapter = new ReviewsArrayAdapter(getActivity(), R.layout.review_row, new ArrayList<Review>(), getActivity().getLayoutInflater());
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(null);
+        adapter = new ReviewsArrayAdapter(getActivity(), R.layout.review_row, new ArrayList<Review>(), getActivity().getLayoutInflater());
+        listView.setOnItemClickListener(null);
+        listView.setAdapter(adapter);
+        listView.setEmptyView(emptyView);
     }
 
     @DebugLog
@@ -78,7 +94,6 @@ public class MovieReviewsTabFragment extends ListFragment implements MovieDetail
 
     @Override
     public void displayReviews(List<Review> reviews) {
-        ArrayAdapter adapter = (ArrayAdapter) getListAdapter();
         adapter.addAll(reviews);
         adapter.notifyDataSetChanged();
     }

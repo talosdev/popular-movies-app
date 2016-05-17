@@ -14,7 +14,7 @@ public class TestData {
     public static final long MOVIE_ID = 206647;
     public static final String MOVIE_TITLE = "Spectre";
     public static final String MOVIE_OVERVIEW = "A cryptic message from Bond’s past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.";
-    public static final String MOVIE_RELEASE_DATE  = "2015-10-26";
+    public static final String MOVIE_RELEASE_DATE_STR = "2015-10-26";
     public static final String MOVIE_POSTER_PATH = "/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg";
 
     public static final String MOVIE_JSON_EMPTY_DATE ="{\"adult\":false,\"backdrop_path\":\"/wVTYlkKPKrljJfugXN7UlLNjtuJ.jpg\",\"genre_ids\":[28,12,80],\"id\":206647,\"original_language\":\"en\",\"original_title\":\"Spectre\",\"overview\":\"A cryptic message from Bond’s past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.\",\"release_date\":\"\",\"poster_path\":\"/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg\",\"popularity\":57.231904,\"title\":\"Spectre\",\"video\":false,\"vote_average\":6.7,\"vote_count\":453}";

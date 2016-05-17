@@ -8,17 +8,15 @@ import org.mockito.MockitoAnnotations;
 
 import app.we.go.movies.R;
 import app.we.go.movies.SharedPreferencesHelper;
-import app.we.go.movies.moviedetails.MovieDetailsContract;
-import app.we.go.movies.moviedetails.MovieDetailsPresenter;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.MockTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
 
 import static app.we.go.movies.remote.DummyData.DUMMY_MOVIE;
-import static app.we.go.movies.remote.DummyData.DUMMY_MOVIE_BACKDROP_PATH;
-import static app.we.go.movies.remote.DummyData.DUMMY_MOVIE_DATE_STR;
-import static app.we.go.movies.remote.DummyData.DUMMY_MOVIE_ID;
-import static app.we.go.movies.remote.DummyData.DUMMY_MOVIE_TITLE;
+import static app.we.go.movies.remote.DummyData.MOVIE_BACKDROP_PATH;
+import static app.we.go.movies.remote.DummyData.MOVIE_RELEASE_DATE_STR;
+import static app.we.go.movies.remote.DummyData.MOVIE_ID;
+import static app.we.go.movies.remote.DummyData.MOVIE_TITLE;
 import static app.we.go.movies.remote.DummyData.INEXISTENT_MOVIE_ID;
 import static app.we.go.movies.remote.DummyData.MOVIE_ID_CAUSES_SERVER_ERROR;
 import static org.mockito.Matchers.anyInt;
@@ -49,7 +47,7 @@ public class MovieDetailsPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        when(sharedPreferencesHelper.formatDate(DummyData.DUMMY_MOVIE_DATE)).thenReturn(DummyData.DUMMY_MOVIE_DATE_STR);
+        when(sharedPreferencesHelper.formatDate(DummyData.MOVIE_RELEASE_DATE)).thenReturn(DummyData.MOVIE_RELEASE_DATE_STR);
 
 
         TMDBService service = new MockTMDBServiceSync();
@@ -69,13 +67,13 @@ public class MovieDetailsPresenterTest {
     @Test
     public void testLoadMovieInfo() throws InterruptedException {
 
-        presenter.loadMovieInfo(DUMMY_MOVIE_ID);
+        presenter.loadMovieInfo(MOVIE_ID);
 
-        verify(view).displayTitle(eq(DUMMY_MOVIE_TITLE));
-        verify(view).displayImage(eq(DUMMY_MOVIE_BACKDROP_PATH));
+        verify(view).displayTitle(eq(MOVIE_TITLE));
+        verify(view).displayImage(eq(MOVIE_BACKDROP_PATH));
 
         verify(infoView).displayInfo(DUMMY_MOVIE);
-        verify(infoView).displayFormattedDate(DUMMY_MOVIE_DATE_STR);
+        verify(infoView).displayFormattedDate(MOVIE_RELEASE_DATE_STR);
 
 
         verifyNoMoreInteractions(view);

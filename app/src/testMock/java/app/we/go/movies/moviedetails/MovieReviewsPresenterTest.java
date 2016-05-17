@@ -7,8 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import app.we.go.movies.R;
-import app.we.go.movies.moviedetails.MovieDetailsContract;
-import app.we.go.movies.moviedetails.MovieReviewsPresenter;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.MockTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
@@ -46,7 +44,7 @@ public class MovieReviewsPresenterTest {
 
     @Test
     public void testLoadReviews() throws Exception {
-        presenter.loadMovieReviews(DummyData.DUMMY_MOVIE_ID);
+        presenter.loadMovieReviews(DummyData.MOVIE_ID);
 
         verify(view).displayReviews(eq(DummyData.REVIEWS.getReviews()));
         verifyNoMoreInteractions(view);

@@ -48,7 +48,7 @@ public class MockTMDBServiceSync implements TMDBService {
 
     @Override
     public Call<Movie> getDetails(@Path("id") long movieId) {
-        if (movieId == DummyData.DUMMY_MOVIE_ID) {
+        if (movieId == DummyData.MOVIE_ID) {
             return Calls.response(DummyData.DUMMY_MOVIE);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
 
@@ -62,7 +62,7 @@ public class MockTMDBServiceSync implements TMDBService {
 
     @Override
     public Call<VideoList> getVideos(@Path("id") long movieId) {
-        if (movieId == DummyData.DUMMY_MOVIE_ID) {
+        if (movieId == DummyData.MOVIE_ID) {
             return Calls.response(DummyData.VIDEOS);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
             return Calls.response(Response.<VideoList>error(404, errorBody));
@@ -76,7 +76,7 @@ public class MockTMDBServiceSync implements TMDBService {
 
     @Override
     public Call<ReviewList> getReviews(@Path("id") long movieId) {
-        if (movieId == DummyData.DUMMY_MOVIE_ID) {
+        if (movieId == DummyData.MOVIE_ID) {
             return Calls.response(DummyData.REVIEWS);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
             return Calls.response(Response.<ReviewList>error(404, errorBody));
