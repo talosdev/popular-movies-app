@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -11,8 +12,10 @@ import org.junit.Test;
 
 import app.we.go.movies.R;
 import app.we.go.movies.remote.DummyData;
-import app.we.go.movies.util.Matchers;
+import app.we.go.movies.remote.json.Review;
+import app.we.go.movies.remote.json.Video;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -20,6 +23,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -66,15 +71,50 @@ public class MovieDetailsActivityTest {
 
         onView(withId(R.id.details_pager)).perform(swipeLeft());
 
-        onView(withId(R.id.reviews_list)).check(matches(Matchers.withListSize(DummyData.REVIEWS.getReviews().size())));
-        onView(withId(R.id.videos_list)).check(matches(Matchers.withListSize(DummyData.VIDEOS.getVideos().size())));
+//        onView(withId(R.id.reviews_list)).check(matches(Matchers.withListSize(DummyData.REVIEWS.getReviews().size())));
+//        onView(withId(R.id.videos_list)).check(matches(Matchers.withListSize(DummyData.VIDEOS.getVideos().size())));
 
 
-//
-//        onData(instanceOf(Review.class))
-//                .inAdapterView(allOf(withId(android.R.id.list), isDisplayed()))
-//                .atPosition(3)
-//                .check(matches(isDisplayed()));
+        for (int i=0; i< DummyData.REVIEWS_NUM; i++) {
+
+            onData(is(instanceOf(Review.class))).
+                    inAdapterView(withId(R.id.reviews_list)).
+                    atPosition(i).
+                    onChildView(withId(R.id.reviewContent)).
+                    check(matches(isDisplayed())).
+                    check(matches(withText(DummyData.REVIEW_CONTENTS[i])));
+
+            onData(is(instanceOf(Review.class))).
+                    inAdapterView(withId(R.id.reviews_list)).
+                    atPosition(i).
+                    onChildView(withId(R.id.reviewAuthor)).
+                    check(matches(isDisplayed())).
+                    check(matches(withText(DummyData.REVIEW_AUTHORS[i])));
+
+        }
+
+
+        onView(withId(R.id.details_pager)).perform(swipeLeft());
+
+
+        for (int i=0; i< DummyData.VIDEOS_NUM; i++) {
+
+            onData(is(instanceOf(Video.class))).
+                    inAdapterView(withId(R.id.videos_list)).
+                    atPosition(i).
+                    onChildView(withId(R.id.videoName)).
+                    check(matches(isDisplayed())).
+                    check(matches(withText(DummyData.VIDEO_NAMES[i])));
+
+            onData(is(instanceOf(Video.class))).
+                    inAdapterView(withId(R.id.videos_list)).
+                    atPosition(i).
+                    onChildView(withId(R.id.videoDetails)).
+                    check(matches(isDisplayed())).
+                    check(matches(withText(Matchers.startsWith(DummyData.VIDEO_TYPES[i]))));
+
+        }
+
 
     }
 }

@@ -2,7 +2,6 @@ package app.we.go.movies.remote.json;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 /**
  * Created by apapad on 1/03/16.
@@ -21,7 +20,6 @@ public class Review implements Parcelable {
 
     private String url;
 
-    @NonNull
     public String getId() {
         return id;
     }
@@ -91,7 +89,8 @@ public class Review implements Parcelable {
 
         Review review = (Review) o;
 
-        if (!getId().equals(review.getId())) return false;
+        if (getId() != null ? !getId().equals(review.getId()) : review.getId() != null)
+            return false;
         if (getAuthor() != null ? !getAuthor().equals(review.getAuthor()) : review.getAuthor() != null)
             return false;
         if (getContent() != null ? !getContent().equals(review.getContent()) : review.getContent() != null)
@@ -102,7 +101,7 @@ public class Review implements Parcelable {
 
     @Override
     public int hashCode() {
-        int result = getId().hashCode();
+        int result = getId() != null ? getId().hashCode() : 0;
         result = 31 * result + (getAuthor() != null ? getAuthor().hashCode() : 0);
         result = 31 * result + (getContent() != null ? getContent().hashCode() : 0);
         result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
