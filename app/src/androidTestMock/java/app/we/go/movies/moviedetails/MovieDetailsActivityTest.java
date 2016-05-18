@@ -1,13 +1,6 @@
 package app.we.go.movies.moviedetails;
 
-import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
-
 import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import app.we.go.movies.R;
@@ -29,28 +22,11 @@ import static org.hamcrest.Matchers.is;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MovieDetailsActivityTest {
-
-    @Rule
-    public ActivityTestRule<MovieDetailsActivity> testRule =
-            new ActivityTestRule<>(MovieDetailsActivity.class, true,
-                    false);
+public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
 
 
-    @Before
-    public void intentWithStubbedNoteId() {
-        // Lazily start the Activity from the ActivityTestRule this time to inject the start Intent
-        Intent intent = MovieDetailsActivity.newIntent(
-                InstrumentationRegistry.getInstrumentation().getTargetContext(),
-                DummyData.MOVIE_ID, DummyData.MOVIE_POSTER_PATH);
-        testRule.launchActivity(intent);
 
-    }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
 
     @Test
     public void testDetailsAreDisplayed() throws Exception {
@@ -75,7 +51,7 @@ public class MovieDetailsActivityTest {
 //        onView(withId(R.id.videos_list)).check(matches(Matchers.withListSize(DummyData.VIDEOS.getVideos().size())));
 
 
-        for (int i=0; i< DummyData.REVIEWS_NUM; i++) {
+        for (int i = 0; i < DummyData.REVIEWS_NUM; i++) {
 
             onData(is(instanceOf(Review.class))).
                     inAdapterView(withId(R.id.reviews_list)).
@@ -97,7 +73,7 @@ public class MovieDetailsActivityTest {
         onView(withId(R.id.details_pager)).perform(swipeLeft());
 
 
-        for (int i=0; i< DummyData.VIDEOS_NUM; i++) {
+        for (int i = 0; i < DummyData.VIDEOS_NUM; i++) {
 
             onData(is(instanceOf(Video.class))).
                     inAdapterView(withId(R.id.videos_list)).
@@ -114,7 +90,8 @@ public class MovieDetailsActivityTest {
                     check(matches(withText(Matchers.startsWith(DummyData.VIDEO_TYPES[i]))));
 
         }
-
-
     }
+
+
+
 }
