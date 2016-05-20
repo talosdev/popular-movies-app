@@ -3,8 +3,6 @@ package app.we.go.movies.db;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.junit.Test;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +35,7 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
      *
      * @throws Exception
      */
-    @Test
+  //  @Test
     public void testTablesExist() throws Exception {
 
         // Get cursor with all table names in the database
@@ -66,7 +64,7 @@ public abstract class AbstractSchemaValidatorATC<T extends SQLiteOpenHelper>
      *
      * @throws Exception
      */
-    @Test
+ //   @Test
     public void testTableColumns() throws Exception {
 
         Set<String> tables = getTablesSet();

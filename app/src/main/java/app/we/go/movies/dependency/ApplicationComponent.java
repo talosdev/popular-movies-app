@@ -6,17 +6,18 @@ package app.we.go.movies.dependency;
 
 import javax.inject.Singleton;
 
-import app.we.go.movies.ui.tab.MovieInfoTabFragment;
-import app.we.go.movies.ui.tab.MovieReviewsTabFragment;
-import app.we.go.movies.ui.tab.VideosTabFragment;
+import app.we.go.movies.moviedetails.dependency.MovieDetailsComponent;
+import app.we.go.movies.moviedetails.dependency.MovieDetailsModule;
+import app.we.go.movies.movielist.MovieListFragment;
 import dagger.Component;
 
 
 @Singleton
-@Component(modules = ApplicationModule.class)
+@Component(modules = {ApplicationModule.class, ServiceModule.class, ApplicationAndroidModule.class})
 public interface ApplicationComponent {
-    void inject(MovieInfoTabFragment f);
-    void inject(VideosTabFragment f);
-    void inject(MovieReviewsTabFragment f);
+    void inject(MovieListFragment f);
+
+
+    MovieDetailsComponent plus(MovieDetailsModule module);
 
 }

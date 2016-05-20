@@ -4,12 +4,11 @@ import android.net.Uri;
 
 import app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
 
-import org.junit.Test;
-
 import static app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry.getMovieIdFromUri;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * TODO remove this
  * Created by apapad on 2016-01-15.
  */
 public class MoviesContractTest {
@@ -18,13 +17,13 @@ public class MoviesContractTest {
     public static final String FAVORITE_URI = "content://app.we.go.movies/favorite/1000";
 
 
-    @Test
+ //   @Test
     public void testBuildFavoriteMovieUri() {
         assertThat(FavoriteMovieEntry.buildFavoriteMovieUri(1000l)).
                 isEqualTo(Uri.parse(FAVORITE_URI));
     }
 
-    @Test
+ //   @Test
     public void testGetMovieIdFromUri() {
         assertThat(getMovieIdFromUri(Uri.parse(FAVORITE_URI))).
                 isEqualTo(1000l);

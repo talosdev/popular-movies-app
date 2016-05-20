@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@id/android:list"
+        android:id="@+id/reviews_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="0dp"
@@ -13,7 +13,7 @@
         android:layout_marginRight="@dimen/content_horizontal_margin"/>
 
     <TextView
-        android:id="@id/android:empty"
+        android:id="@+id/reviews_list_empty"
         style="@style/empty_list_text"
         android:text="@string/empty_reviews" />
 

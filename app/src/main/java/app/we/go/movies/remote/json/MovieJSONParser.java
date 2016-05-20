@@ -19,6 +19,14 @@ public class MovieJSONParser {
         return movie;
     }
 
+    public String toJson(Movie movie) {
+        return gson.toJson(movie);
+    }
+
+    public String toJson(MovieList movies) {
+        return gson.toJson(movies);
+    }
+
 
     public MovieList parseMovieList(String json) {
         MovieList list = gson.fromJson(json, MovieList.class);

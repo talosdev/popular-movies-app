@@ -12,8 +12,24 @@ public class VideoList {
 
     }
 
-    public long id;
+    private long id;
 
     @SerializedName("results")
-    public List<Video> videos;
+    private List<Video> videos;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<Video> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
+    }
 }

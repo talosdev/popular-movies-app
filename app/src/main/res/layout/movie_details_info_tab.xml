@@ -27,7 +27,7 @@
                     android:text="@string/synopsis" />
 
                 <TextView
-                    android:id="@+id/movieDescription"
+                    android:id="@+id/synopsis"
                     style="@style/cardContent" />
             </LinearLayout>
 
@@ -56,7 +56,7 @@
                         android:text="@string/release_date" />
 
                     <TextView
-                        android:id="@+id/releaseDate"
+                        android:id="@+id/release_date"
                         style="@style/cardContent" />
                 </LinearLayout>
 
@@ -80,7 +80,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/score_title"
+                        android:id="@+id/vote_average_title"
                         style="@style/cardHeaderMediumText"
                         android:text="@string/score_title" />
 

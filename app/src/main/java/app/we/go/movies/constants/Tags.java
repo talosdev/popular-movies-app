@@ -11,4 +11,5 @@ public class Tags {
     public static final String PREF =  "T_SH_PREF";
     public static final String DB = "T_DB";
     public static final String LIFECYCLE =  "T_LIFECYCLE";
+    public static final String TEST = "T_TEST";
 }
