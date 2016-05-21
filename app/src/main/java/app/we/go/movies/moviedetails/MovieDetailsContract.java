@@ -73,7 +73,7 @@ public interface MovieDetailsContract {
         void loadMovieInfo(long movieId);
 
 
-        void onFavoriteClick(long movieId);
+        void onFavoriteClick(long movieId, String posterPath);
     }
 
 

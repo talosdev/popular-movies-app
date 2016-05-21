@@ -42,7 +42,7 @@ public class ApplicationAndroidModule {
 
     // NOT A SINGLETON, in order to not maintain a connection to the database always
     @Provides
-    public FavoriteMovieDAO proFavoriteMovieDAO(SQLiteOpenHelper sqLiteOpenHelper) {
+    public FavoriteMovieDAO provideFavoriteMovieDAO(SQLiteOpenHelper sqLiteOpenHelper) {
         return new CupboardFavoriteMovieDAO(sqLiteOpenHelper.getWritableDatabase());
     }
 
