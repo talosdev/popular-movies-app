@@ -8,10 +8,10 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import app.we.go.movies.R;
 import app.we.go.movies.SharedPreferencesHelper;
 import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.FavoriteMovie;
+import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.MockTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
@@ -25,7 +25,6 @@ import static app.we.go.movies.remote.DummyData.MOVIE_POSTER_PATH;
 import static app.we.go.movies.remote.DummyData.MOVIE_RELEASE_DATE_STR;
 import static app.we.go.movies.remote.DummyData.MOVIE_TITLE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -34,7 +33,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MovieDetailsPresenterTest {
+public class MovieDetailsPresenterTest extends BasePresenterTest {
 
 
     @Mock
@@ -95,8 +94,7 @@ public class MovieDetailsPresenterTest {
 
         presenter.loadMovieInfo(INEXISTENT_MOVIE_ID);
 
-        verify(view).displayError(R.string.error_network);
-        verifyNoMoreInteractions(view);
+        verifyError(view);
     }
 
 
@@ -105,8 +103,7 @@ public class MovieDetailsPresenterTest {
 
         presenter.loadMovieInfo(MOVIE_ID_CAUSES_SERVER_ERROR);
 
-        verify(view).displayError(anyInt());
-        verifyNoMoreInteractions(view);
+        verifyFail(view);
 
     }
 

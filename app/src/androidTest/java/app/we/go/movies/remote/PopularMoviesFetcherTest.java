@@ -35,7 +35,7 @@ public class PopularMoviesFetcherTest {
      */
 //    @Test
     public void testFetchMoviesPopularity() throws Exception {
-        List<Movie> movies = fetcher.fetch(SortByCriterion.POPULARITY, 1).movies;
+        List<Movie> movies = fetcher.fetch(SortByCriterion.POPULARITY, 1).getMovies();
 
         assertThat(movies).hasSize(20);
         for (int i=0; i<19; i++) {
@@ -54,7 +54,7 @@ public class PopularMoviesFetcherTest {
      */
  //   @Test
     public void testFetchMoviesVote() throws Exception {
-        List<Movie> movies = fetcher.fetch(SortByCriterion.VOTE, 1).movies;
+        List<Movie> movies = fetcher.fetch(SortByCriterion.VOTE, 1).getMovies();
 
         assertThat(movies).hasSize(20);
         for (int i=0; i<19; i++) {
@@ -71,10 +71,10 @@ public class PopularMoviesFetcherTest {
     @Ignore
     @Test
     public void testFetchWithPaging() throws Exception {
-        List<Movie> movies1 = fetcher.fetch(SortByCriterion.POPULARITY, 1).movies;
+        List<Movie> movies1 = fetcher.fetch(SortByCriterion.POPULARITY, 1).getMovies();
         assertThat(movies1).hasSize(20);
 
-        List<Movie> movies2 = fetcher.fetch(SortByCriterion.POPULARITY, 2).movies;
+        List<Movie> movies2 = fetcher.fetch(SortByCriterion.POPULARITY, 2).getMovies();
         assertThat(movies2).hasSize(20);
 
         assertThat(movies1).doesNotContainAnyElementsOf(movies2);

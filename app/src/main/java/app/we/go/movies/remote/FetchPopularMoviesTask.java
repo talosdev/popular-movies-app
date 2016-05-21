@@ -67,14 +67,14 @@ public class FetchPopularMoviesTask extends
                 adapter.clear();
             }
             adapter.addAll(getPosterURLs(result.getMovieList()));
-            Log.d("UI", "Received posterList with " + result.getMovieList().movies.size() + " items. Notifying the adapter...");
+            Log.d("UI", "Received posterList with " + result.getMovieList().getMovies().size() + " items. Notifying the adapter...");
             adapter.notifyDataSetChanged();
         }
     }
 
     private List<MoviePoster> getPosterURLs(MovieList movieList) {
-        List<MoviePoster> urls = new ArrayList<>(movieList.movies.size());
-        for (Movie movie:movieList.movies) {
+        List<MoviePoster> urls = new ArrayList<>(movieList.getMovies().size());
+        for (Movie movie: movieList.getMovies()) {
             String poster = movie.getPosterPath();
 
             urls.add(new MoviePoster(movie.getId(), poster));

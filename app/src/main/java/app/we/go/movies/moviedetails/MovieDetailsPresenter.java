@@ -79,22 +79,19 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
                         getBoundView().displayImage(movie.getBackdropPath());
                     }
                 } else {
-                    onError();
+                    onError("The call to get the movie details was not successful",
+                            R.string.error_network);
                 }
             }
 
             @Override
             public void onFailure(Call<Movie> call, Throwable t) {
-                onError();
+                onFail("Network error getting the movie details",
+                        R.string.error_network,
+                        t);
             }
         });
 
-    }
-
-    private void onError() {
-        if (getBoundView() != null) {
-            getBoundView().displayError(R.string.error_network);
-        }
     }
 
 

@@ -47,14 +47,18 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
                     } else {
                         TMDBError error = service.parse(response.errorBody());
 
-                        onError();
+                        onError("The get videos call was unsuccessfull",
+                                R.string.error_network);
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<VideoList> call, Throwable t) {
-                onError();
+
+                onFail("Error getting list of videos",
+                        R.string.error_network,
+                        t);
             }
 
         });
@@ -74,13 +78,4 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
         }
     }
 
-
-
-
-
-    private void onError() {
-        if (getBoundView() != null) {
-            getBoundView().displayError(R.string.error_network);
-        }
-    }
 }

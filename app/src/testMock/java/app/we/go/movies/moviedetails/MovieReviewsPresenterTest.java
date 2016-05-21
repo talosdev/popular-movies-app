@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import app.we.go.movies.R;
+import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.MockTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MovieReviewsPresenterTest {
+public class MovieReviewsPresenterTest extends BasePresenterTest {
 
     @Mock
     MovieDetailsContract.ReviewsView view;
@@ -54,8 +54,7 @@ public class MovieReviewsPresenterTest {
     public void testLoadReviewsWithWrongData() throws Exception {
         presenter.loadMovieReviews(DummyData.INEXISTENT_MOVIE_ID);
 
-        verify(view).displayError(R.string.error_network);
-        verifyNoMoreInteractions(view);
+        verifyError(view);
     }
 
     @Test
@@ -63,8 +62,7 @@ public class MovieReviewsPresenterTest {
 
         presenter.loadMovieReviews(MOVIE_ID_CAUSES_SERVER_ERROR);
 
-        verify(view).displayError(R.string.error_network);
-        verifyNoMoreInteractions(view);
+        verifyFail(view);
 
     }
 }

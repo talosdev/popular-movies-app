@@ -10,15 +10,50 @@ import java.util.List;
  */
 public class MovieList {
 
+    public MovieList() {
+    }
+
     @SerializedName("page")
-    public int page;
+    private int page;
 
     @SerializedName("results")
-    public List<Movie> movies;
+    private List<Movie> movies;
 
     @SerializedName("total_pages")
-    public long totalPages;
+    private long totalPages;
 
     @SerializedName("total_results")
-    public long totalResults;
+    private long totalResults;
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public long getTotalPages() {
+        return totalPages;
+    }
+
+    public long getTotalResults() {
+        return totalResults;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+    }
+
+    public void setTotalPages(long totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public void setTotalResults(long totalResults) {
+        this.totalResults = totalResults;
+    }
 }

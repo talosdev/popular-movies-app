@@ -43,21 +43,21 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
                     TMDBError error = service.parse(response.errorBody());
 
 
-                    onError();
+                    onError("The call to get the reviews list was unsuccessful",
+                            R.string.error_network);
                 }
             }
 
             @Override
             public void onFailure(Call<ReviewList> call, Throwable t) {
-                onError();
+
+                onFail("Network error in call to get reviews list",
+                        R.string.error_network,
+                        t);
             }
 
         });
     }
 
-    private void onError() {
-        if (getBoundView() != null) {
-            getBoundView().displayError(R.string.error_network);
-        }
-    }
+
 }

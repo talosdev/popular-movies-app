@@ -1,5 +1,7 @@
 package app.we.go.movies.common;
 
+import app.we.go.movies.R;
+
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
@@ -23,4 +25,17 @@ public abstract class AbstractPresenter<V extends BaseView> implements  BasePres
         return boundView;
     }
 
+    protected void onError(String logMessage, int resourceId) {
+        if (getBoundView() != null) {
+            getBoundView().showError(logMessage, R.string.error_network, null);
+        }
+    }
+
+
+
+    protected void onFail(String logMessage, int resourceId, Throwable t) {
+        if (getBoundView() != null) {
+            getBoundView().showError(logMessage, R.string.error_network, t);
+        }
+    }
 }

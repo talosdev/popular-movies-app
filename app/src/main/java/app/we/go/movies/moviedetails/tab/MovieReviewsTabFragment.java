@@ -1,6 +1,7 @@
 package app.we.go.movies.moviedetails.tab;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -98,8 +99,10 @@ public class MovieReviewsTabFragment extends Fragment implements MovieDetailsCon
         adapter.notifyDataSetChanged();
     }
 
+
     @Override
-    public void displayError(@StringRes int errorMessage) {
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
         // Do nothing, do not display the error message, just leave the empty list message
+
     }
 }

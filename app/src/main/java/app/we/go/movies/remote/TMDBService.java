@@ -1,6 +1,8 @@
 package app.we.go.movies.remote;
 
+import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.MovieList;
 import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.VideoList;
@@ -20,6 +22,8 @@ public interface TMDBService {
 
 
     Call<ReviewList> getReviews(long movieId);
+
+    Call<MovieList> getMovies(SortByCriterion sortBy, int page);
 
 
     TMDBError parse(ResponseBody responseBody);

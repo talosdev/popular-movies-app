@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import app.we.go.movies.R;
+import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.MockTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
@@ -23,10 +23,11 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class VideosPresenterTest {
+public class VideosPresenterTest extends BasePresenterTest {
 
     @Mock
     MovieDetailsContract.VideosView view;
+
     @Mock
     URLBuilder urlBuilder;
 
@@ -69,8 +70,7 @@ public class VideosPresenterTest {
     public void testLoadReviewsWithWrongData() throws Exception {
         presenter.loadMovieVideos(DummyData.INEXISTENT_MOVIE_ID);
 
-        verify(view).displayError(R.string.error_network);
-        verifyNoMoreInteractions(view);
+        verifyError(view);
     }
 
     @Test
@@ -78,8 +78,7 @@ public class VideosPresenterTest {
 
         presenter.loadMovieVideos(MOVIE_ID_CAUSES_SERVER_ERROR);
 
-        verify(view).displayError(R.string.error_network);
-        verifyNoMoreInteractions(view);
+        verifyFail(view);
 
     }
 

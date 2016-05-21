@@ -8,8 +8,10 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.dependency.ApplicationModule;
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.MovieList;
 import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.VideoList;
@@ -84,6 +86,11 @@ public class MockTMDBServiceSync implements TMDBService {
             return Calls.failure(new IOException("Error contacting server"));
         }
         throw new IllegalArgumentException("Method is not prepared to accept input value " + movieId);
+    }
+
+    @Override
+    public Call<MovieList> getMovies(SortByCriterion sortBy, int page) {
+        return Calls.response(DummyData.MOVIE_LIST);
     }
 
     @Override

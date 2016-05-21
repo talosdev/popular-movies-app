@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -105,10 +105,6 @@ public class VideosTabFragment extends Fragment implements MovieDetailsContract.
         adapter.addAll(videos);
     }
 
-    @Override
-    public void displayError(@StringRes int errorMessage) {
-        // Do nothing, do not display the error message, just leave the empty list message
-    }
 
     @Override
     public void openVideo(Uri videoUrl) {
@@ -136,5 +132,10 @@ public class VideosTabFragment extends Fragment implements MovieDetailsContract.
     @Override
     public void onVideoShareClick(String videoKey, String videoName) {
         presenter.onShareVideoClicked(videoKey, videoName);
+    }
+
+    @Override
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
+        // Do nothing, do not display the error message, just leave the empty list message
     }
 }

@@ -1,12 +1,18 @@
 package app.we.go.movies.remote;
 
+import com.google.gson.Gson;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import app.we.go.movies.JsonUtils;
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.MovieGsonBuilder;
+import app.we.go.movies.remote.json.MovieList;
 import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.Video;
@@ -91,6 +97,8 @@ public class DummyData {
             "Trailer"
     };
 
+    public static MovieList MOVIE_LIST = new MovieList();
+
 
     static {
         DUMMY_MOVIE = new Movie();
@@ -138,6 +146,17 @@ public class DummyData {
         }
 
         REVIEWS.setReviews(reviews);
+
+
+        InputStream resourceAsStream = DummyData.class.getClassLoader().getResourceAsStream("movie-list.json");
+        try {
+            String s = JsonUtils.convertStreamToString(resourceAsStream);
+            Gson gson = new MovieGsonBuilder().create();
+            MOVIE_LIST = gson.fromJson(s, MovieList.class);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

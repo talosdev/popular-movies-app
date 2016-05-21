@@ -11,6 +11,7 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import app.we.go.movies.R;
+import app.we.go.movies.common.BaseView;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.moviedetails.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
@@ -102,5 +103,10 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     @Override
     public void displayFormattedDate(String date) {
         releaseDateView.setText(date);
+    }
+
+    @Override
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
+        BaseView.Helper.showError(getContext(), logMessage, resourceId, t);
     }
 }

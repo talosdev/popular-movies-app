@@ -1,7 +1,6 @@
 package app.we.go.movies.moviedetails;
 
 import android.net.Uri;
-import android.support.annotation.StringRes;
 
 import java.util.List;
 
@@ -24,8 +23,6 @@ public interface MovieDetailsContract {
 
         void toggleFavorite(boolean isFavorite);
 
-        void displayError(@StringRes int errorResource);
-
         void displayTitle(String title);
 
         void displayImage(String imagePath);
@@ -38,14 +35,10 @@ public interface MovieDetailsContract {
 
     interface ReviewsView extends BaseView {
         void displayReviews(List<Review> body);
-
-        void displayError(@StringRes int errorMessage);
     }
 
     interface VideosView extends BaseView {
         void displayVideos(List<Video> videos);
-
-        void displayError(@StringRes int errorMessage);
 
         void openVideo(Uri videoUrl);
 
