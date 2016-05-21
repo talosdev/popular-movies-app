@@ -4,10 +4,13 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 
+import com.facebook.stetho.Stetho;
+
 import app.we.go.movies.dependency.ApplicationAndroidModule;
 import app.we.go.movies.dependency.ApplicationComponent;
 import app.we.go.movies.dependency.ApplicationModule;
 import app.we.go.movies.dependency.DaggerApplicationComponent;
+import app.we.go.movies.dependency.DatabaseModule;
 import app.we.go.movies.dependency.ServiceModule;
 
 /**
@@ -22,6 +25,8 @@ public class MovieApplication extends Application {
     public void onCreate() {
         super.onCreate();
         createApplicationComponent();
+        Stetho.newInitializerBuilder(this).enableWebKitInspector(
+                Stetho.defaultInspectorModulesProvider(this));
     }
 
     @VisibleForTesting
@@ -31,6 +36,7 @@ public class MovieApplication extends Application {
                 applicationModule(new ApplicationModule()).
                 serviceModule(new ServiceModule()).
                 applicationAndroidModule(new ApplicationAndroidModule(this)).
+                databaseModule(new DatabaseModule(this)).
 
                 build();
     }

@@ -3,6 +3,7 @@ package app.we.go.movies;
 import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.dependency.ApplicationAndroidModule;
 import app.we.go.movies.dependency.ApplicationModule;
+import app.we.go.movies.dependency.MockDatabaseModule;
 import application.DaggerMockApplicationComponent;
 import application.MockServiceModule;
 
@@ -17,7 +18,9 @@ public class TestMoviesApplication extends MovieApplication {
                 builder().
                 applicationModule(new ApplicationModule()).
                 mockServiceModule(new MockServiceModule()).
-                applicationAndroidModule(new ApplicationAndroidModule(this)).                build();
+                applicationAndroidModule(new ApplicationAndroidModule(this)).
+                mockDatabaseModule(new MockDatabaseModule()).
+                build();
 
 
     }

@@ -10,11 +10,13 @@ import app.we.go.movies.remote.json.Video;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static app.we.go.movies.util.Matchers.withDrawable;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -23,8 +25,6 @@ import static org.hamcrest.Matchers.is;
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
-
-
 
 
 
@@ -47,10 +47,6 @@ public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
 
         onView(withId(R.id.details_pager)).perform(swipeLeft());
 
-//        onView(withId(R.id.reviews_list)).check(matches(Matchers.withListSize(DummyData.REVIEWS.getReviews().size())));
-//        onView(withId(R.id.videos_list)).check(matches(Matchers.withListSize(DummyData.VIDEOS.getVideos().size())));
-
-
         for (int i = 0; i < DummyData.REVIEWS_NUM; i++) {
 
             onData(is(instanceOf(Review.class))).
@@ -66,7 +62,6 @@ public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
                     onChildView(withId(R.id.reviewAuthor)).
                     check(matches(isDisplayed())).
                     check(matches(withText(DummyData.REVIEW_AUTHORS[i])));
-
         }
 
 
@@ -93,5 +88,20 @@ public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
     }
 
 
+    @Test
+    public void testFavoriteButton() throws Exception {
+        onView(withId(R.id.menu_favorite)).
+                check(matches(withDrawable(R.drawable.ic_favorite_border_blue_24dp)));
 
+        onView(withId(R.id.menu_favorite)).perform(click());
+
+        onView(withId(R.id.menu_favorite)).
+                check(matches(withDrawable(R.drawable.ic_favorite_blue_24dp)));
+
+        onView(withId(R.id.menu_favorite)).perform(click());
+
+        onView(withId(R.id.menu_favorite)).
+                check(matches(withDrawable(R.drawable.ic_favorite_border_blue_24dp)));
+
+    }
 }

@@ -13,7 +13,10 @@ import dagger.Component;
 
 
 @Singleton
-@Component(modules = {ApplicationModule.class, ServiceModule.class, ApplicationAndroidModule.class})
+@Component(modules = {ApplicationModule.class,
+        ServiceModule.class,
+        ApplicationAndroidModule.class,
+        DatabaseModule.class})
 public interface ApplicationComponent {
     void inject(MovieListFragment f);
 

@@ -27,6 +27,7 @@ import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.moviedetails.tab.MovieDetailsPagerAdapter;
 import app.we.go.movies.remote.URLBuilder;
+import app.we.go.movies.util.LOG;
 import butterknife.Bind;
 import butterknife.BindDrawable;
 import butterknife.ButterKnife;
@@ -39,6 +40,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
 
     private long currentMovieId;
+    private String currentMoviePosterPath;
 
     @BindDrawable(R.drawable.ic_favorite_blue_24dp)
     Drawable icon_favorite_selected;
@@ -89,6 +91,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             currentMovieId = getArguments().getLong(Args.ARG_MOVIE_ID);
+            currentMoviePosterPath = getArguments().getString(Args.ARG_POSTER_PATH);
         }
     }
 
@@ -97,14 +100,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         super.onActivityCreated(savedInstanceState);
 
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        presenter.checkFavorite(currentMovieId);
-   //     presenter.loadMovieInfo(currentMovieId);
     }
 
     @DebugLog
@@ -148,8 +143,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         pager.setAdapter(pagerAdapter);
 
         imageView.forceLayout();
-
-
     }
 
     @Override
@@ -158,6 +151,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         inflater.inflate(R.menu.movie_actions, menu);
 
         favItem = menu.findItem(R.id.menu_favorite);
+        presenter.checkFavorite(currentMovieId);
 
     }
 
@@ -213,30 +207,17 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        LOG.v(Tags.UI, "ITEM: " + item.getItemId());
+
         switch (item.getItemId()) {
             case R.id.menu_favorite:
-                presenter.onFavoriteClick(currentMovieId);
+                // currentMovie hasn't been loaded yet
+                if (currentMovieId == 0) {
+                    return false;
+                }
+                presenter.onFavoriteClick(currentMovieId, currentMoviePosterPath);
+                return true;
 
-//            case R.id.menu_favorite:
-//                // currentMovie hasn't been loaded yet
-//                if (currentMovieId == 0) {
-//                    return false;
-//                }
-//                if (currentMovieIsFavorite) {
-//                    getActivity().getContentResolver().delete(
-//                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
-//                            null,
-//                            null);
-//                    setFavoriteActive(false);
-//                } else {
-//                    ContentValues cv = new ContentValues();
-//                    cv.put(FavoriteMovieEntry.COLUMN_POSTER_PATH, currentMoviePosterPath);
-//                    getActivity().getContentResolver().insert(
-//                            FavoriteMovieEntry.buildFavoriteMovieUri(currentMovieId),
-//                            cv);
-//                    setFavoriteActive(true);
-//                }
-//                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
