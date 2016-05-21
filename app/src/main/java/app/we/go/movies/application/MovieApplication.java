@@ -10,6 +10,7 @@ import app.we.go.movies.dependency.ApplicationAndroidModule;
 import app.we.go.movies.dependency.ApplicationComponent;
 import app.we.go.movies.dependency.ApplicationModule;
 import app.we.go.movies.dependency.DaggerApplicationComponent;
+import app.we.go.movies.dependency.DatabaseModule;
 import app.we.go.movies.dependency.ServiceModule;
 
 /**
@@ -35,6 +36,7 @@ public class MovieApplication extends Application {
                 applicationModule(new ApplicationModule()).
                 serviceModule(new ServiceModule()).
                 applicationAndroidModule(new ApplicationAndroidModule(this)).
+                databaseModule(new DatabaseModule(this)).
 
                 build();
     }
