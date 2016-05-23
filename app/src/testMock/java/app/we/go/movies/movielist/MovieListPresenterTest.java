@@ -44,7 +44,6 @@ public class MovieListPresenterTest {
     public void testLoad() throws Exception {
         presenter.loadMovies(SortByCriterion.POPULARITY);
 
-        // TODO
         verify(view).showMovieList(DummyData.MOVIE_LIST.getMovies());
         verifyNoMoreInteractions(view);
     }
