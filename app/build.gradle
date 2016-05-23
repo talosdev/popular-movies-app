@@ -5,7 +5,13 @@ apply from: 'build.workaround-missing-resource.gradle'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
+
+    dexOptions{
+        dexInProcess true
+        maxProcessCount 2
+        javaMaxHeapSize "2g"
+    }
 
     defaultConfig {
         applicationId "app.we.go.movies"
