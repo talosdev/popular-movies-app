@@ -16,14 +16,12 @@ public interface MovieListContract {
     interface View extends BaseView {
 
         void showMovieList(List<Movie> movies);
-        void showMovieDetails(long movieId);
-
-        void showError(int error_network);
+        void showMovieDetails(Movie movie);
     }
 
     interface Presenter extends BasePresenter<View> {
 
         void loadMovies(SortByCriterion sortBy);
-        void openMovieDetails(long movieId);
+        void openMovieDetails(Movie movie);
     }
 }

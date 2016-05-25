@@ -45,6 +45,9 @@ public class TMDBServiceImpl implements TMDBService {
 
     @Override
     public Call<MovieList> getMovies(SortByCriterion sortBy, int page) {
+        if (page <= 0) {
+            throw new IllegalArgumentException("TMDB API defines that page should be greater than 0");
+        }
         return retrofitService.getMovies(
                 convertSortByCriterionToStringParameter(sortBy),
                 page,

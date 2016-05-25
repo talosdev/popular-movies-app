@@ -24,6 +24,7 @@ import app.we.go.movies.R;
 import app.we.go.movies.common.BaseView;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
+import app.we.go.movies.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.tab.MovieDetailsPagerAdapter;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.util.LOG;
@@ -139,7 +140,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId);
 
         pager.setOffscreenPageLimit(2);
-        pager.setAdapter(pagerAdapter);
+
 
         imageView.forceLayout();
     }

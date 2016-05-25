@@ -26,7 +26,7 @@ public interface TMDBRetrofitService {
     @GET("movie/{id}/reviews")
     Call<ReviewList> getReviews(@Path("id") long movieId);
 
-    @GET("discover/movies")
+    @GET("discover/movie")
     Call<MovieList> getMovies(@Query("sort_by") String sortBy,
                               @Query("page") int page,
                               @Query("vote_counter.gte") int minVotes);

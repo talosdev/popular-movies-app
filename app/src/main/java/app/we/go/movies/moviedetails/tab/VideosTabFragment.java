@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.moviedetails.HasMovieDetailsComponent;
+import app.we.go.movies.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
 import app.we.go.movies.remote.json.Video;
 import butterknife.Bind;

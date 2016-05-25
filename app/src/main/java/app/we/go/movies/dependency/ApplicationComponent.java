@@ -8,7 +8,8 @@ import javax.inject.Singleton;
 
 import app.we.go.movies.moviedetails.dependency.MovieDetailsComponent;
 import app.we.go.movies.moviedetails.dependency.MovieDetailsModule;
-import app.we.go.movies.movielist.MovieListFragment;
+import app.we.go.movies.movielist.dependency.MovieListComponent;
+import app.we.go.movies.movielist.dependency.MovieListModule;
 import dagger.Component;
 
 
@@ -18,9 +19,9 @@ import dagger.Component;
         ApplicationAndroidModule.class,
         DatabaseModule.class})
 public interface ApplicationComponent {
-    void inject(MovieListFragment f);
-
 
     MovieDetailsComponent plus(MovieDetailsModule module);
+
+    MovieListComponent plus(MovieListModule movieListModule);
 
 }

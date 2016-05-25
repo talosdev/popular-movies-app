@@ -11,7 +11,7 @@ import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.MockTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
 
-import static app.we.go.movies.remote.DummyData.MOVIE_ID;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -24,7 +24,9 @@ public class MovieListPresenterTest {
     MovieListContract.View view;
 
     MovieListPresenter presenter;
+
     TMDBService service;
+
     @Before
     public void setUp() throws Exception {
 
@@ -50,9 +52,9 @@ public class MovieListPresenterTest {
 
     @Test
     public void testOpenMovie() throws Exception {
-        presenter.openMovieDetails(MOVIE_ID);
+        presenter.openMovieDetails(DummyData.DUMMY_MOVIE);
 
-        verify(view).showMovieDetails(MOVIE_ID);
+        verify(view).showMovieDetails(eq(DummyData.DUMMY_MOVIE));
         verifyNoMoreInteractions(view);
     }
 

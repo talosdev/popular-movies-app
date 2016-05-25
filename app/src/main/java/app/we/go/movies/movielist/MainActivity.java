@@ -12,6 +12,7 @@ import android.widget.SpinnerAdapter;
 
 import app.we.go.movies.R;
 import app.we.go.movies.SortByChangedCallback;
+import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.common.BaseActivity;
 import app.we.go.movies.constants.Fragments;
 import app.we.go.movies.constants.Tags;
@@ -19,11 +20,17 @@ import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.moviedetails.MovieDetailsActivity;
 import app.we.go.movies.moviedetails.MovieDetailsFragment;
+import app.we.go.movies.movielist.dependency.HasMovieListComponent;
+import app.we.go.movies.movielist.dependency.MovieListComponent;
+import app.we.go.movies.movielist.dependency.MovieListModule;
+import app.we.go.movies.remote.json.Movie;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
-public class MainActivity extends BaseActivity implements MovieSelectedCallback, SortByChangedCallback {
+public class MainActivity extends BaseActivity implements MovieSelectedCallback,
+        SortByChangedCallback,
+        HasMovieListComponent {
 
 
     private boolean twoPane;
@@ -34,6 +41,9 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
 
     @Bind(R.id.sort_by_spinner)
     Spinner spinner;
+
+
+    private MovieListComponent movieListComponent;
 
 
     @DebugLog
@@ -61,7 +71,7 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
                     f = MovieListFragment.newInstance(SortByCriterion.byIndex((int) id));
                     getSupportFragmentManager().
                             beginTransaction().
-                            add(R.id.movie_list_frame, f, "TAG_SORT_BY_" + id).
+                            replace(R.id.movie_list_frame, f, "TAG_SORT_BY_" + id).
                             commit();
                 } else {
                     getSupportFragmentManager().
@@ -69,8 +79,6 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
                             replace(R.id.movie_list_frame, f, "TAG_SORT_BY_" + id).
                             commit();
                 }
-
-
 
 
             }
@@ -109,6 +117,9 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
         } else {
             twoPane = false;
         }
+
+        movieListComponent = MovieApplication.get(this).getComponent().
+                plus(new MovieListModule(this));
     }
 
     @DebugLog
@@ -142,7 +153,10 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
     }
 
     @Override
-    public void onMovieSelected(long movieId, String posterPath) {
+    public void onMovieSelected(Movie movie) {
+
+        long movieId = movie.getId();
+        String posterPath = movie.getPosterPath();
 
         if (twoPane) {
             // TABLET
@@ -165,4 +179,8 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
     }
 
 
+    @Override
+    public MovieListComponent getComponent() {
+        return movieListComponent;
+    }
 }

@@ -3,13 +3,10 @@ package app.we.go.movies.movielist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,52 +14,73 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
-import android.widget.GridView;
+
+import com.github.yasevich.endlessrecyclerview.EndlessRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import app.we.go.movies.R;
 import app.we.go.movies.SortByChangedCallback;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.constants.Tags;
-import app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
 import app.we.go.movies.data.MoviePoster;
 import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.listener.MovieSelectedCallback;
-import app.we.go.movies.remote.FetchPopularMoviesTask;
-import app.we.go.movies.remote.FetchPopularMoviesTask.FetchPopularMoviesParams;
+import app.we.go.movies.movielist.dependency.HasMovieListComponent;
+import app.we.go.movies.remote.URLBuilder;
+import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.ui.GridSpacingItemDecoration;
 import app.we.go.movies.ui.activity.PreferencesActivity;
-import app.we.go.movies.ui.util.EndlessScrollListener;
+import app.we.go.movies.util.LOG;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
 /**
+ * Must be included in an activity that implements {@link MovieSelectedCallback}
+ * <p/>
  * Created by apapad on 19/11/15.
  */
 public class MovieListFragment extends Fragment
-        implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+        implements  MovieListContract.View, EndlessRecyclerView.Pager, MovieAdapter.MovieClickListener {
 
     private static final String BUNDLE_MOVIE_POSTER = "BUNDLE_KEY_MOVIE_POSTER";
     private static final String BUNDLE_CURRENT_PAGE = "BUNDLE_KEY_CURRENT_PAGE";
 
 
-    public static final int LOADER_FAVORITES = 0;
     private static final String SORT_BY = "app.we.go.SORT_BY";
 
-    /**
-     * The threshold required by {@link EndlessScrollListener}. Not really very important for UX.
-     */
-    private static final int SCROLL_THRESHOLD = 5;
+
+    private static final int NUM_COLS = 3;
 
     private ArrayAdapter tmdbAdapter;
     private CursorAdapter favoritesAdapter;
 
-    private GridView gridView;
-    private EndlessScrollListener onScrollListener;
     private SortByChangedCallback sortByChangedCallback;
+
+    private MovieSelectedCallback movieSelectedCallback;
+
+    @Inject
+    MovieListContract.Presenter presenter;
+
+    @Inject
+    Context context;
+
+    @Inject
+    URLBuilder urlBuilder;
+
+    @Bind(R.id.movie_recycler_view)
+    EndlessRecyclerView recycler;
+
+
+    private boolean isLoading;
+    private SortByCriterion sortBy;
+    private MovieAdapter adapter;
 
 
     public MovieListFragment() {
@@ -77,17 +95,40 @@ public class MovieListFragment extends Fragment
     }
 
     @DebugLog
+    @Nullable
     @Override
-    public void onStart() {
-        super.onStart();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // No need to call super because Fragment.onCreateView() return null
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        return inflater.inflate(R.layout.movie_list_fragment, container, false);
     }
 
-    @DebugLog
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setHasOptionsMenu(true);
+
+        ButterKnife.bind(this, view);
+
+        ((HasMovieListComponent) getActivity()).getComponent().inject(this);
+
+        presenter.bindView(this);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(context, NUM_COLS);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        recycler.setLayoutManager(layoutManager);
+//        GridSpacingItemDecoration decorator = new GridSpacingItemDecoration(NUM_COLS, false);
+//        decorator.setColWidth(context.getResources().getDimension(R.dimen.poster_width_grid));
+//        recycler.addItemDecoration(decorator);
+
+        adapter = new MovieAdapter(getContext(), this, urlBuilder);
+        recycler.setAdapter(adapter);
+        recycler.setPager(this);
+
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -99,6 +140,13 @@ public class MovieListFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        try {
+            movieSelectedCallback = (MovieSelectedCallback) getActivity();
+        } catch (Exception e) {
+            LOG.e(Tags.UI, "This fragment must be used in an activity " +
+                    "that implements " + MovieSelectedCallback.class);
+        }
+
         List<MoviePoster> movies = new ArrayList<>();
         int page = 0;
         if (savedInstanceState != null) {
@@ -109,75 +157,36 @@ public class MovieListFragment extends Fragment
             Log.d(Tags.BUNDLE, String.format("Found current page: %d", page));
         }
 
-        SortByCriterion sortBy = SortByCriterion.byIndex(getArguments().getInt(SORT_BY));
+        sortBy = SortByCriterion.byIndex(getArguments().getInt(SORT_BY));
 
         sortByChangedCallback.sortByChanged(sortBy);
 
         tmdbAdapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
         favoritesAdapter = new GridViewFavoritesCursorAdapter(getActivity(), null, 0);
-        onScrollListener = new MovieEndlessScrollListener(sortBy, SCROLL_THRESHOLD, page);
 
 
-        switch(sortBy) {
+        switch (sortBy) {
 
             case POPULARITY:
             case VOTE:
-                gridView.setAdapter(tmdbAdapter);
-                gridView.setOnScrollListener(onScrollListener);
+
                 // If nothing was found in the Bundle, fetch from the API
                 if (movies.size() == 0) {
-                    fetchMovies(sortBy, 1, true);
+                    presenter.loadMovies(sortBy);
                 }
                 break;
             case FAVORITES:
-                gridView.setAdapter(favoritesAdapter);
-                gridView.setOnScrollListener(null);
-                getLoaderManager().initLoader(LOADER_FAVORITES, null, this);
+
                 break;
         }
 
 
-
     }
-
-    @DebugLog
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // No need to call super because Fragment.onCreateView() return null
-        super.onCreateView(inflater, container, savedInstanceState);
-
-        setHasOptionsMenu(true);
-
-
-        gridView = (GridView) inflater.inflate(R.layout.movie_list_fragment, container, false);
-        gridView.setOnItemClickListener(this);
-
-
-
-
-
-        return gridView;
-    }
-
-
 
     @DebugLog
     @Override
     public void onStop() {
         super.onStop();
-    }
-
-
-    /**
-     * @param page    the page to request from the API (starting from index 1)
-     * @param replace
-     */
-    private void fetchMovies(SortByCriterion sortBy, int page, boolean replace) {
-        FetchPopularMoviesTask fetchMovies = new FetchPopularMoviesTask(tmdbAdapter);
-        FetchPopularMoviesParams params =
-                new FetchPopularMoviesParams(sortBy, page, replace);
-        fetchMovies.execute(params);
     }
 
 
@@ -202,16 +211,6 @@ public class MovieListFragment extends Fragment
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        MoviePoster moviePoster = (MoviePoster) gridView.getAdapter().getItem(position);
-
-
-        ((MovieSelectedCallback) getActivity()).onMovieSelected(moviePoster.getMovieId(), moviePoster.getPosterPath());
-
-    }
-
-
 
 
     @Override
@@ -233,57 +232,36 @@ public class MovieListFragment extends Fragment
     }
 
     @Override
-    public Loader onCreateLoader(int id, Bundle args) {
+    public void showMovieList(List<Movie> movies) {
+        isLoading = false;
+        adapter.addMovies(movies);
+    }
 
-        if (id == LOADER_FAVORITES) {
-
-
-            CursorLoader loader = new CursorLoader(getActivity(),
-                    FavoriteMovieEntry.CONTENT_URI,
-                    FavoriteMovieEntry.PROJECTION,
-                    null,
-                    null,
-                    FavoriteMovieEntry._ID + " DESC ");
-
-            return loader;
-        } else {
-            return null;
-        }
-
+    @Override
+    public void showMovieDetails(Movie movie) {
+        movieSelectedCallback.onMovieSelected(movie);
     }
 
 
     @Override
-    public void onLoadFinished(Loader loader, Cursor data) {
-        favoritesAdapter.swapCursor(data);
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
+
     }
 
     @Override
-    public void onLoaderReset(Loader loader) {
-        favoritesAdapter.swapCursor(null);
+    public boolean shouldLoad() {
+        return !isLoading;
     }
 
-    /**
-     * Scroll listener that handles loading new elements when user is scrolling down.
-     */
-    class MovieEndlessScrollListener extends EndlessScrollListener {
-
-        private SortByCriterion sortBy;
-
-        public MovieEndlessScrollListener(SortByCriterion sortBy, int visibleThreshold, int startPage) {
-            super(visibleThreshold, startPage);
-            this.sortBy = sortBy;
-        }
-
-        @Override
-        public boolean onLoadMore(int page, int totalItemsCount) {
-            Log.i(TAG_SCROLL, String.format("Scroll listener will load more items, " +
-                            "currently we are at page %d, with %d total items",
-                    page, totalItemsCount));
-            fetchMovies(sortBy, page, false);
-            return true;
-        }
+    @Override
+    public void loadNextPage() {
+        isLoading = true;
+        presenter.loadMovies(sortBy);
     }
 
+    @Override
+    public void onPosterClick(Movie movie) {
+        presenter.openMovieDetails(movie);
+    }
 
 }

@@ -23,6 +23,12 @@ public interface TMDBService {
 
     Call<ReviewList> getReviews(long movieId);
 
+    /**
+     *
+     * @param sortBy
+     * @param page 1-based
+     * @return
+     */
     Call<MovieList> getMovies(SortByCriterion sortBy, int page);
 
 

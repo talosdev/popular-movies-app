@@ -2,7 +2,6 @@ package app.we.go.movies.moviedetails.tab;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,7 @@ import javax.inject.Inject;
 
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.moviedetails.HasMovieDetailsComponent;
+import app.we.go.movies.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
 import app.we.go.movies.remote.json.Review;
 import butterknife.Bind;
