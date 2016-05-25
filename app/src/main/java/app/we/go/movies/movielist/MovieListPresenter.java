@@ -39,7 +39,9 @@ movies.enqueue(new Callback<MovieList>() {
                 if (response.isSuccess()) {
                     MovieList movieList = response.body();
                     currentPage++;
-                    cachedMovies.addAll(movieList.getMovies());
+                    if (movieList.getMovies() != null) {
+                        cachedMovies.addAll(movieList.getMovies());
+                    }
                     if (getBoundView() != null) {
                         getBoundView().showMovieList(movieList.getMovies());
                     }
