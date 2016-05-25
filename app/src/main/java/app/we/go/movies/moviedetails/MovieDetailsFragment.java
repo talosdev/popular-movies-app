@@ -140,6 +140,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId);
 
         pager.setOffscreenPageLimit(2);
+        pager.setAdapter(pagerAdapter);
 
 
         imageView.forceLayout();
