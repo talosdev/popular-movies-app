@@ -11,7 +11,6 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import app.we.go.movies.R;
-import app.we.go.movies.SortByChangedCallback;
 import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.common.BaseActivity;
 import app.we.go.movies.constants.Fragments;
@@ -29,7 +28,7 @@ import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
 public class MainActivity extends BaseActivity implements MovieSelectedCallback,
-        SortByChangedCallback,
+  //      SortByChangedCallback,
         HasMovieListComponent {
 
 
@@ -58,6 +57,8 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
                 android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
+        // The onItemSelected will also be called when the app is first opened,
+        // so the fragment will be added
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -66,6 +67,7 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
 
                 Log.d(Tags.LIFECYCLE, String.format("Adding fragment %d", position));
 
+                // TODO check this, this is never notnull
                 MovieListFragment f = (MovieListFragment) getSupportFragmentManager().findFragmentByTag("TAG_SORT_BY_" + id);
                 if (f == null) {
                     f = MovieListFragment.newInstance(SortByCriterion.byIndex((int) id));
@@ -89,14 +91,6 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
             }
         });
 
-
-//        if (savedInstanceState == null) {
-//            Log.d(Tags.LIFECYCLE, String.format("Adding fragment %d", -1));
-//            getSupportFragmentManager().
-//                    beginTransaction().
-//                    replace(R.id.movie_list_frame, MovieListFragment.newInstance(SortByCriterion.POPULARITY), Fragments.MOVIE_LIST_FRAGMENT).
-//                    commit();
-//        }
 
         setSupportActionBar(toolbar);
 
@@ -172,11 +166,11 @@ public class MainActivity extends BaseActivity implements MovieSelectedCallback,
     }
 
 
-    @Override
-    public void sortByChanged(SortByCriterion sortBy) {
-        int index = sortBy.getIndex();
-        spinner.setSelection(index);
-    }
+//    @Override
+//    public void sortByChanged(SortByCriterion sortBy) {
+//        int index = sortBy.getIndex();
+//        spinner.setSelection(index);
+//    }
 
 
     @Override

@@ -61,7 +61,7 @@ public class MovieListFragment extends Fragment
     private ArrayAdapter tmdbAdapter;
     private CursorAdapter favoritesAdapter;
 
-    private SortByChangedCallback sortByChangedCallback;
+//    private SortByChangedCallback sortByChangedCallback;
 
     private MovieSelectedCallback movieSelectedCallback;
 
@@ -133,7 +133,7 @@ public class MovieListFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        sortByChangedCallback = (SortByChangedCallback) context;
+//        sortByChangedCallback = (SortByChangedCallback) context;
     }
 
     @Override
@@ -159,7 +159,7 @@ public class MovieListFragment extends Fragment
 
         sortBy = SortByCriterion.byIndex(getArguments().getInt(SORT_BY));
 
-        sortByChangedCallback.sortByChanged(sortBy);
+//        sortByChangedCallback.sortByChanged(sortBy);
 
         tmdbAdapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
         favoritesAdapter = new GridViewFavoritesCursorAdapter(getActivity(), null, 0);
