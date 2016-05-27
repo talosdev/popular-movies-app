@@ -1,7 +1,5 @@
 package app.we.go.movies.dependency;
 
-import android.support.test.espresso.IdlingResource;
-
 import com.google.gson.Gson;
 
 import javax.inject.Singleton;
@@ -17,9 +15,11 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -39,12 +39,20 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
+    public CallAdapter.Factory provideCallAdapterFactory() {
+        return RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io())
+    }
 
+
+    @Provides
+    @Singleton
+    public Retrofit provideRetrofit(Gson gson,
+                                    OkHttpClient okHttpClient,
+                                    CallAdapter.Factory callAdapterFactory) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TMDB.BASE_URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
@@ -68,13 +76,11 @@ public class ServiceModule {
     }
 
 
-
     @Provides
     @Singleton
     public TMDBRetrofitService provideTMDBRetrofitService(Retrofit retrofit) {
         return retrofit.create(TMDBRetrofitService.class);
     }
-
 
 
     @Provides
@@ -91,9 +97,4 @@ public class ServiceModule {
         return new TMDBErrorParser(retrofit);
     }
 
-    @Provides
-    @Singleton
-    public IdlingResource provideIdlingResource() {
-        return null;
-    }
 }

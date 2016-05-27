@@ -16,7 +16,7 @@ public interface MovieListContract {
     interface View extends BaseView {
 
         void showMovieList(List<Movie> movies);
-        void showMovieDetails(Movie movie);
+        void navigateToMovieDetails(Movie movie);
     }
 
     interface Presenter extends BasePresenter<View> {

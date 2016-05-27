@@ -3,10 +3,17 @@ package app.we.go.movies.movielist;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.we.go.movies.R;
 import app.we.go.movies.common.AbstractPresenter;
 import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.MovieList;
+import app.we.go.movies.util.RxUtils;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -17,6 +24,7 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
     private TMDBService service;
 
     private int currentPage = 1;
+    private Subscription subscription;
 
     public MovieListPresenter(TMDBService service) {
         this.service = service;
@@ -24,43 +32,51 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
 
     private List<Movie> cachedMovies = new ArrayList<>();
 
+    @Override
+    public void unbindView() {
+        super.unbindView();
+        RxUtils.unsubscribe(subscription);
+    }
 
     @Override
     public void loadMovies(SortByCriterion sortBy) {
-//        Call<MovieList> movies = service.getMovies(sortBy, currentPage);
-//        movies.enqueue(new Callback<MovieList>() {
-//            @Override
-//            public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-//                if (response.isSuccess()) {
-//                    MovieList movieList = response.body();
-//                    currentPage++;
-//                    if (movieList.getMovies() != null) {
-//                        cachedMovies.addAll(movieList.getMovies());
-//                    }
-//                    if (getBoundView() != null) {
-//                        getBoundView().showMovieList(movieList.getMovies());
-//                    }
-//                } else {
-//                    onError("The get cachedMovies list call was not successful",
-//                            R.string.error_network);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<MovieList> call, Throwable t) {
-//                onFail("Error receiving movie list from server",
-//                        R.string.error_network,
-//                        t);
-//            }
-//        });
+        Observable<MovieList> movieListObservable = service.getMovies(sortBy, currentPage);
 
+        subscription = movieListObservable.
+                observeOn(AndroidSchedulers.mainThread()).
+                subscribe(new Observer<MovieList>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        onFail("Error receiving movie list from server",
+                                R.string.error_network,
+                                t);
+                    }
+
+                    @Override
+                    public void onNext(MovieList movieList) {
+                        if (movieList != null) {
+                            currentPage++;
+                            if (movieList.getMovies() != null) {
+                                cachedMovies.addAll(movieList.getMovies());
+                            }
+                            if (getBoundView() != null) {
+                                getBoundView().showMovieList(movieList.getMovies());
+                            }
+                        }
+                    }
+                });
     }
 
 
     @Override
     public void openMovieDetails(Movie movie) {
         if (getBoundView() != null) {
-            getBoundView().showMovieDetails(movie);
+            getBoundView().navigateToMovieDetails(movie);
         }
     }
 }

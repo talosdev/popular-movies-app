@@ -2,7 +2,6 @@ package app.we.go.movies.dependency;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.test.espresso.IdlingResource;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -10,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
-import app.we.go.movies.espresso.ThreadPoolIdlingResource;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
@@ -49,20 +47,6 @@ public class MockServiceModule  {
         return executor;
     }
 
-    @Provides
-    @Singleton
-    public IdlingResource provideIdlingResource(ThreadPoolExecutor executor) {
-        return new ThreadPoolIdlingResource(executor) {
-            @Override
-            public String getName() {
-                return "ThreadPoolIdlingResource";
-            }
-
-
-        };
-
-
-    }
 
 
     /**

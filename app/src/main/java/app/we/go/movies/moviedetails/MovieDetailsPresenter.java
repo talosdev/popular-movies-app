@@ -1,10 +1,17 @@
 package app.we.go.movies.moviedetails;
 
+import app.we.go.movies.R;
 import app.we.go.movies.SharedPreferencesHelper;
 import app.we.go.movies.common.AbstractPresenter;
 import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.FavoriteMovie;
 import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.util.RxUtils;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -20,6 +27,8 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
     MovieDetailsContract.InfoView infoView;
 
+    private Subscription subscription;
+
 
     public MovieDetailsPresenter(TMDBService service,
                                  SharedPreferencesHelper sharedPrefsHelper,
@@ -32,12 +41,14 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
     @Override
     public void bindInfoView(MovieDetailsContract.InfoView infoView) {
         this.infoView = infoView;
+        RxUtils.unsubscribe(subscription);
     }
 
 
     @Override
     public void unbindInfoView() {
         this.infoView = null;
+        RxUtils.unsubscribe(subscription);
     }
 
 
@@ -45,6 +56,7 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
     public void unbindAllViews() {
         unbindView();
         unbindInfoView();
+        RxUtils.unsubscribe(subscription);
     }
 
     @Override
@@ -55,37 +67,43 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
     @Override
     public void loadMovieInfo(long movieId) {
-//        Call<Movie> call = service.getDetails(movieId);
-//       // EspressoIdlingResource.increment(); // App is busy until further notice
-//
-//        call.enqueue(new Callback<Movie>() {
-//            @Override
-//            public void onResponse(Call<Movie> call, Response<Movie> response) {
-//                if (response.isSuccess()) {
-//                    Movie movie = response.body();
-//                    if (getInfoView() != null) {
-//                        getInfoView().displayInfo(movie);
-//
-//                        getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
-//
-//                    }
-//                    if (getBoundView() != null) {
-//                        getBoundView().displayTitle(movie.getTitle());
-//                        getBoundView().displayImage(movie.getBackdropPath());
-//                    }
-//                } else {
-//                    onError("The call to get the movie details was not successful",
-//                            R.string.error_network);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Movie> call, Throwable t) {
-//                onFail("Network error getting the movie details",
-//                        R.string.error_network,
-//                        t);
-//            }
-//        });
+        Observable<Movie> details = service.getDetails(movieId);
+
+        subscription = details.
+                observeOn(AndroidSchedulers.mainThread()).
+                subscribe(
+                new Observer<Movie>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        onFail("Network error getting the movie details",
+                                R.string.error_network,
+                                t);
+                    }
+
+                    @Override
+                    public void onNext(Movie movie) {
+                        if (movie != null) {
+                            if (getInfoView() != null) {
+                                getInfoView().displayInfo(movie);
+
+                                getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
+
+                            }
+                            if (getBoundView() != null) {
+                                getBoundView().displayTitle(movie.getTitle());
+                                getBoundView().displayImage(movie.getBackdropPath());
+                            }
+                        }
+                    }
+                }
+
+        );
+
 
     }
 
@@ -98,7 +116,6 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
             getBoundView().toggleFavorite(isFavorite);
         }
     }
-
 
 
     @Override
@@ -117,7 +134,6 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
         }
 
     }
-
 
 
 }

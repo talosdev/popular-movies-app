@@ -3,11 +3,7 @@ package app.we.go.movies.moviedetails;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
-import android.support.test.espresso.IdlingResource;
 import android.support.v7.widget.Toolbar;
-
-import javax.inject.Inject;
 
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
@@ -29,8 +25,6 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    @Inject
-    IdlingResource idlingResource;
 
     private MovieDetailsComponent movieDetailsComponent;
 
@@ -117,8 +111,4 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
         return movieDetailsComponent;
     }
 
-    @VisibleForTesting
-    public IdlingResource getIdlingResource() {
-        return idlingResource;
-    }
 }

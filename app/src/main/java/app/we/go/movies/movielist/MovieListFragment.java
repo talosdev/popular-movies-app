@@ -238,7 +238,7 @@ public class MovieListFragment extends Fragment
     }
 
     @Override
-    public void showMovieDetails(Movie movie) {
+    public void navigateToMovieDetails(Movie movie) {
         movieSelectedCallback.onMovieSelected(movie);
     }
 
