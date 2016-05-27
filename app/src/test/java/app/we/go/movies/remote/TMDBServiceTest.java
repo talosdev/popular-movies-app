@@ -22,8 +22,9 @@ import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.Video;
 import app.we.go.movies.remote.json.VideoList;
 import app.we.go.movies.util.RxTestingUtils;
+import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.HttpException;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
@@ -49,7 +50,10 @@ public class TMDBServiceTest {
         ServiceModule module = new ServiceModule();
         ApplicationModule appModule = new ApplicationModule();
         Retrofit retrofit = module.provideRetrofit(appModule.provideGson(),
-                module.provideOkHttpClient(new TMDBApiKeyInterceptor()));
+                module.provideOkHttpClient(new TMDBApiKeyInterceptor()),
+                // important, we use the default call adapter factory,
+                // and not the io scheduler, because we want this to be sync.
+                RxJavaCallAdapterFactory.create());
 
 
         service = module.provideTMDBRetrofitService(retrofit);
@@ -70,13 +74,18 @@ public class TMDBServiceTest {
 
     @Test
     public void testGetDetails() throws Exception {
-        Observable<Movie> movieDetailsObservable = service.getDetails(TestData.MOVIE_ID);
+        Observable<Response<Movie>> movieDetailsObservable = service.getDetails(TestData.MOVIE_ID);
 
-        TestSubscriber<Movie> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<Response<Movie>> testSubscriber = new TestSubscriber<>();
 
-        movieDetailsObservable.subscribe(testSubscriber);
+        movieDetailsObservable.
+                subscribe(testSubscriber);
 
-        Movie m = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
+        Response<Movie> response = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
+
+        assertThat(response.isSuccessful()).isTrue();
+
+        Movie m = response.body();
 
         assertThat(m.getOverview()).isEqualTo(TestData.MOVIE_OVERVIEW);
         assertThat(m.getTitle()).isEqualTo(TestData.MOVIE_TITLE);
@@ -96,15 +105,17 @@ public class TMDBServiceTest {
     @Test
     public void testGetVideos() throws Exception {
 
-        Observable<VideoList> videosObservable = service.getVideos(TestData.VideoData.MOVIE_ID);
+        Observable<Response<VideoList>> videosObservable = service.getVideos(TestData.VideoData.MOVIE_ID);
 
-        TestSubscriber<VideoList> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<Response<VideoList>> testSubscriber = new TestSubscriber<>();
 
         videosObservable.subscribe(testSubscriber);
 
-        VideoList videoList = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
+        Response<VideoList> response = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
 
-        List<Video> videos = videoList.getVideos();
+        assertThat(response.isSuccessful());
+
+        List<Video> videos = response.body().getVideos();
 
         assertThat(videos.size()).isGreaterThanOrEqualTo(2);
 
@@ -121,14 +132,16 @@ public class TMDBServiceTest {
 
     @Test
     public void testGetReviews() throws Exception {
-        Observable<ReviewList> reviewsObservable = service.getReviews(TestData.ReviewData.MOVIE_ID);
+        Observable<Response<ReviewList>> reviewsObservable = service.getReviews(TestData.ReviewData.MOVIE_ID);
 
-        TestSubscriber<ReviewList> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<Response<ReviewList>> testSubscriber = new TestSubscriber<>();
 
         reviewsObservable.subscribe(testSubscriber);
-        ReviewList reviewList = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
+        Response<ReviewList> response = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
 
-        List<Review> reviews = reviewList.getReviews();
+        assertThat(response.isSuccessful()).isTrue();
+
+        List<Review> reviews = response.body().getReviews();
 
         assertThat(reviews.size()).isGreaterThanOrEqualTo(2);
 
@@ -143,16 +156,17 @@ public class TMDBServiceTest {
 
     @Test
     public void testGetDetailsWithInexistentId() throws Exception {
-        Observable<Movie> movieDetailsObservable = service.getDetails(TestData.MOVIE_ID_INEXISTENT);
-        TestSubscriber<Movie> testSubscriber = new TestSubscriber<>();
+        Observable<Response<Movie>> movieDetailsObservable = service.getDetails(TestData.MOVIE_ID_INEXISTENT);
+        TestSubscriber<Response<Movie>> testSubscriber = new TestSubscriber<>();
 
         movieDetailsObservable.subscribe(testSubscriber);
 
-        testSubscriber.assertError(HttpException.class);
-        List<Throwable> onErrorEvents = testSubscriber.getOnErrorEvents();
-        HttpException e = (HttpException) onErrorEvents.get(0);
+        Response<Movie> response = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
 
-        TMDBError error = errorParser.parse(e.response().errorBody());
+        assertThat(response.isSuccessful()).isFalse();
+
+
+        TMDBError error = errorParser.parse(response.errorBody());
 
         assertThat(error.getStatusCode()).isNotNull();
         assertThat(error.getStatusMessage()).isNotNull();

@@ -7,7 +7,9 @@ import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.FavoriteMovie;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.util.RxUtils;
+import retrofit2.Response;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -67,12 +69,12 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
     @Override
     public void loadMovieInfo(long movieId) {
-        Observable<Movie> details = service.getDetails(movieId);
+        Observable<Response<Movie>> details = service.getDetails(movieId);
 
         subscription = details.
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(
-                new Observer<Movie>() {
+                new Observer<Response<Movie>>() {
                     @Override
                     public void onCompleted() {
 
@@ -80,24 +82,32 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
                     @Override
                     public void onError(Throwable t) {
-                        onFail("Network error getting the movie details",
+                        onCallFail("Network error getting the movie details",
                                 R.string.error_network,
                                 t);
                     }
 
                     @Override
-                    public void onNext(Movie movie) {
-                        if (movie != null) {
-                            if (getInfoView() != null) {
-                                getInfoView().displayInfo(movie);
+                    public void onNext(Response<Movie> response) {
+                        if (response.isSuccessful()) {
+                            Movie movie = response.body();
 
-                                getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
+                            if (movie != null) {
+                                if (getInfoView() != null) {
+                                    getInfoView().displayInfo(movie);
 
+                                    getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
+
+                                }
+                                if (getBoundView() != null) {
+                                    getBoundView().displayTitle(movie.getTitle());
+                                    getBoundView().displayImage(movie.getBackdropPath());
+                                }
                             }
-                            if (getBoundView() != null) {
-                                getBoundView().displayTitle(movie.getTitle());
-                                getBoundView().displayImage(movie.getBackdropPath());
-                            }
+                        } else {
+                            TMDBError error = service.parse(response.errorBody());
+                            onCallError("The call to get the movie details was not successful",
+                                    R.string.error_generic, error);
                         }
                     }
                 }

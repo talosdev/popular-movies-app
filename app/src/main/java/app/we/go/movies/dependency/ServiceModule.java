@@ -1,5 +1,6 @@
 package app.we.go.movies.dependency;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 
 import javax.inject.Singleton;
@@ -19,7 +20,6 @@ import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -40,7 +40,8 @@ public class ServiceModule {
     @Provides
     @Singleton
     public CallAdapter.Factory provideCallAdapterFactory() {
-        return RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
+//        return RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
+        return RxJavaCallAdapterFactory.create();
     }
 
 
@@ -71,6 +72,9 @@ public class ServiceModule {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
         httpClient.addInterceptor(logging);
+
+        // stetho interceptor
+        httpClient.addNetworkInterceptor(new StethoInterceptor());
 
         return httpClient.build();
     }

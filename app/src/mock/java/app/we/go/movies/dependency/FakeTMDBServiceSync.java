@@ -18,6 +18,7 @@ import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.VideoList;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -48,12 +49,11 @@ public class FakeTMDBServiceSync implements TMDBService {
     }
 
     @Override
-    public Observable<Movie> getDetails(@Path("id") long movieId) {
+    public Observable<Response<Movie>> getDetails(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return Observable.just(DummyData.DUMMY_MOVIE);
+            return Observable.just(Response.success(DummyData.DUMMY_MOVIE));
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-//TODO
-            return null;
+            return Observable.just(Response.<Movie>error(404, errorBody));
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
@@ -61,13 +61,11 @@ public class FakeTMDBServiceSync implements TMDBService {
     }
 
     @Override
-    public Observable<VideoList> getVideos(@Path("id") long movieId) {
+    public Observable<Response<VideoList>> getVideos(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return Observable.just(DummyData.VIDEOS);
+            return Observable.just(Response.success(DummyData.VIDEOS));
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-            // TODO
-            return null;
-//            return Calls.response(Response.<VideoList>error(404, errorBody));
+            return Observable.just(Response.<VideoList>error(404, errorBody));
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
@@ -77,13 +75,11 @@ public class FakeTMDBServiceSync implements TMDBService {
     }
 
     @Override
-    public Observable<ReviewList> getReviews(@Path("id") long movieId) {
+    public Observable<Response<ReviewList>> getReviews(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return Observable.just(DummyData.REVIEWS);
+            return Observable.just(Response.success(DummyData.REVIEWS));
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-            return null;
-            //TODO
-//            return Calls.response(Response.<ReviewList>error(404, errorBody));
+            return Observable.just(Response.<ReviewList>error(404, errorBody));
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
@@ -91,24 +87,26 @@ public class FakeTMDBServiceSync implements TMDBService {
     }
 
     @Override
-    public Observable<MovieList> getMovies(SortByCriterion sortBy, int page) {
+    public Observable<Response<MovieList>> getMovies(SortByCriterion sortBy, int page) {
+        MovieList movieList;
         switch (sortBy) {
             case POPULARITY:
                 if (page == 1) {
-                    return Observable.just(DummyData.MOVIE_LIST_POPULAR_1);
+                    movieList = DummyData.MOVIE_LIST_POPULAR_1;
                 } else if (page == 2) {
-                    return Observable.just(DummyData.MOVIE_LIST_POPULAR_2);
+                    movieList = DummyData.MOVIE_LIST_POPULAR_2;
                 }
             case VOTE:
-                return Observable.just(DummyData.MOVIE_LIST_VOTES);
+                movieList = DummyData.MOVIE_LIST_VOTES;
             case FAVORITES:
-                return Observable.just(DummyData.MOVIE_LIST_FAVORITES);
+                movieList = DummyData.MOVIE_LIST_FAVORITES;
             default:
-                return null;
+                movieList = null;
+
         }
-
-
+        return Observable.just(Response.success(movieList));
     }
+
     @Override
     public TMDBError parse(ResponseBody responseBody) {
         return new TMDBError();

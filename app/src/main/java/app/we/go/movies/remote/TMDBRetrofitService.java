@@ -4,6 +4,7 @@ import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.remote.json.MovieList;
 import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.VideoList;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -16,18 +17,18 @@ public interface TMDBRetrofitService {
 
 
     @GET("movie/{id}")
-    Observable<Movie> getDetails(@Path("id") long movieId);
+    Observable<Response<Movie>> getDetails(@Path("id") long movieId);
 
 
     @GET("movie/{id}/videos")
-    Observable<VideoList> getVideos(@Path("id") long movieId);
+    Observable<Response<VideoList>> getVideos(@Path("id") long movieId);
 
 
     @GET("movie/{id}/reviews")
-    Observable<ReviewList> getReviews(@Path("id") long movieId);
+    Observable<Response<ReviewList>> getReviews(@Path("id") long movieId);
 
     @GET("discover/movie")
-    Observable<MovieList> getMovies(@Query("sort_by") String sortBy,
+    Observable<Response<MovieList>> getMovies(@Query("sort_by") String sortBy,
                               @Query("page") int page,
                               @Query("vote_counter.gte") int minVotes);
 

@@ -26,7 +26,7 @@ import rx.Observable;
 
 /**
  * Fake {@link TMDBService} implementation.
- *
+ * <p>
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class FakeTMDBServiceAsync implements TMDBService {
@@ -53,9 +53,9 @@ public class FakeTMDBServiceAsync implements TMDBService {
 
 
     @Override
-    public Observable<Movie> getDetails(@Path("id") long movieId) {
+    public Observable<Response<Movie>> getDetails(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return Observable.just(DummyData.DUMMY_MOVIE);
+            return delegate.returningResponse(DummyData.DUMMY_MOVIE).getDetails(movieId);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
 
             return delegate.returningResponse(Response.<Movie>error(404, errorBody)).getDetails(movieId);
@@ -67,7 +67,7 @@ public class FakeTMDBServiceAsync implements TMDBService {
     }
 
     @Override
-    public Observable<VideoList> getVideos(@Path("id") long movieId) {
+    public Observable<Response<VideoList>> getVideos(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
             return delegate.returningResponse(DummyData.VIDEOS).getVideos(movieId);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
@@ -81,7 +81,7 @@ public class FakeTMDBServiceAsync implements TMDBService {
     }
 
     @Override
-    public Observable<ReviewList> getReviews(@Path("id") long movieId) {
+    public Observable<Response<ReviewList>> getReviews(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
             return delegate.returningResponse(DummyData.REVIEWS).getReviews(movieId);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
@@ -93,7 +93,7 @@ public class FakeTMDBServiceAsync implements TMDBService {
     }
 
     @Override
-    public Observable<MovieList> getMovies(SortByCriterion sortBy, int page) {
+    public Observable<Response<MovieList>> getMovies(SortByCriterion sortBy, int page) {
         switch (sortBy) {
             case POPULARITY:
                 if (page == 1) {
@@ -111,11 +111,11 @@ public class FakeTMDBServiceAsync implements TMDBService {
 
 
     }
+
     @Override
     public TMDBError parse(ResponseBody responseBody) {
         return new TMDBError();
     }
-
 
 
 }

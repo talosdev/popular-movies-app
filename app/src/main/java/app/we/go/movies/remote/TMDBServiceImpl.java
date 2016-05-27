@@ -7,6 +7,7 @@ import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.VideoList;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 import rx.Observable;
 
 /**
@@ -29,22 +30,22 @@ public class TMDBServiceImpl implements TMDBService {
     }
 
     @Override
-    public Observable<Movie> getDetails(long movieId) {
+    public Observable<Response<Movie>> getDetails(long movieId) {
         return retrofitService.getDetails(movieId);
     }
 
     @Override
-    public Observable<VideoList> getVideos(long movieId) {
+    public Observable<Response<VideoList>> getVideos(long movieId) {
         return retrofitService.getVideos(movieId);
     }
 
     @Override
-    public Observable<ReviewList> getReviews(long movieId) {
+    public Observable<Response<ReviewList>> getReviews(long movieId) {
         return retrofitService.getReviews(movieId);
     }
 
     @Override
-    public Observable<MovieList> getMovies(SortByCriterion sortBy, int page) {
+    public Observable<Response<MovieList>> getMovies(SortByCriterion sortBy, int page) {
         if (page <= 0) {
             throw new IllegalArgumentException("TMDB API defines that page should be greater than 0");
         }

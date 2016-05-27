@@ -9,8 +9,9 @@ import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.remote.json.MovieList;
+import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.util.RxUtils;
-import rx.Observable;
+import retrofit2.Response;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -40,11 +41,11 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
 
     @Override
     public void loadMovies(SortByCriterion sortBy) {
-        Observable<MovieList> movieListObservable = service.getMovies(sortBy, currentPage);
 
-        subscription = movieListObservable.
+
+        subscription = service.getMovies(sortBy, currentPage).
                 observeOn(AndroidSchedulers.mainThread()).
-                subscribe(new Observer<MovieList>() {
+                subscribe(new Observer<Response<MovieList>>() {
                     @Override
                     public void onCompleted() {
 
@@ -52,21 +53,29 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
 
                     @Override
                     public void onError(Throwable t) {
-                        onFail("Error receiving movie list from server",
+                        onCallFail("Error receiving movie list from server",
                                 R.string.error_network,
                                 t);
                     }
 
                     @Override
-                    public void onNext(MovieList movieList) {
-                        if (movieList != null) {
-                            currentPage++;
-                            if (movieList.getMovies() != null) {
-                                cachedMovies.addAll(movieList.getMovies());
+                    public void onNext(Response<MovieList> response) {
+                        if (response.isSuccessful()) {
+                            MovieList movieList = response.body();
+
+                            if (movieList != null) {
+                                currentPage++;
+                                if (movieList.getMovies() != null) {
+                                    cachedMovies.addAll(movieList.getMovies());
+                                }
+                                if (getBoundView() != null) {
+                                    getBoundView().showMovieList(movieList.getMovies());
+                                }
                             }
-                            if (getBoundView() != null) {
-                                getBoundView().showMovieList(movieList.getMovies());
-                            }
+                        } else {
+                            TMDBError error = service.parse(response.errorBody());
+                            onCallError("The call to get the movie list was not successful",
+                                    R.string.error_generic, error);
                         }
                     }
                 });
