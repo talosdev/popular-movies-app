@@ -165,7 +165,6 @@ public class TMDBServiceTest {
 
         assertThat(response.isSuccessful()).isFalse();
 
-
         TMDBError error = errorParser.parse(response.errorBody());
 
         assertThat(error.getStatusCode()).isNotNull();

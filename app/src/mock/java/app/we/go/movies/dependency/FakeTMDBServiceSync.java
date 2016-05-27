@@ -88,7 +88,7 @@ public class FakeTMDBServiceSync implements TMDBService {
 
     @Override
     public Observable<Response<MovieList>> getMovies(SortByCriterion sortBy, int page) {
-        MovieList movieList;
+        MovieList movieList = null;
         switch (sortBy) {
             case POPULARITY:
                 if (page == 1) {
@@ -96,10 +96,13 @@ public class FakeTMDBServiceSync implements TMDBService {
                 } else if (page == 2) {
                     movieList = DummyData.MOVIE_LIST_POPULAR_2;
                 }
+                break;
             case VOTE:
                 movieList = DummyData.MOVIE_LIST_VOTES;
+                break;
             case FAVORITES:
                 movieList = DummyData.MOVIE_LIST_FAVORITES;
+                break;
             default:
                 movieList = null;
 

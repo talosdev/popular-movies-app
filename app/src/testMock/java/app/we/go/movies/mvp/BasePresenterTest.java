@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
  */
 public class BasePresenterTest {
     protected void verifyError(BaseView view) {
-        verify(view).showError(any(String.class), eq(R.string.error_network), isNull(Throwable.class));
+        verify(view).showError(any(String.class), eq(R.string.error_generic), isNull(Throwable.class));
         verifyNoMoreInteractions(view);
     }
 

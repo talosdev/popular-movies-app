@@ -67,7 +67,7 @@ public class VideosPresenterTest extends BasePresenterTest {
     }
 
     @Test
-    public void testLoadReviewsWithWrongData() throws Exception {
+    public void testLoadVideosWithWrongData() throws Exception {
         presenter.loadMovieVideos(DummyData.INEXISTENT_MOVIE_ID);
 
         verifyError(view);

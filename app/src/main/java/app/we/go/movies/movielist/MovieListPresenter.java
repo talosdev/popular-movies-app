@@ -14,7 +14,6 @@ import app.we.go.movies.util.RxUtils;
 import retrofit2.Response;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -42,9 +41,7 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
     @Override
     public void loadMovies(SortByCriterion sortBy) {
 
-
         subscription = service.getMovies(sortBy, currentPage).
-                observeOn(AndroidSchedulers.mainThread()).
                 subscribe(new Observer<Response<MovieList>>() {
                     @Override
                     public void onCompleted() {

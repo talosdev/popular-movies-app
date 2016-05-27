@@ -13,7 +13,6 @@ import retrofit2.Response;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -72,7 +71,6 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
         Observable<Response<Movie>> details = service.getDetails(movieId);
 
         subscription = details.
-                observeOn(AndroidSchedulers.mainThread()).
                 subscribe(
                 new Observer<Response<Movie>>() {
                     @Override
