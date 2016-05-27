@@ -1,11 +1,7 @@
-package application;
+package app.we.go.movies.dependency;
 
 import javax.inject.Singleton;
 
-import app.we.go.movies.dependency.ApplicationAndroidModule;
-import app.we.go.movies.dependency.ApplicationComponent;
-import app.we.go.movies.dependency.ApplicationModule;
-import app.we.go.movies.dependency.MockDatabaseModule;
 import dagger.Component;
 
 /**
@@ -15,6 +11,6 @@ import dagger.Component;
  @Component(modules = {ApplicationModule.class,
          MockServiceModule.class,
          ApplicationAndroidModule.class,
-         MockDatabaseModule.class})
+         FakeURLBuilder.MockDatabaseModule.class})
  public interface MockApplicationComponent extends ApplicationComponent {
  }

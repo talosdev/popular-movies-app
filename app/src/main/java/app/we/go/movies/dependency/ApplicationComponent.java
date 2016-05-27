@@ -6,6 +6,7 @@ package app.we.go.movies.dependency;
 
 import javax.inject.Singleton;
 
+import app.we.go.movies.moviedetails.MovieDetailsActivity;
 import app.we.go.movies.moviedetails.dependency.MovieDetailsComponent;
 import app.we.go.movies.moviedetails.dependency.MovieDetailsModule;
 import app.we.go.movies.movielist.dependency.MovieListComponent;
@@ -24,4 +25,7 @@ public interface ApplicationComponent {
 
     MovieListComponent plus(MovieListModule movieListModule);
 
+
+
+    void inject(MovieDetailsActivity movieDetailsActivity);
 }

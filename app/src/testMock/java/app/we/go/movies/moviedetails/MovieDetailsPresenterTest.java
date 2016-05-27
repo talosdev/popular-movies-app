@@ -13,7 +13,7 @@ import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.FavoriteMovie;
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
-import app.we.go.movies.remote.MockTMDBServiceSync;
+import app.we.go.movies.remote.FakeTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
 
 import static app.we.go.movies.remote.DummyData.DUMMY_MOVIE;
@@ -58,7 +58,7 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
         // setup SharedPreferences mock
         when(sharedPreferencesHelper.formatDate(DummyData.MOVIE_RELEASE_DATE)).thenReturn(DummyData.MOVIE_RELEASE_DATE_STR);
 
-        TMDBService service = new MockTMDBServiceSync();
+        TMDBService service = new FakeTMDBServiceSync();
 
         presenter = new MovieDetailsPresenter(service,
                 sharedPreferencesHelper,

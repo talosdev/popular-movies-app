@@ -17,7 +17,7 @@ import retrofit2.Response;
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class MovieListPresenter extends AbstractPresenter<MovieListContract.View>
-        implements MovieListContract.Presenter{
+        implements MovieListContract.Presenter {
 
     private TMDBService service;
 
@@ -33,7 +33,7 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
     @Override
     public void loadMovies(SortByCriterion sortBy) {
         Call<MovieList> movies = service.getMovies(sortBy, currentPage);
-movies.enqueue(new Callback<MovieList>() {
+        movies.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
                 if (response.isSuccess()) {
@@ -56,16 +56,15 @@ movies.enqueue(new Callback<MovieList>() {
                 onFail("Error receiving movie list from server",
                         R.string.error_network,
                         t);
-                }
+            }
         });
 
     }
 
 
-
     @Override
     public void openMovieDetails(Movie movie) {
-        if (getBoundView()!=null) {
+        if (getBoundView() != null) {
             getBoundView().showMovieDetails(movie);
         }
     }

@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
-import app.we.go.movies.remote.MockTMDBServiceSync;
+import app.we.go.movies.remote.FakeTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
 
@@ -47,7 +47,7 @@ public class VideosPresenterTest extends BasePresenterTest {
         when(urlBuilder.buildYoutubeUri(VIDEO_KEY)).thenReturn(uri);
 
 
-        TMDBService service = new MockTMDBServiceSync();
+        TMDBService service = new FakeTMDBServiceSync();
 
         presenter = new MovieVideosPresenter(service, urlBuilder);
         presenter.bindView(view);

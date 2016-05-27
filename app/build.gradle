@@ -153,6 +153,7 @@ dependencies {
         exclude module: 'recyclerview-v7'
         exclude module: 'support-v4'
     }
+    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
     testCompile('com.squareup.assertj:assertj-android:1.1.1') {
         exclude module: 'support-annotations'

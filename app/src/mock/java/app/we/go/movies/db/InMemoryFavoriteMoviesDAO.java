@@ -1,11 +1,10 @@
-package app.we.go.db;
+package app.we.go.movies.db;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.FavoriteMovie;
 
 /**

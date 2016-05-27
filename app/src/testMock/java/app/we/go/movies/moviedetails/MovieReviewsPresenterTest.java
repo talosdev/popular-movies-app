@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
-import app.we.go.movies.remote.MockTMDBServiceSync;
+import app.we.go.movies.remote.FakeTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
 
 import static app.we.go.movies.remote.DummyData.MOVIE_ID_CAUSES_SERVER_ERROR;
@@ -31,7 +31,7 @@ public class MovieReviewsPresenterTest extends BasePresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        TMDBService service = new MockTMDBServiceSync();
+        TMDBService service = new FakeTMDBServiceSync();
 
         presenter = new MovieReviewsPresenter(service);
         presenter.bindView(view);

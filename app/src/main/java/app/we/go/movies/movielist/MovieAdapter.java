@@ -72,6 +72,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
     public void onBindViewHolder(MovieHolder holder, final int position) {
         final Movie m = movies.get(position);
 
+        holder.image.setContentDescription(m.getTitle());
+
         String posterPath = m.getPosterPath();
         if (posterPath != null) {
             // already in pixels

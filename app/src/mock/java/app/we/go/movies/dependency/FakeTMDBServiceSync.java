@@ -1,4 +1,4 @@
-package app.we.go.movies.remote;
+package app.we.go.movies.dependency;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -9,7 +9,8 @@ import com.google.gson.Gson;
 import java.io.IOException;
 
 import app.we.go.movies.data.SortByCriterion;
-import app.we.go.movies.dependency.ApplicationModule;
+import app.we.go.movies.remote.DummyData;
+import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.remote.json.MovieList;
 import app.we.go.movies.remote.json.ReviewList;
@@ -24,17 +25,17 @@ import retrofit2.mock.Calls;
 
 
 /**
- * Mock {@link TMDBService}. We don't use retrofit-mock's
+ * Fake {@link TMDBService} implementation. We don't use retrofit-mock's
  * {@link retrofit2.mock.BehaviorDelegate} here, since that would make the service
  * to operate as an async service.
  *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MockTMDBServiceSync implements TMDBService {
+public class FakeTMDBServiceSync implements TMDBService {
 
     private final ResponseBody errorBody;
 
-    public MockTMDBServiceSync() {
+    public FakeTMDBServiceSync() {
         // Using the Dagger module to get the same Gson instance as in production code
         // This is not absolutely necessary though...
         ApplicationModule module = new ApplicationModule();
@@ -90,9 +91,23 @@ public class MockTMDBServiceSync implements TMDBService {
 
     @Override
     public Call<MovieList> getMovies(SortByCriterion sortBy, int page) {
-        return Calls.response(DummyData.MOVIE_LIST);
-    }
+        switch (sortBy) {
+            case POPULARITY:
+                if (page == 1) {
+                    return Calls.response(DummyData.MOVIE_LIST_POPULAR_1);
+                } else if (page == 2) {
+                    return Calls.response(DummyData.MOVIE_LIST_POPULAR_2);
+                }
+            case VOTE:
+                return Calls.response(DummyData.MOVIE_LIST_VOTES);
+            case FAVORITES:
+                return Calls.response(DummyData.MOVIE_LIST_FAVORITES);
+            default:
+                return null;
+        }
 
+
+    }
     @Override
     public TMDBError parse(ResponseBody responseBody) {
         return new TMDBError();

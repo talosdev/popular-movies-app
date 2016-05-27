@@ -1,12 +1,20 @@
 package app.we.go.movies.moviedetails;
 
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingResource;
+import android.test.UiThreadTest;
+
 import org.hamcrest.Matchers;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import app.we.go.movies.R;
+import app.we.go.movies.constants.Tags;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.remote.json.Video;
+import app.we.go.movies.util.LOG;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -16,7 +24,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static app.we.go.movies.util.Matchers.withDrawable;
+import static app.we.go.movies.matchers.Matchers.withDrawable;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -27,10 +35,32 @@ import static org.hamcrest.Matchers.is;
 public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
 
 
+    private IdlingResource idlingResource;
+
+
+
+
+    @Before
+    public void setUpIdlingResource() {
+
+
+        idlingResource = testRule.getActivity().getIdlingResource();
+        LOG.d(Tags.TEST, "Registering Idling resource");
+
+        Espresso.registerIdlingResources(idlingResource);
+
+    }
+
+
+    @After
+    public void unregisterIntentServiceIdlingResource() {
+   //     Espresso.unregisterIdlingResources(idlingResource);
+    }
+
 
     @Test
     public void testDetailsAreDisplayed() throws Exception {
-
+//Thread.sleep(2000);
         onView(withId(R.id.movieTitle)).check(matches(withText(DummyData.MOVIE_TITLE)));
 
         onView(withId(R.id.synopsis_title)).check(matches(isDisplayed()));
@@ -89,6 +119,7 @@ public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
 
 
     @Test
+    @UiThreadTest
     public void testFavoriteButton() throws Exception {
         onView(withId(R.id.menu_favorite)).
                 check(matches(withDrawable(R.drawable.ic_favorite_border_blue_24dp)));

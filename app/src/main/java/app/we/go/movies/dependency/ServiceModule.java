@@ -1,5 +1,7 @@
 package app.we.go.movies.dependency;
 
+import android.support.test.espresso.IdlingResource;
+
 import com.google.gson.Gson;
 
 import javax.inject.Singleton;
@@ -10,6 +12,7 @@ import app.we.go.movies.remote.TMDBErrorParser;
 import app.we.go.movies.remote.TMDBRetrofitService;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.TMDBServiceImpl;
+import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -25,6 +28,13 @@ public class ServiceModule {
 
     public ServiceModule() {
     }
+
+    @Provides
+    @Singleton
+    public URLBuilder provideUrlBuilder() {
+        return new URLBuilder();
+    }
+
 
     @Provides
     @Singleton
@@ -77,5 +87,11 @@ public class ServiceModule {
     @Singleton
     public TMDBErrorParser provideTMDBErrorParser(Retrofit retrofit) {
         return new TMDBErrorParser(retrofit);
+    }
+
+    @Provides
+    @Singleton
+    public IdlingResource provideIdlingResource() {
+        return null;
     }
 }

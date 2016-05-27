@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 
 import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.remote.DummyData;
-import app.we.go.movies.remote.MockTMDBServiceSync;
+import app.we.go.movies.remote.FakeTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
 
 import static org.mockito.Matchers.eq;
@@ -32,7 +32,7 @@ public class MovieListPresenterTest {
 
         MockitoAnnotations.initMocks(this);
 
-        service = new MockTMDBServiceSync();
+        service = new FakeTMDBServiceSync();
 
         presenter = new MovieListPresenter(service);
         presenter.bindView(view);

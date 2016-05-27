@@ -164,6 +164,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
     @Override
     public void displayTitle(String title) {
+        LOG.d(Tags.REMOTE, "Got movie title \'%s\' and will display it", title);
+
         titleView.setText(title);
     }
 
