@@ -57,7 +57,7 @@ public class TMDBServiceImpl implements TMDBService {
         return retrofitService.getMovies(
                 convertSortByCriterionToStringParameter(sortBy),
                 page,
-                MINIMUM_VOTES);
+                MINIMUM_VOTES).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

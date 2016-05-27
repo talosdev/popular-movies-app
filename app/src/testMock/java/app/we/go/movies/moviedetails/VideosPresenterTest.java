@@ -75,11 +75,9 @@ public class VideosPresenterTest extends BasePresenterTest {
 
     @Test
     public void testLoadInfoWithServerError() throws Exception {
-
         presenter.loadMovieVideos(MOVIE_ID_CAUSES_SERVER_ERROR);
 
         verifyFail(view);
-
     }
 
     @Test

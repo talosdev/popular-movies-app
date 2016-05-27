@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
+import android.widget.Toast;
 
 import com.github.yasevich.endlessrecyclerview.EndlessRecyclerView;
 
@@ -25,7 +26,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import app.we.go.movies.R;
-import app.we.go.movies.SortByChangedCallback;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.data.MoviePoster;
@@ -34,7 +34,6 @@ import app.we.go.movies.listener.MovieSelectedCallback;
 import app.we.go.movies.movielist.dependency.HasMovieListComponent;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.ui.GridSpacingItemDecoration;
 import app.we.go.movies.ui.activity.PreferencesActivity;
 import app.we.go.movies.util.LOG;
 import butterknife.Bind;
@@ -245,7 +244,8 @@ public class MovieListFragment extends Fragment
 
     @Override
     public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
-
+        LOG.e(Tags.REMOTE, logMessage, t);
+        Toast.makeText(context, resourceId, Toast.LENGTH_SHORT).show();
     }
 
     @Override
