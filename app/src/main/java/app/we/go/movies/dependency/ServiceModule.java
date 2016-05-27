@@ -40,7 +40,7 @@ public class ServiceModule {
     @Provides
     @Singleton
     public CallAdapter.Factory provideCallAdapterFactory() {
-        return RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io())
+        return RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
     }
 
 
