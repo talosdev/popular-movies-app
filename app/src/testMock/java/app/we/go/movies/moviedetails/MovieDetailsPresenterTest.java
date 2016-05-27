@@ -10,10 +10,10 @@ import org.mockito.MockitoAnnotations;
 
 import app.we.go.movies.SharedPreferencesHelper;
 import app.we.go.movies.db.FavoriteMovieDAO;
+import app.we.go.movies.dependency.FakeTMDBServiceSync;
 import app.we.go.movies.model.FavoriteMovie;
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
-import app.we.go.movies.remote.FakeTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
 
 import static app.we.go.movies.remote.DummyData.DUMMY_MOVIE;

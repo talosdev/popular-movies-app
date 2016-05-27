@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.hugo'
 apply plugin: 'com.neenbedankt.android-apt'
+//Retrolambda plugin
+apply plugin: 'me.tatarka.retrolambda'
 apply from: 'build.workaround-missing-resource.gradle'
 
 android {
@@ -64,11 +66,11 @@ android {
     // Remove mockRelease as it's not needed.
     //
     android.variantFilter { variant ->
-        if(variant.buildType.name.equals('release')
+        if (variant.buildType.name.equals('release')
                 && variant.getFlavors().get(0).name.equals('mock')) {
             variant.setIgnore(true);
         }
-        if(variant.buildType.name.equals('release')
+        if (variant.buildType.name.equals('release')
                 && variant.getFlavors().get(0).name.equals('instantRun')) {
             variant.setIgnore(true);
         }
@@ -119,6 +121,11 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.squareup.okhttp:okhttp:2.+'
     compile 'com.google.code.gson:gson:2.2.4'
+    // rx
+    compile 'io.reactivex:rxandroid:1.2.0'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    compile 'io.reactivex:rxjava:1.1.5'
     // cupboard
     compile 'nl.qbusict:cupboard:2.1.4'
     // stetho
@@ -130,6 +137,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     compile 'com.squareup.retrofit2:retrofit-mock:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
     // Butterknife
     compile 'com.jakewharton:butterknife:7.0.1'
     // multidex
@@ -148,7 +156,7 @@ dependencies {
     androidTestCompile 'com.squareup.assertj:assertj-android:1.1.1'
     // espresso
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.1') {
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.1') {
         exclude module: 'support-annotations'
         exclude module: 'recyclerview-v7'
         exclude module: 'support-v4'

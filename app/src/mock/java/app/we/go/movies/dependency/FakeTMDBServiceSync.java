@@ -18,10 +18,8 @@ import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.VideoList;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Path;
-import retrofit2.mock.Calls;
+import rx.Observable;
 
 
 /**
@@ -50,27 +48,28 @@ public class FakeTMDBServiceSync implements TMDBService {
     }
 
     @Override
-    public Call<Movie> getDetails(@Path("id") long movieId) {
+    public Observable<Movie> getDetails(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return Calls.response(DummyData.DUMMY_MOVIE);
+            return Observable.just(DummyData.DUMMY_MOVIE);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-
-            return Calls.response(Response.<Movie>error(404, errorBody));
-
+//TODO
+            return null;
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
-            return Calls.failure(new IOException("Error contacting server"));
+            return Observable.error(new IOException("Error contacting server"));
         }
         throw new IllegalArgumentException("Method is not prepared to accept input value " + movieId);
     }
 
     @Override
-    public Call<VideoList> getVideos(@Path("id") long movieId) {
+    public Observable<VideoList> getVideos(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return Calls.response(DummyData.VIDEOS);
+            return Observable.just(DummyData.VIDEOS);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-            return Calls.response(Response.<VideoList>error(404, errorBody));
+            // TODO
+            return null;
+//            return Calls.response(Response.<VideoList>error(404, errorBody));
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
-            return Calls.failure(new IOException("Error contacting server"));
+            return Observable.error(new IOException("Error contacting server"));
         }
         throw new IllegalArgumentException("Method is not prepared to accept input value " + movieId);
 
@@ -78,30 +77,32 @@ public class FakeTMDBServiceSync implements TMDBService {
     }
 
     @Override
-    public Call<ReviewList> getReviews(@Path("id") long movieId) {
+    public Observable<ReviewList> getReviews(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return Calls.response(DummyData.REVIEWS);
+            return Observable.just(DummyData.REVIEWS);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-            return Calls.response(Response.<ReviewList>error(404, errorBody));
+            return null;
+            //TODO
+//            return Calls.response(Response.<ReviewList>error(404, errorBody));
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
-            return Calls.failure(new IOException("Error contacting server"));
+            return Observable.error(new IOException("Error contacting server"));
         }
         throw new IllegalArgumentException("Method is not prepared to accept input value " + movieId);
     }
 
     @Override
-    public Call<MovieList> getMovies(SortByCriterion sortBy, int page) {
+    public Observable<MovieList> getMovies(SortByCriterion sortBy, int page) {
         switch (sortBy) {
             case POPULARITY:
                 if (page == 1) {
-                    return Calls.response(DummyData.MOVIE_LIST_POPULAR_1);
+                    return Observable.just(DummyData.MOVIE_LIST_POPULAR_1);
                 } else if (page == 2) {
-                    return Calls.response(DummyData.MOVIE_LIST_POPULAR_2);
+                    return Observable.just(DummyData.MOVIE_LIST_POPULAR_2);
                 }
             case VOTE:
-                return Calls.response(DummyData.MOVIE_LIST_VOTES);
+                return Observable.just(DummyData.MOVIE_LIST_VOTES);
             case FAVORITES:
-                return Calls.response(DummyData.MOVIE_LIST_FAVORITES);
+                return Observable.just(DummyData.MOVIE_LIST_FAVORITES);
             default:
                 return null;
         }

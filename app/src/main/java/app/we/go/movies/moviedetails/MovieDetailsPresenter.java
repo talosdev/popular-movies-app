@@ -1,15 +1,10 @@
 package app.we.go.movies.moviedetails;
 
-import app.we.go.movies.R;
 import app.we.go.movies.SharedPreferencesHelper;
 import app.we.go.movies.common.AbstractPresenter;
 import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.FavoriteMovie;
 import app.we.go.movies.remote.TMDBService;
-import app.we.go.movies.remote.json.Movie;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -60,37 +55,37 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
     @Override
     public void loadMovieInfo(long movieId) {
-        Call<Movie> call = service.getDetails(movieId);
-       // EspressoIdlingResource.increment(); // App is busy until further notice
-
-        call.enqueue(new Callback<Movie>() {
-            @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
-                if (response.isSuccess()) {
-                    Movie movie = response.body();
-                    if (getInfoView() != null) {
-                        getInfoView().displayInfo(movie);
-
-                        getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
-
-                    }
-                    if (getBoundView() != null) {
-                        getBoundView().displayTitle(movie.getTitle());
-                        getBoundView().displayImage(movie.getBackdropPath());
-                    }
-                } else {
-                    onError("The call to get the movie details was not successful",
-                            R.string.error_network);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
-                onFail("Network error getting the movie details",
-                        R.string.error_network,
-                        t);
-            }
-        });
+//        Call<Movie> call = service.getDetails(movieId);
+//       // EspressoIdlingResource.increment(); // App is busy until further notice
+//
+//        call.enqueue(new Callback<Movie>() {
+//            @Override
+//            public void onResponse(Call<Movie> call, Response<Movie> response) {
+//                if (response.isSuccess()) {
+//                    Movie movie = response.body();
+//                    if (getInfoView() != null) {
+//                        getInfoView().displayInfo(movie);
+//
+//                        getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
+//
+//                    }
+//                    if (getBoundView() != null) {
+//                        getBoundView().displayTitle(movie.getTitle());
+//                        getBoundView().displayImage(movie.getBackdropPath());
+//                    }
+//                } else {
+//                    onError("The call to get the movie details was not successful",
+//                            R.string.error_network);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Movie> call, Throwable t) {
+//                onFail("Network error getting the movie details",
+//                        R.string.error_network,
+//                        t);
+//            }
+//        });
 
     }
 

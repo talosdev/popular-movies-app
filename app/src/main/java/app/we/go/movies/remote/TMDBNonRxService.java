@@ -7,21 +7,21 @@ import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.VideoList;
 import okhttp3.ResponseBody;
-import rx.Observable;
+import retrofit2.Call;
 
 /**
  * Created by apapad on 8/03/16.
  */
-public interface TMDBService {
+public interface TMDBNonRxService {
 
 
-    Observable<Movie> getDetails(long movieId);
+    Call<Movie> getDetails(long movieId);
 
 
-    Observable<VideoList> getVideos(long movieId);
+    Call<VideoList> getVideos(long movieId);
 
 
-    Observable<ReviewList> getReviews(long movieId);
+    Call<ReviewList> getReviews(long movieId);
 
     /**
      *
@@ -29,7 +29,7 @@ public interface TMDBService {
      * @param page 1-based
      * @return
      */
-    Observable<MovieList> getMovies(SortByCriterion sortBy, int page);
+    Call<MovieList> getMovies(SortByCriterion sortBy, int page);
 
 
     TMDBError parse(ResponseBody responseBody);

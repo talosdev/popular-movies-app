@@ -7,8 +7,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import app.we.go.movies.data.SortByCriterion;
+import app.we.go.movies.dependency.FakeTMDBServiceSync;
 import app.we.go.movies.remote.DummyData;
-import app.we.go.movies.remote.FakeTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
 
 import static org.mockito.Matchers.eq;
@@ -46,7 +46,7 @@ public class MovieListPresenterTest {
     public void testLoad() throws Exception {
         presenter.loadMovies(SortByCriterion.POPULARITY);
 
-        verify(view).showMovieList(DummyData.MOVIE_LIST.getMovies());
+        verify(view).showMovieList(DummyData.MOVIE_LIST_POPULAR_1.getMovies());
         verifyNoMoreInteractions(view);
     }
 

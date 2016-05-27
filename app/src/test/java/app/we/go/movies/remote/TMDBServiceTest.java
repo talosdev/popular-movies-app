@@ -21,16 +21,18 @@ import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.Video;
 import app.we.go.movies.remote.json.VideoList;
-import retrofit2.Call;
-import retrofit2.Response;
+import app.we.go.movies.util.RxTestingUtils;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.HttpException;
+import rx.Observable;
+import rx.observers.TestSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests the Service by contacting the real server.
  * Basically an integration test, as it also tests the json parsing part.
- *
+ * <p/>
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class TMDBServiceTest {
@@ -68,11 +70,13 @@ public class TMDBServiceTest {
 
     @Test
     public void testGetDetails() throws Exception {
-        Call<Movie> call = service.getDetails(TestData.MOVIE_ID);
-        Response<Movie> response = call.execute();
+        Observable<Movie> movieDetailsObservable = service.getDetails(TestData.MOVIE_ID);
 
-        assertThat(response.isSuccess()).isTrue();
-        Movie m = response.body();
+        TestSubscriber<Movie> testSubscriber = new TestSubscriber<>();
+
+        movieDetailsObservable.subscribe(testSubscriber);
+
+        Movie m = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
 
         assertThat(m.getOverview()).isEqualTo(TestData.MOVIE_OVERVIEW);
         assertThat(m.getTitle()).isEqualTo(TestData.MOVIE_TITLE);
@@ -84,6 +88,7 @@ public class TMDBServiceTest {
         assertThat(m.getPopularity()).isGreaterThan(0.0f);
         assertThat(m.getPosterPath()).isNotEmpty();
         assertThat(m.getBackdropPath()).isNotEmpty();
+
     }
 
 
@@ -91,12 +96,15 @@ public class TMDBServiceTest {
     @Test
     public void testGetVideos() throws Exception {
 
-        Call<VideoList> call = service.getVideos(TestData.VideoData.MOVIE_ID);
-        Response<VideoList> response = call.execute();
+        Observable<VideoList> videosObservable = service.getVideos(TestData.VideoData.MOVIE_ID);
 
-        assertThat(response.isSuccess()).isTrue();
-        VideoList body = response.body();
-        List<Video> videos = body.getVideos();
+        TestSubscriber<VideoList> testSubscriber = new TestSubscriber<>();
+
+        videosObservable.subscribe(testSubscriber);
+
+        VideoList videoList = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
+
+        List<Video> videos = videoList.getVideos();
 
         assertThat(videos.size()).isGreaterThanOrEqualTo(2);
 
@@ -113,13 +121,14 @@ public class TMDBServiceTest {
 
     @Test
     public void testGetReviews() throws Exception {
-        Call<ReviewList> call = service.getReviews(TestData.ReviewData.MOVIE_ID);
-        Response<ReviewList> response = call.execute();
+        Observable<ReviewList> reviewsObservable = service.getReviews(TestData.ReviewData.MOVIE_ID);
 
-        assertThat(response.isSuccess()).isTrue();
-        ReviewList body = response.body();
-        List<Review> reviews = body.getReviews();
+        TestSubscriber<ReviewList> testSubscriber = new TestSubscriber<>();
 
+        reviewsObservable.subscribe(testSubscriber);
+        ReviewList reviewList = RxTestingUtils.getUniqueOnNextEvent(testSubscriber);
+
+        List<Review> reviews = reviewList.getReviews();
 
         assertThat(reviews.size()).isGreaterThanOrEqualTo(2);
 
@@ -134,14 +143,16 @@ public class TMDBServiceTest {
 
     @Test
     public void testGetDetailsWithInexistentId() throws Exception {
-        Call<Movie> call = service.getDetails(TestData.MOVIE_ID_INEXISTENT);
-        Response<Movie> response = call.execute();
+        Observable<Movie> movieDetailsObservable = service.getDetails(TestData.MOVIE_ID_INEXISTENT);
+        TestSubscriber<Movie> testSubscriber = new TestSubscriber<>();
 
-        assertThat(response.isSuccess()).isFalse();
+        movieDetailsObservable.subscribe(testSubscriber);
 
-        okhttp3.ResponseBody errorBody = response.errorBody();
+        testSubscriber.assertError(HttpException.class);
+        List<Throwable> onErrorEvents = testSubscriber.getOnErrorEvents();
+        HttpException e = (HttpException) onErrorEvents.get(0);
 
-        TMDBError error = errorParser.parse(errorBody);
+        TMDBError error = errorParser.parse(e.response().errorBody());
 
         assertThat(error.getStatusCode()).isNotNull();
         assertThat(error.getStatusMessage()).isNotNull();

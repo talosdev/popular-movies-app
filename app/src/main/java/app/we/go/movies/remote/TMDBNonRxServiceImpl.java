@@ -7,44 +7,44 @@ import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.TMDBError;
 import app.we.go.movies.remote.json.VideoList;
 import okhttp3.ResponseBody;
-import rx.Observable;
+import retrofit2.Call;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class TMDBServiceImpl implements TMDBService {
+public class TMDBNonRxServiceImpl implements TMDBNonRxService {
 
     // TODO, where to put this? inject by constructor?
     public static final int MINIMUM_VOTES = 500;
 
 
-    private TMDBRetrofitService retrofitService;
+    private TMDBRetrofitNonRxService retrofitService;
 
     private TMDBErrorParser errorParser;
 
-    public TMDBServiceImpl(TMDBRetrofitService retrofitService,
-                           TMDBErrorParser errorParser) {
+    public TMDBNonRxServiceImpl(TMDBRetrofitNonRxService retrofitService,
+                                TMDBErrorParser errorParser) {
         this.retrofitService = retrofitService;
         this.errorParser = errorParser;
     }
 
     @Override
-    public Observable<Movie> getDetails(long movieId) {
+    public Call<Movie> getDetails(long movieId) {
         return retrofitService.getDetails(movieId);
     }
 
     @Override
-    public Observable<VideoList> getVideos(long movieId) {
+    public Call<VideoList> getVideos(long movieId) {
         return retrofitService.getVideos(movieId);
     }
 
     @Override
-    public Observable<ReviewList> getReviews(long movieId) {
+    public Call<ReviewList> getReviews(long movieId) {
         return retrofitService.getReviews(movieId);
     }
 
     @Override
-    public Observable<MovieList> getMovies(SortByCriterion sortBy, int page) {
+    public Call<MovieList> getMovies(SortByCriterion sortBy, int page) {
         if (page <= 0) {
             throw new IllegalArgumentException("TMDB API defines that page should be greater than 0");
         }
