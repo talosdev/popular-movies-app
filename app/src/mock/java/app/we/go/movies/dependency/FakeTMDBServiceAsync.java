@@ -21,6 +21,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Path;
 import retrofit2.mock.BehaviorDelegate;
+import retrofit2.mock.Calls;
 import rx.Observable;
 
 
@@ -58,7 +59,9 @@ public class FakeTMDBServiceAsync implements TMDBService {
             return delegate.returningResponse(DummyData.DUMMY_MOVIE).getDetails(movieId);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
 
-            return delegate.returningResponse(Response.<Movie>error(404, errorBody)).getDetails(movieId);
+            // returningResponse always returns a successful response, so we need to use
+            // returning here
+            return delegate.returning(Calls.response(Response.error(404, errorBody))).getDetails(movieId);
 
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));

@@ -28,8 +28,11 @@ import rx.Observable;
  * {@link retrofit2.mock.BehaviorDelegate} here, since that would make the service
  * to operate as an async service.
  *
+ * Deprecated, use {@link FakeTMDBServiceAsync} instead
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
+@Deprecated
 public class FakeTMDBServiceSync implements TMDBService {
 
     private final ResponseBody errorBody;

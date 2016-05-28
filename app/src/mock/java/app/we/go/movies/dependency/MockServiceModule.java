@@ -14,6 +14,7 @@ import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.mock.BehaviorDelegate;
 import retrofit2.mock.MockRetrofit;
 import retrofit2.mock.NetworkBehavior;
@@ -60,20 +61,34 @@ public class MockServiceModule  {
     @Singleton
     public TMDBService provideServiceModule(ThreadPoolExecutor executor) {
 
-//        return new FakeTMDBServiceSync();
+        return FakeTmdbServiceAsyncFactory.getInstance(executor);
+    }
 
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .callbackExecutor(executor)
-                .baseUrl("http://example.com").build();
 
-        NetworkBehavior networkBehavior = NetworkBehavior.create();
-        networkBehavior.setDelay(30, TimeUnit.SECONDS);
-        MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit)
-                .networkBehavior(networkBehavior).build();
+    public static class FakeTmdbServiceAsyncFactory {
 
-        final BehaviorDelegate<TMDBService> delegate = mockRetrofit.create(TMDBService.class);
+        private static FakeTMDBServiceAsync INSTANCE;
 
-        return new FakeTMDBServiceAsync(delegate);
+        public static TMDBService getInstance(ThreadPoolExecutor executor) {
+            if (INSTANCE == null) {
+                Retrofit retrofit = new Retrofit.Builder().
+                   //     callbackExecutor(executor).
+                        addCallAdapterFactory(RxJavaCallAdapterFactory.create()).
+                        baseUrl("http://example.com").build();
+
+                NetworkBehavior networkBehavior = NetworkBehavior.create();
+            //    networkBehavior.setDelay(30, TimeUnit.SECONDS);
+                MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit)
+                        .networkBehavior(networkBehavior).build();
+
+                final BehaviorDelegate<TMDBService> delegate = mockRetrofit.create(TMDBService.class);
+
+                INSTANCE = new FakeTMDBServiceAsync(delegate);
+
+            }
+            return INSTANCE;
+        }
+
     }
 }

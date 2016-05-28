@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import app.we.go.movies.SharedPreferencesHelper;
 import app.we.go.movies.db.FavoriteMovieDAO;
-import app.we.go.movies.dependency.FakeTMDBServiceSync;
+import app.we.go.movies.dependency.MockServiceModule;
 import app.we.go.movies.model.FavoriteMovie;
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
@@ -58,7 +58,7 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
         // setup SharedPreferences mock
         when(sharedPreferencesHelper.formatDate(DummyData.MOVIE_RELEASE_DATE)).thenReturn(DummyData.MOVIE_RELEASE_DATE_STR);
 
-        TMDBService service = new FakeTMDBServiceSync();
+        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(null);
 
 //        ServiceModule module = new ServiceModule();
 //        Retrofit retrofit = module.provideRetrofit(gson, okH);
