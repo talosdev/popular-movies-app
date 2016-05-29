@@ -68,7 +68,7 @@ public class MockServiceModule  {
 
     public static class FakeTmdbServiceAsyncFactory {
 
-        private static FakeTMDBServiceAsync INSTANCE;
+        private static FakeTMDBService INSTANCE;
 
         public static TMDBService getInstance(ThreadPoolExecutor executor) {
             if (INSTANCE == null) {
@@ -84,7 +84,7 @@ public class MockServiceModule  {
 
                 final BehaviorDelegate<TMDBService> delegate = mockRetrofit.create(TMDBService.class);
 
-                INSTANCE = new FakeTMDBServiceAsync(delegate);
+                INSTANCE = new FakeTMDBService(delegate);
 
             }
             return INSTANCE;

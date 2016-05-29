@@ -30,13 +30,13 @@ import rx.Observable;
  * <p>
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class FakeTMDBServiceAsync implements TMDBService {
+public class FakeTMDBService implements TMDBService {
 
     private final ResponseBody errorBody;
 
     private final BehaviorDelegate<TMDBService> delegate;
 
-    public FakeTMDBServiceAsync(BehaviorDelegate<TMDBService> delegate) {
+    public FakeTMDBService(BehaviorDelegate<TMDBService> delegate) {
         this.delegate = delegate;
 
         // Using the Dagger module to get the same Gson instance as in production code
