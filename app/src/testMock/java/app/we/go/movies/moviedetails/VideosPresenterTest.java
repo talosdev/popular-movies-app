@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import app.we.go.movies.dependency.FakeTMDBServiceSync;
+import app.we.go.movies.dependency.MockServiceModule;
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.TMDBService;
@@ -47,7 +47,7 @@ public class VideosPresenterTest extends BasePresenterTest {
         when(urlBuilder.buildYoutubeUri(VIDEO_KEY)).thenReturn(uri);
 
 
-        TMDBService service = new FakeTMDBServiceSync();
+        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(null);
 
         presenter = new MovieVideosPresenter(service, urlBuilder);
         presenter.bindView(view);

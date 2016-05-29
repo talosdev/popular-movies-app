@@ -58,7 +58,6 @@ public class FakeTMDBServiceAsync implements TMDBService {
         if (movieId == DummyData.MOVIE_ID) {
             return delegate.returningResponse(DummyData.DUMMY_MOVIE).getDetails(movieId);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-
             // returningResponse always returns a successful response, so we need to use
             // returning here
             return delegate.returning(Calls.response(Response.error(404, errorBody))).getDetails(movieId);
@@ -74,7 +73,7 @@ public class FakeTMDBServiceAsync implements TMDBService {
         if (movieId == DummyData.MOVIE_ID) {
             return delegate.returningResponse(DummyData.VIDEOS).getVideos(movieId);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-            return delegate.returningResponse(Response.<VideoList>error(404, errorBody)).getVideos(movieId);
+            return delegate.returning(Calls.response(Response.error(404, errorBody))).getVideos(movieId);
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
@@ -88,7 +87,7 @@ public class FakeTMDBServiceAsync implements TMDBService {
         if (movieId == DummyData.MOVIE_ID) {
             return delegate.returningResponse(DummyData.REVIEWS).getReviews(movieId);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-            return delegate.returningResponse(Response.<ReviewList>error(404, errorBody)).getReviews(movieId);
+            return delegate.returning(Calls.response(Response.error(404, errorBody))).getReviews(movieId);
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }

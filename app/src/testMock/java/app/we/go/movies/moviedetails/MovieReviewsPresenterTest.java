@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import app.we.go.movies.dependency.FakeTMDBServiceSync;
+import app.we.go.movies.dependency.MockServiceModule;
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.TMDBService;
@@ -31,7 +31,7 @@ public class MovieReviewsPresenterTest extends BasePresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        TMDBService service = new FakeTMDBServiceSync();
+        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(null);
 
         presenter = new MovieReviewsPresenter(service);
         presenter.bindView(view);

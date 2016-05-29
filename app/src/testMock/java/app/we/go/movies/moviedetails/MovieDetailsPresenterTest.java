@@ -60,10 +60,6 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
 
         TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(null);
 
-//        ServiceModule module = new ServiceModule();
-//        Retrofit retrofit = module.provideRetrofit(gson, okH);
-//        TMDBRetrofitService retrofitService = module.provideTMDBRetrofitService(retrofit);
-//        TMDBService service = module.provideTMDBService()
 
         presenter = new MovieDetailsPresenter(service,
                 sharedPreferencesHelper,
