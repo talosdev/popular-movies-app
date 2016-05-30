@@ -15,6 +15,7 @@ The app features:
   - Dependency injection with ```Dagger2```, including custom modules, and sophisticated component hierarchy to support testing
   - Model-View-Presenter architecture
   - Extensive testing with ```JUnit```, ```Espresso``` and ```Mockito```
+  - Functional reactive programming, with ```rxandroid```
 
 
 ### Current status
@@ -23,12 +24,12 @@ I am currently performing some heavy refactoring to the application. The status 
 
   - ~~MVP-ize the MovieDetails screen~~
   - ~~Espresso tests for MovieDetails screen~~
-  - MVP-ize the MovieDetails screen
-  - Espresso tests for MovieDetails screen
+  - ~~MVP-ize the MovieDetails screen~~
+  - ~~Espresso tests for MovieDetails screen~~
   - Revisit the tablet layout, and specifically the configuration changes from two-pane mode to single-pane mode
-  - Switch from GridLayout to RecyclerView for the posters grid
-  - Change the database code from pure SQL to some framework (GreenDAO?) and get rid of ```ContentResolvers```
-
+  - ~~Switch from GridLayout to RecyclerView for the posters grid~~
+  - ~~Change the database code from pure SQL to some framework (cupboard) and get rid of ```ContentResolvers```~~
+  - ~~Introduce rxAndroid~~
 
 
 
