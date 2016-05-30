@@ -1,5 +1,8 @@
 package app.we.go.movies.common;
 
+import app.we.go.movies.R;
+import app.we.go.movies.remote.json.TMDBError;
+
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
@@ -23,4 +26,18 @@ public abstract class AbstractPresenter<V extends BaseView> implements  BasePres
         return boundView;
     }
 
+    protected void onCallError(String logMessage, int resourceId, TMDBError error) {
+        if (getBoundView() != null) {
+            getBoundView().showError(logMessage +
+                    ": " + error.getStatusCode() + " - " + error.getStatusMessage() , resourceId, null);
+        }
+    }
+
+
+
+    protected void onCallFail(String logMessage, int resourceId, Throwable t) {
+        if (getBoundView() != null) {
+            getBoundView().showError(logMessage, R.string.error_network, t);
+        }
+    }
 }

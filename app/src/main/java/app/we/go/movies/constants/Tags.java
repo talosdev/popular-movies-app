@@ -13,4 +13,5 @@ public class Tags {
     public static final String LIFECYCLE =  "T_LIFECYCLE";
     public static final String TEST = "T_TEST";
     public static final String UI = "T_UI";
+    public static final String GEN = "T_GEN";
 }

@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import app.we.go.movies.R;
+import app.we.go.movies.dependency.MockServiceModule;
+import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
-import app.we.go.movies.remote.MockTMDBServiceSync;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
 
@@ -23,10 +23,11 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class VideosPresenterTest {
+public class VideosPresenterTest extends BasePresenterTest {
 
     @Mock
     MovieDetailsContract.VideosView view;
+
     @Mock
     URLBuilder urlBuilder;
 
@@ -46,7 +47,7 @@ public class VideosPresenterTest {
         when(urlBuilder.buildYoutubeUri(VIDEO_KEY)).thenReturn(uri);
 
 
-        TMDBService service = new MockTMDBServiceSync();
+        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
         presenter = new MovieVideosPresenter(service, urlBuilder);
         presenter.bindView(view);
@@ -66,21 +67,17 @@ public class VideosPresenterTest {
     }
 
     @Test
-    public void testLoadReviewsWithWrongData() throws Exception {
+    public void testLoadVideosWithWrongData() throws Exception {
         presenter.loadMovieVideos(DummyData.INEXISTENT_MOVIE_ID);
 
-        verify(view).displayError(R.string.error_network);
-        verifyNoMoreInteractions(view);
+        verifyError(view);
     }
 
     @Test
     public void testLoadInfoWithServerError() throws Exception {
-
         presenter.loadMovieVideos(MOVIE_ID_CAUSES_SERVER_ERROR);
 
-        verify(view).displayError(R.string.error_network);
-        verifyNoMoreInteractions(view);
-
+        verifyFail(view);
     }
 
     @Test

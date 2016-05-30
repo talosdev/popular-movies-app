@@ -1,7 +1,11 @@
 package app.we.go.movies.movielist;
 
+import java.util.List;
+
 import app.we.go.movies.common.BasePresenter;
 import app.we.go.movies.common.BaseView;
+import app.we.go.movies.data.SortByCriterion;
+import app.we.go.movies.remote.json.Movie;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -11,12 +15,13 @@ public interface MovieListContract {
 
     interface View extends BaseView {
 
-        void showMovieDetails(String movieId);
-
+        void showMovieList(List<Movie> movies);
+        void navigateToMovieDetails(Movie movie);
     }
 
     interface Presenter extends BasePresenter<View> {
 
-        void openMovieDetails(String movieId);
+        void loadMovies(SortByCriterion sortBy);
+        void openMovieDetails(Movie movie);
     }
 }

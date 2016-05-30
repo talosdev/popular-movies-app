@@ -1,6 +1,4 @@
-package app.we.go.movies.moviedetails;
-
-import app.we.go.movies.moviedetails.dependency.MovieDetailsComponent;
+package app.we.go.movies.moviedetails.dependency;
 
 /**
  * Interface that should be implemented by the class that creates and holds a copy
@@ -8,6 +6,7 @@ import app.we.go.movies.moviedetails.dependency.MovieDetailsComponent;
  *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
+
 public interface HasMovieDetailsComponent {
     MovieDetailsComponent getComponent();
 }

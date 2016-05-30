@@ -21,13 +21,12 @@ public class BaseMovieDetailsActivityTest {
 
 
     @Before
-    public void intentWithStubbedNoteId() {
+    public void launchActivity() {
         // Lazily start the Activity from the ActivityTestRule this time to inject the start Intent
         Intent intent = MovieDetailsActivity.newIntent(
                 InstrumentationRegistry.getInstrumentation().getTargetContext(),
                 DummyData.MOVIE_ID, DummyData.MOVIE_POSTER_PATH);
         testRule.launchActivity(intent);
-
     }
 
     @After

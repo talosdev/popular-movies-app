@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class FavoriteMovieDAOTest {
+public abstract class FavoriteMovieDAOTest {
     protected static final String TEST_DB = CupboardSQLiteOpenHelper.DATABASE_NAME + ".test";
     protected static final String TABLE_NAME = FavoriteMovie.class.getSimpleName();
     private static final String SECOND_POSTER_PATH = "second/poster/path";

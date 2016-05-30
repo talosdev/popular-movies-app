@@ -22,7 +22,7 @@ public class URLBuilder {
     private static final int[] BACKDROP_RESOLUTIONS = new int[]{300, 780, 1280};
 
     private static final int[] POSTER_RESOLUTIONS = new int[]{92, 154, 185, 342, 500, 780};
-    private static final int MINIMUM_VOTES = 500;
+    private static final String MINIMUM_VOTES = "500";
 
     @Inject
     public URLBuilder() {

@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.common.BaseActivity;
+import app.we.go.movies.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.dependency.MovieDetailsComponent;
 import app.we.go.movies.moviedetails.dependency.MovieDetailsModule;
 import butterknife.Bind;
@@ -25,7 +26,7 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
     Toolbar toolbar;
 
 
-    private MovieDetailsComponent movieDetailsModule;
+    private MovieDetailsComponent movieDetailsComponent;
 
 
     @DebugLog
@@ -36,6 +37,7 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
         setContentView(R.layout.activity_movie_detail);
 
         ButterKnife.bind(this);
+        MovieApplication.get(this).getComponent().inject(this);
 
         setSupportActionBar(toolbar);
 
@@ -51,7 +53,7 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
             getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame, fragment).commit();
         }
 
-        movieDetailsModule = MovieApplication.get(this).getComponent().
+        movieDetailsComponent = MovieApplication.get(this).getComponent().
                 plus(new MovieDetailsModule(this, movieId));
     }
 
@@ -106,8 +108,7 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
 
     @Override
     public MovieDetailsComponent getComponent() {
-        return movieDetailsModule;
+        return movieDetailsComponent;
     }
-
 
 }

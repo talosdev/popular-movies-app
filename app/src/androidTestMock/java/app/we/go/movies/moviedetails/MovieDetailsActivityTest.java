@@ -1,5 +1,7 @@
 package app.we.go.movies.moviedetails;
 
+import android.test.UiThreadTest;
+
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -16,7 +18,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static app.we.go.movies.util.Matchers.withDrawable;
+import static app.we.go.movies.matchers.Matchers.withDrawable;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -28,9 +30,10 @@ public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
 
 
 
+
     @Test
     public void testDetailsAreDisplayed() throws Exception {
-
+//Thread.sleep(2000);
         onView(withId(R.id.movieTitle)).check(matches(withText(DummyData.MOVIE_TITLE)));
 
         onView(withId(R.id.synopsis_title)).check(matches(isDisplayed()));
@@ -89,6 +92,7 @@ public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
 
 
     @Test
+    @UiThreadTest
     public void testFavoriteButton() throws Exception {
         onView(withId(R.id.menu_favorite)).
                 check(matches(withDrawable(R.drawable.ic_favorite_border_blue_24dp)));

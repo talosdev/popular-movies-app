@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import app.we.go.movies.TestData;
-import app.we.go.movies.TestUtils;
+import app.we.go.movies.JsonUtils;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.remote.json.MovieJSONParser;
@@ -42,23 +42,23 @@ public class MovieJSONParserTest {
  //   @Test
     public void testParseMovieList() throws Exception {
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("movie-list.json");
-        String s = TestUtils.convertStreamToString(resourceAsStream);
+        String s = JsonUtils.convertStreamToString(resourceAsStream);
 
         MovieList movieList = parser.parseMovieList(s);
 
         assertNotNull(movieList);
-        assertEquals(1, movieList.page);
-        assertEquals(12520, movieList.totalPages);
-        assertEquals(250384, movieList.totalResults);
-        assertEquals(20, movieList.movies.size());
+        assertEquals(1, movieList.getPage());
+        assertEquals(12520, movieList.getTotalPages());
+        assertEquals(250384, movieList.getTotalResults());
+        assertEquals(20, movieList.getMovies().size());
 
         // Verify all fields of the first movie
-        Movie firstMovie = movieList.movies.get(0);
+        Movie firstMovie = movieList.getMovies().get(0);
         verifyMovie(firstMovie);
 
         // Verify some fields from the other movies
-        assertEquals("Jurassic World", movieList.movies.get(1).getTitle());
-        assertEquals(1162, movieList.movies.get(19).getVoteCount());
+        assertEquals("Jurassic World", movieList.getMovies().get(1).getTitle());
+        assertEquals(1162, movieList.getMovies().get(19).getVoteCount());
 
     }
 
@@ -71,9 +71,9 @@ public class MovieJSONParserTest {
         assertThat(movie.getReleaseDate()).isInSameDayAs(sdf.parse(TestData.MOVIE_RELEASE_DATE_STR));
 
         assertEquals(206647, movie.getId());
-        assertEquals(6.7f, movie.getVoteAverage(), TestUtils.EPSILON);
+        assertEquals(6.7f, movie.getVoteAverage(), JsonUtils.EPSILON);
         assertEquals(453, movie.getVoteCount());
-        assertEquals(57.231904f, movie.getPopularity(), TestUtils.EPSILON);
+        assertEquals(57.231904f, movie.getPopularity(), JsonUtils.EPSILON);
         assertEquals("/1n9D32o30XOHMdMWuIT4AaA5ruI.jpg", movie.getPosterPath());
         assertEquals("/wVTYlkKPKrljJfugXN7UlLNjtuJ.jpg", movie.getBackdropPath());
         assertEquals(TestData.MOVIE_OVERVIEW, movie.getOverview());

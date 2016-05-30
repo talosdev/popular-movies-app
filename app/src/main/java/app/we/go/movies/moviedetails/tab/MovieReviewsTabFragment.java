@@ -1,7 +1,7 @@
 package app.we.go.movies.moviedetails.tab;
 
 import android.os.Bundle;
-import android.support.annotation.StringRes;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import app.we.go.movies.R;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.moviedetails.HasMovieDetailsComponent;
+import app.we.go.movies.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
 import app.we.go.movies.remote.json.Review;
 import butterknife.Bind;
@@ -84,7 +84,6 @@ public class MovieReviewsTabFragment extends Fragment implements MovieDetailsCon
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         presenter.loadMovieReviews(getArguments().getLong(Args.ARG_MOVIE_ID));
     }
 
@@ -98,8 +97,16 @@ public class MovieReviewsTabFragment extends Fragment implements MovieDetailsCon
         adapter.notifyDataSetChanged();
     }
 
+
     @Override
-    public void displayError(@StringRes int errorMessage) {
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
         // Do nothing, do not display the error message, just leave the empty list message
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unbindView();
     }
 }

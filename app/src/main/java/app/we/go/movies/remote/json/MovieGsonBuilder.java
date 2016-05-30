@@ -6,13 +6,14 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import app.we.go.movies.constants.TMDB;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import app.we.go.movies.constants.TMDB;
 
 /**
  * Custom GsonBuilder that uses the date format defined in {@link TMDB}

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -16,15 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 import app.we.go.movies.R;
+import app.we.go.movies.common.BaseView;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
+import app.we.go.movies.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.moviedetails.tab.MovieDetailsPagerAdapter;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.util.LOG;
@@ -142,6 +142,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         pager.setOffscreenPageLimit(2);
         pager.setAdapter(pagerAdapter);
 
+
         imageView.forceLayout();
     }
 
@@ -162,12 +163,9 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     }
 
     @Override
-    public void displayError(@StringRes int errorResource) {
-        Toast.makeText(context, errorResource, Toast.LENGTH_LONG);
-    }
-
-    @Override
     public void displayTitle(String title) {
+        LOG.d(Tags.REMOTE, "Got movie title \'%s\' and will display it", title);
+
         titleView.setText(title);
     }
 
@@ -224,4 +222,14 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     }
 
 
+    @Override
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
+        BaseView.Helper.showError(context, logMessage, resourceId, t);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unbindView();
+    }
 }

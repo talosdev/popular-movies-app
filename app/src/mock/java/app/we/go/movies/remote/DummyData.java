@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.remote.json.MovieList;
 import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.Video;
@@ -91,6 +92,11 @@ public class DummyData {
             "Trailer"
     };
 
+    public static MovieList MOVIE_LIST_POPULAR_1 = new MovieList();
+    public static MovieList MOVIE_LIST_POPULAR_2 = new MovieList();
+    public static MovieList MOVIE_LIST_VOTES = new MovieList();
+    public static MovieList MOVIE_LIST_FAVORITES = new MovieList();
+
 
     static {
         DUMMY_MOVIE = new Movie();
@@ -138,7 +144,49 @@ public class DummyData {
         }
 
         REVIEWS.setReviews(reviews);
+
+        //
+        List<Movie> popularMovies1 = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            popularMovies1.add(createMovie("POPULAR", i, 1000));
+        }
+        MOVIE_LIST_POPULAR_1.setPage(1);
+        MOVIE_LIST_POPULAR_1.setMovies(popularMovies1);
+
+        List<Movie> popularMovies2 = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            popularMovies2.add(createMovie("POPULAR", 20+i, 1000));
+        }
+        MOVIE_LIST_POPULAR_2.setPage(2);
+        MOVIE_LIST_POPULAR_2.setMovies(popularMovies2);
+
+        List<Movie> votedMovies = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            votedMovies.add(createMovie("VOTED", i, 2000));
+        }
+        MOVIE_LIST_VOTES.setPage(1);
+        MOVIE_LIST_VOTES.setMovies(votedMovies);
+
+
+        List<Movie> favoriteMovies = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            favoriteMovies.add(createMovie("FAVORITE", i, 3000));
+        }
+        MOVIE_LIST_FAVORITES = new MovieList();
+        MOVIE_LIST_FAVORITES.setPage(1);
+        MOVIE_LIST_FAVORITES.setMovies(favoriteMovies);
+
+
+
     }
 
+
+    private static Movie createMovie(String prefix, int index, int offset) {
+        Movie m = new Movie();
+        m.setId(offset+index);
+        m.setTitle(prefix + "_" + index);
+        m.setOverview("Overview for movie " + prefix + "_" + index);
+        return m;
+    }
 
 }

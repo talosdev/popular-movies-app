@@ -8,9 +8,10 @@ import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.remote.json.ReviewList;
 import app.we.go.movies.remote.json.TMDBError;
-import retrofit2.Call;
-import retrofit2.Callback;
+import app.we.go.movies.util.RxUtils;
 import retrofit2.Response;
+import rx.Observer;
+import rx.Subscription;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -21,6 +22,7 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
     private final TMDBService service;
 
     private List<Review> reviews;
+    private Subscription subscription;
 
 
     public MovieReviewsPresenter(TMDBService service) {
@@ -28,36 +30,46 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
     }
 
     @Override
+    public void unbindView() {
+        super.unbindView();
+        RxUtils.unsubscribe(subscription);
+    }
+
+    @Override
     public void loadMovieReviews(final long movieId) {
-        Call<ReviewList> call = service.getReviews(movieId);
-        call.enqueue(new Callback<ReviewList>() {
-            @Override
-            public void onResponse(Call<ReviewList> call, Response<ReviewList> response) {
-                if (response.isSuccess()) {
-                    if (getBoundView() != null) {
-                        reviews = response.body().getReviews();
-                        getBoundView().displayReviews(reviews);
-                    }
-                } else {
-                    // If we want to access the error:
-                    TMDBError error = service.parse(response.errorBody());
+
+        subscription = service.getReviews(movieId).
+                subscribe(
+                        new Observer<Response<ReviewList>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable t) {
+                                onCallFail("Network error in call to get reviews list",
+                                        R.string.error_generic,
+                                        t);
+                            }
+
+                            @Override
+                            public void onNext(Response<ReviewList> response) {
+                                if (response.isSuccessful()) {
+                                    reviews = response.body().getReviews();
+                                    getBoundView().displayReviews(reviews);
+                                } else {
+                                    // If we want to access the error:
+                                    TMDBError error = service.parse(response.errorBody());
 
 
-                    onError();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ReviewList> call, Throwable t) {
-                onError();
-            }
-
-        });
+                                    onCallError("The call to get the reviews list was unsuccessful",
+                                            R.string.error_generic,
+                                            error);
+                                }
+                            }
+                        }
+                );
     }
 
-    private void onError() {
-        if (getBoundView() != null) {
-            getBoundView().displayError(R.string.error_network);
-        }
-    }
 }

@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import javax.inject.Singleton;
 
 import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
 
@@ -32,11 +31,6 @@ public class ApplicationModule {
 
 
 
-    @Provides
-    @Singleton
-    public URLBuilder provideUrlBuilder() {
-        return new URLBuilder();
-    }
 
 
 

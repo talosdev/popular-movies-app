@@ -11,10 +11,13 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import app.we.go.movies.R;
+import app.we.go.movies.common.BaseView;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.moviedetails.HasMovieDetailsComponent;
+import app.we.go.movies.constants.Tags;
 import app.we.go.movies.moviedetails.MovieDetailsContract;
+import app.we.go.movies.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.remote.json.Movie;
+import app.we.go.movies.util.LOG;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
@@ -87,12 +90,16 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
         ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
 
         presenter.bindInfoView(this);
-        presenter.loadMovieInfo(getArguments().getLong(Args.ARG_MOVIE_ID));
+
+        long movieId = getArguments().getLong(Args.ARG_MOVIE_ID);
+        LOG.d(Tags.REMOTE, "Fetching movie details for: %d", movieId);
+        presenter.loadMovieInfo(movieId);
 
     }
 
     @Override
     public void displayInfo(Movie movie) {
+        LOG.d(Tags.REMOTE, "Got info details for movie %d, and will display them", movie.getId());
         descriptionView.setText(movie.getOverview());
 
         voteAverageView.setText(movie.getVoteAverage() + "");
@@ -102,5 +109,16 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     @Override
     public void displayFormattedDate(String date) {
         releaseDateView.setText(date);
+    }
+
+    @Override
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
+        BaseView.Helper.showError(getContext(), logMessage, resourceId, t);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unbindInfoView();
     }
 }

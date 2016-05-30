@@ -21,6 +21,7 @@ public class MovieApplication extends Application {
     @VisibleForTesting
     protected ApplicationComponent component;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -39,6 +40,7 @@ public class MovieApplication extends Application {
                 databaseModule(new DatabaseModule(this)).
 
                 build();
+
     }
 
     public ApplicationComponent getComponent() {
@@ -56,4 +58,6 @@ public class MovieApplication extends Application {
     public static MovieApplication get(Context context) {
         return (MovieApplication) context.getApplicationContext();
     }
+
+
 }

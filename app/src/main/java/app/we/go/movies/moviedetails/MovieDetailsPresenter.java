@@ -7,9 +7,12 @@ import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.FavoriteMovie;
 import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.json.Movie;
-import retrofit2.Call;
-import retrofit2.Callback;
+import app.we.go.movies.remote.json.TMDBError;
+import app.we.go.movies.util.RxUtils;
 import retrofit2.Response;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -25,6 +28,8 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
     MovieDetailsContract.InfoView infoView;
 
+    private Subscription subscription;
+
 
     public MovieDetailsPresenter(TMDBService service,
                                  SharedPreferencesHelper sharedPrefsHelper,
@@ -37,12 +42,14 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
     @Override
     public void bindInfoView(MovieDetailsContract.InfoView infoView) {
         this.infoView = infoView;
+        RxUtils.unsubscribe(subscription);
     }
 
 
     @Override
     public void unbindInfoView() {
         this.infoView = null;
+        RxUtils.unsubscribe(subscription);
     }
 
 
@@ -50,6 +57,7 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
     public void unbindAllViews() {
         unbindView();
         unbindInfoView();
+        RxUtils.unsubscribe(subscription);
     }
 
     @Override
@@ -60,41 +68,46 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
     @Override
     public void loadMovieInfo(long movieId) {
-        Call<Movie> call = service.getDetails(movieId);
-       // EspressoIdlingResource.increment(); // App is busy until further notice
+        Observable<Response<Movie>> details = service.getDetails(movieId);
 
-        call.enqueue(new Callback<Movie>() {
-            @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
-                if (response.isSuccess()) {
-                    Movie movie = response.body();
-                    if (getInfoView() != null) {
-                        getInfoView().displayInfo(movie);
+        subscription = details.
+                subscribe(
+                        new Observer<Response<Movie>>() {
+                            @Override
+                            public void onCompleted() {
 
-                        getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
+                            }
 
-                    }
-                    if (getBoundView() != null) {
-                        getBoundView().displayTitle(movie.getTitle());
-                        getBoundView().displayImage(movie.getBackdropPath());
-                    }
-                } else {
-                    onError();
-                }
-            }
+                            @Override
+                            public void onError(Throwable t) {
+                                onCallFail("Network error getting the movie details",
+                                        R.string.error_network,
+                                        t);
+                            }
 
-            @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
-                onError();
-            }
-        });
+                            @Override
+                            public void onNext(Response<Movie> response) {
+                                if (response.isSuccessful()) {
+                                    Movie movie = response.body();
 
-    }
+                                    if (movie != null) {
+                                        getInfoView().displayInfo(movie);
+                                        getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
 
-    private void onError() {
-        if (getBoundView() != null) {
-            getBoundView().displayError(R.string.error_network);
-        }
+                                        getBoundView().displayTitle(movie.getTitle());
+                                        getBoundView().displayImage(movie.getBackdropPath());
+                                    }
+                                } else {
+                                    TMDBError error = service.parse(response.errorBody());
+                                    onCallError("The call to get the movie details was not successful",
+                                            R.string.error_generic, error);
+                                }
+                            }
+                        }
+
+                );
+
+
     }
 
 
@@ -106,7 +119,6 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
             getBoundView().toggleFavorite(isFavorite);
         }
     }
-
 
 
     @Override
@@ -125,7 +137,6 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
         }
 
     }
-
 
 
 }

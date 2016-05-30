@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-
-    android:id="@+id/moviesGrid"
-    android:numColumns="auto_fit"
-    android:columnWidth="@dimen/poster_width_grid"
-    android:layout_gravity="center"
-    android:gravity="center_horizontal"
+    android:layout_height="match_parent"
     android:background="@color/color4"
-    />
+ >
+
+    <com.github.yasevich.endlessrecyclerview.EndlessRecyclerView
+
+    android:id="@+id/movie_recycler_view"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        >
+
+</com.github.yasevich.endlessrecyclerview.EndlessRecyclerView>
+
+
+</RelativeLayout>
 
 

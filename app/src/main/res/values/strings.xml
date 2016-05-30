@@ -16,4 +16,5 @@
     <string name="empty_videos">No videos found.</string>
     <string name="share_chooser_title">Share trailer`</string>
     <string name="error_network">There was an error contacting the server.</string>
+    <string name="error_generic">An error occured</string>
 </resources>

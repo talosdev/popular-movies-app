@@ -32,10 +32,6 @@
         </activity>
 
 
-        <provider
-            android:authorities="app.we.go.movies"
-            android:name=".provider.MoviesProvider"/>
-
     </application>
 
 </manifest>
