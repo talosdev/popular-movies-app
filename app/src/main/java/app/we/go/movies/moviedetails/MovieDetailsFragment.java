@@ -227,4 +227,9 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         BaseView.Helper.showError(context, logMessage, resourceId, t);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unbindView();
+    }
 }

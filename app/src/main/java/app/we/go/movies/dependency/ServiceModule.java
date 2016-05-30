@@ -17,9 +17,13 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.CallAdapter;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
+import rx.Observable.Transformer;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -41,7 +45,25 @@ public class ServiceModule {
     @Provides
     @Singleton
     public CallAdapter.Factory provideCallAdapterFactory() {
-        return RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
+        return RxJavaCallAdapterFactory.create();
+    }
+
+    @Provides
+    @Singleton
+    public Transformer<Response<?>, Response<?>> provideTransformer() {
+        Transformer<Response<?>, Response<?>> transformer = new Transformer<Response<?>, Response<?>>() {
+
+
+            @Override
+            public Observable<Response<?>> call(Observable<Response<?>> obs) {
+                return obs.
+                        subscribeOn(Schedulers.io()).
+                        observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+
+        return transformer;
+
     }
 
 
@@ -90,8 +112,11 @@ public class ServiceModule {
     @Provides
     @Singleton
     public TMDBService provideTMDBService(TMDBRetrofitService retrofitService,
-                                          TMDBErrorParser parser) {
-        return new TMDBServiceImpl(retrofitService, parser);
+                                          TMDBErrorParser parser,
+                                          Transformer<Response<?>, Response<?>>  transformer) {
+
+//        return MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(null);
+        return new TMDBServiceImpl(retrofitService, parser, transformer);
 
     }
 

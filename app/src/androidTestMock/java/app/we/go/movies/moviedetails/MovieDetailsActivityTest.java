@@ -1,20 +1,14 @@
 package app.we.go.movies.moviedetails;
 
-import android.support.test.espresso.Espresso;
-import android.support.test.espresso.IdlingResource;
 import android.test.UiThreadTest;
 
 import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import app.we.go.movies.R;
-import app.we.go.movies.constants.Tags;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.json.Review;
 import app.we.go.movies.remote.json.Video;
-import app.we.go.movies.util.LOG;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -35,27 +29,6 @@ import static org.hamcrest.Matchers.is;
 public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
 
 
-    private IdlingResource idlingResource;
-
-
-
-
-    @Before
-    public void setUpIdlingResource() {
-
-
-        idlingResource = testRule.getActivity().getIdlingResource();
-        LOG.d(Tags.TEST, "Registering Idling resource");
-
-        Espresso.registerIdlingResources(idlingResource);
-
-    }
-
-
-    @After
-    public void unregisterIntentServiceIdlingResource() {
-   //     Espresso.unregisterIdlingResources(idlingResource);
-    }
 
 
     @Test

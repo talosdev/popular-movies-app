@@ -56,10 +56,8 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
                             @Override
                             public void onNext(Response<ReviewList> response) {
                                 if (response.isSuccessful()) {
-                                    if (getBoundView() != null) {
-                                        reviews = response.body().getReviews();
-                                        getBoundView().displayReviews(reviews);
-                                    }
+                                    reviews = response.body().getReviews();
+                                    getBoundView().displayReviews(reviews);
                                 } else {
                                     // If we want to access the error:
                                     TMDBError error = service.parse(response.errorBody());
@@ -72,8 +70,6 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
                             }
                         }
                 );
-
     }
-
 
 }

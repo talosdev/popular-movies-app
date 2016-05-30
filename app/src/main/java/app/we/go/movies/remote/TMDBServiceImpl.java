@@ -1,5 +1,6 @@
 package app.we.go.movies.remote;
 
+
 import app.we.go.movies.data.SortByCriterion;
 import app.we.go.movies.remote.json.Movie;
 import app.we.go.movies.remote.json.MovieList;
@@ -9,12 +10,9 @@ import app.we.go.movies.remote.json.VideoList;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.Observable.Transformer;
 
 /**
- * TODO I don't like the fact that I am using .observeOn(AndroidSchedulers.mainThread()) here.
- * Maybe adapt the solutions described here?
- * http://appfoundry.be/blog/2015/09/14/mvprx/
  *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
@@ -27,26 +25,29 @@ public class TMDBServiceImpl implements TMDBService {
     private TMDBRetrofitService retrofitService;
 
     private TMDBErrorParser errorParser;
+    private Transformer transformer;
 
     public TMDBServiceImpl(TMDBRetrofitService retrofitService,
-                           TMDBErrorParser errorParser) {
+                           TMDBErrorParser errorParser,
+                           Transformer<Response<?>, Response<?>>  transformer) {
         this.retrofitService = retrofitService;
         this.errorParser = errorParser;
+        this.transformer = transformer;
     }
 
     @Override
     public Observable<Response<Movie>> getDetails(long movieId) {
-        return retrofitService.getDetails(movieId).observeOn(AndroidSchedulers.mainThread());
+        return retrofitService.getDetails(movieId).compose(transformer);
     }
 
     @Override
     public Observable<Response<VideoList>> getVideos(long movieId) {
-        return retrofitService.getVideos(movieId).observeOn(AndroidSchedulers.mainThread());
+        return retrofitService.getVideos(movieId).compose(transformer);
     }
 
     @Override
     public Observable<Response<ReviewList>> getReviews(long movieId) {
-        return retrofitService.getReviews(movieId).observeOn(AndroidSchedulers.mainThread());
+        return retrofitService.getReviews(movieId).compose(transformer);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class TMDBServiceImpl implements TMDBService {
         return retrofitService.getMovies(
                 convertSortByCriterionToStringParameter(sortBy),
                 page,
-                MINIMUM_VOTES).observeOn(AndroidSchedulers.mainThread());
+                MINIMUM_VOTES).compose(transformer);
     }
 
     @Override

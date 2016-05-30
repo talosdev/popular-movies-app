@@ -23,6 +23,7 @@ import retrofit2.http.Path;
 import retrofit2.mock.BehaviorDelegate;
 import retrofit2.mock.Calls;
 import rx.Observable;
+import rx.Observable.Transformer;
 
 
 /**
@@ -35,9 +36,13 @@ public class FakeTMDBService implements TMDBService {
     private final ResponseBody errorBody;
 
     private final BehaviorDelegate<TMDBService> delegate;
+    private Transformer transformer;
 
-    public FakeTMDBService(BehaviorDelegate<TMDBService> delegate) {
+    public FakeTMDBService(BehaviorDelegate<TMDBService> delegate,
+                           Transformer<Response<?>, Response<?>> transformer) {
         this.delegate = delegate;
+        this.transformer = transformer;
+
 
         // Using the Dagger module to get the same Gson instance as in production code
         // This is not absolutely necessary though...
@@ -56,12 +61,17 @@ public class FakeTMDBService implements TMDBService {
     @Override
     public Observable<Response<Movie>> getDetails(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return delegate.returningResponse(DummyData.DUMMY_MOVIE).getDetails(movieId);
+            return delegate.
+                    returningResponse(DummyData.DUMMY_MOVIE).
+                    getDetails(movieId).
+                    compose(transformer);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
             // returningResponse always returns a successful response, so we need to use
             // returning here
-            return delegate.returning(Calls.response(Response.error(404, errorBody))).getDetails(movieId);
-
+            return delegate.
+                    returning(Calls.response(Response.error(404, errorBody))).
+                    getDetails(movieId).
+                    compose(transformer);
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
@@ -71,9 +81,15 @@ public class FakeTMDBService implements TMDBService {
     @Override
     public Observable<Response<VideoList>> getVideos(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return delegate.returningResponse(DummyData.VIDEOS).getVideos(movieId);
+            return delegate.
+                    returningResponse(DummyData.VIDEOS).
+                    getVideos(movieId).
+                    compose(transformer);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-            return delegate.returning(Calls.response(Response.error(404, errorBody))).getVideos(movieId);
+            return delegate.
+                    returning(Calls.response(Response.error(404, errorBody))).
+                    getVideos(movieId).
+                    compose(transformer);
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
@@ -85,9 +101,15 @@ public class FakeTMDBService implements TMDBService {
     @Override
     public Observable<Response<ReviewList>> getReviews(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID) {
-            return delegate.returningResponse(DummyData.REVIEWS).getReviews(movieId);
+            return delegate.
+                    returningResponse(DummyData.REVIEWS).
+                    getReviews(movieId)
+                    .compose(transformer);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
-            return delegate.returning(Calls.response(Response.error(404, errorBody))).getReviews(movieId);
+            return delegate.
+                    returning(Calls.response(Response.error(404, errorBody))).
+                    getReviews(movieId).
+                    compose(transformer);
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
@@ -99,19 +121,30 @@ public class FakeTMDBService implements TMDBService {
         switch (sortBy) {
             case POPULARITY:
                 if (page == 1) {
-                    return delegate.returningResponse(DummyData.MOVIE_LIST_POPULAR_1).getMovies(sortBy, page);
+                    return delegate.
+                            returningResponse(DummyData.MOVIE_LIST_POPULAR_1).
+                            getMovies(sortBy, page).
+                            compose(transformer);
                 } else if (page == 2) {
-                    return delegate.returningResponse(DummyData.MOVIE_LIST_POPULAR_2).getMovies(sortBy, page);
+                    return delegate.
+                            returningResponse(DummyData.MOVIE_LIST_POPULAR_2).
+                            getMovies(sortBy, page).
+                            compose(transformer);
                 }
             case VOTE:
-                return delegate.returningResponse(DummyData.MOVIE_LIST_VOTES).getMovies(sortBy, page);
+                return delegate.
+                        returningResponse(DummyData.MOVIE_LIST_VOTES).
+                        getMovies(sortBy, page).
+                        compose(transformer);
             case FAVORITES:
-                return delegate.returningResponse(DummyData.MOVIE_LIST_FAVORITES).getMovies(sortBy, page);
-            default:
-                return null;
+                return delegate.
+                        returningResponse(DummyData.MOVIE_LIST_FAVORITES).
+                        getMovies(sortBy, page).
+                        compose(transformer);
         }
 
 
+        return null;
     }
 
     @Override

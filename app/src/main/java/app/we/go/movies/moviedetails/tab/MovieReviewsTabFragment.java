@@ -84,7 +84,6 @@ public class MovieReviewsTabFragment extends Fragment implements MovieDetailsCon
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         presenter.loadMovieReviews(getArguments().getLong(Args.ARG_MOVIE_ID));
     }
 
@@ -103,5 +102,11 @@ public class MovieReviewsTabFragment extends Fragment implements MovieDetailsCon
     public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
         // Do nothing, do not display the error message, just leave the empty list message
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unbindView();
     }
 }

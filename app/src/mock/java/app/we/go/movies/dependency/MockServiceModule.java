@@ -1,11 +1,6 @@
 package app.we.go.movies.dependency;
 
-import android.os.Handler;
-import android.os.Looper;
-
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import android.os.AsyncTask;
 
 import javax.inject.Singleton;
 
@@ -13,17 +8,22 @@ import app.we.go.movies.remote.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.mock.BehaviorDelegate;
 import retrofit2.mock.MockRetrofit;
 import retrofit2.mock.NetworkBehavior;
+import rx.Observable;
+import rx.Observable.Transformer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 @Module
-public class MockServiceModule  {
+public class MockServiceModule {
 
     @Provides
     @Singleton
@@ -32,63 +32,72 @@ public class MockServiceModule  {
     }
 
 
-    @Provides
-    @Singleton
-    public ThreadPoolExecutor provideThreadPoolExecutor() {
-
-        final Handler handler = new Handler(Looper.getMainLooper());
-
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 5, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(1)) {
-            @Override
-            public void execute(Runnable command) {
-//                handler.post(command);
-                command.run();
-            }
-        };
-        return executor;
-    }
-
-
-
     /**
      * https://github.com/square/retrofit/issues/1081
-     *
+     * <p>
      * For IdlingResource to work OK we need to do all this....
+     *
      * @param executor
      * @return
      */
     @Provides
     @Singleton
-    public TMDBService provideServiceModule(ThreadPoolExecutor executor) {
+    public TMDBService provideServiceModule() {
 
-        return FakeTmdbServiceAsyncFactory.getInstance(executor);
+        return FakeTmdbServiceAsyncFactory.getInstance(false);
     }
-
 
 
     public static class FakeTmdbServiceAsyncFactory {
 
         private static FakeTMDBService INSTANCE;
 
-        public static TMDBService getInstance(ThreadPoolExecutor executor) {
+        private static Transformer<Response<?>, Response<?>> syncTransformer =
+                new Transformer<Response<?>, Response<?>>() {
+                    @Override
+                    public Observable<Response<?>> call(Observable<Response<?>> responseObservable) {
+                        return responseObservable;
+                    }
+                };
+
+        private static Transformer<Response<?>, Response<?>> asyncTransformer =
+                new Transformer<Response<?>, Response<?>>() {
+                    @Override
+                    public Observable<Response<?>> call(Observable<Response<?>> responseObservable) {
+                        return responseObservable.
+                                observeOn(AndroidSchedulers.mainThread()).
+                                subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR));
+                    }
+                };
+
+
+        /**
+         * This factory method can offer two flavors of the FakeTMDBService: a sync one
+         * to be used in JUnit tests, with no dependencies on the Android framework,
+         * and an async one, to be used in instrumentation tests.
+         * @param sync
+         * @return
+         */
+        public static TMDBService getInstance(boolean sync) {
             if (INSTANCE == null) {
                 Retrofit retrofit = new Retrofit.Builder().
-                   //     callbackExecutor(executor).
                         addCallAdapterFactory(RxJavaCallAdapterFactory.create()).
                         baseUrl("http://example.com").build();
 
                 NetworkBehavior networkBehavior = NetworkBehavior.create();
-            //    networkBehavior.setDelay(30, TimeUnit.SECONDS);
+                //    networkBehavior.setDelay(30, TimeUnit.SECONDS);
                 MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit)
                         .networkBehavior(networkBehavior).build();
 
                 final BehaviorDelegate<TMDBService> delegate = mockRetrofit.create(TMDBService.class);
 
-                INSTANCE = new FakeTMDBService(delegate);
+                INSTANCE = new FakeTMDBService(delegate, sync ? syncTransformer : asyncTransformer);
 
             }
             return INSTANCE;
         }
+
+
 
     }
 }

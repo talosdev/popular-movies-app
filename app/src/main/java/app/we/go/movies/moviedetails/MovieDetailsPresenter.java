@@ -72,45 +72,40 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
         subscription = details.
                 subscribe(
-                new Observer<Response<Movie>>() {
-                    @Override
-                    public void onCompleted() {
+                        new Observer<Response<Movie>>() {
+                            @Override
+                            public void onCompleted() {
 
-                    }
+                            }
 
-                    @Override
-                    public void onError(Throwable t) {
-                        onCallFail("Network error getting the movie details",
-                                R.string.error_network,
-                                t);
-                    }
+                            @Override
+                            public void onError(Throwable t) {
+                                onCallFail("Network error getting the movie details",
+                                        R.string.error_network,
+                                        t);
+                            }
 
-                    @Override
-                    public void onNext(Response<Movie> response) {
-                        if (response.isSuccessful()) {
-                            Movie movie = response.body();
+                            @Override
+                            public void onNext(Response<Movie> response) {
+                                if (response.isSuccessful()) {
+                                    Movie movie = response.body();
 
-                            if (movie != null) {
-                                if (getInfoView() != null) {
-                                    getInfoView().displayInfo(movie);
+                                    if (movie != null) {
+                                        getInfoView().displayInfo(movie);
+                                        getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
 
-                                    getInfoView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
-
-                                }
-                                if (getBoundView() != null) {
-                                    getBoundView().displayTitle(movie.getTitle());
-                                    getBoundView().displayImage(movie.getBackdropPath());
+                                        getBoundView().displayTitle(movie.getTitle());
+                                        getBoundView().displayImage(movie.getBackdropPath());
+                                    }
+                                } else {
+                                    TMDBError error = service.parse(response.errorBody());
+                                    onCallError("The call to get the movie details was not successful",
+                                            R.string.error_generic, error);
                                 }
                             }
-                        } else {
-                            TMDBError error = service.parse(response.errorBody());
-                            onCallError("The call to get the movie details was not successful",
-                                    R.string.error_generic, error);
                         }
-                    }
-                }
 
-        );
+                );
 
 
     }

@@ -34,6 +34,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Tests the Service by contacting the real server.
  * Basically an integration test, as it also tests the json parsing part.
  * <p/>
+ * It tests the {@link TMDBRetrofitService}, so the calls are by default synchronous, there's no
+ * need to do anything else.
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class TMDBServiceTest {
@@ -51,8 +54,6 @@ public class TMDBServiceTest {
         ApplicationModule appModule = new ApplicationModule();
         Retrofit retrofit = module.provideRetrofit(appModule.provideGson(),
                 module.provideOkHttpClient(new TMDBApiKeyInterceptor()),
-                // important, we use the default call adapter factory,
-                // and not the io scheduler, because we want this to be sync.
                 RxJavaCallAdapterFactory.create());
 
 

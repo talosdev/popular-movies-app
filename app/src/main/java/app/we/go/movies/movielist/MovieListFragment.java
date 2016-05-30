@@ -233,6 +233,7 @@ public class MovieListFragment extends Fragment
     @Override
     public void showMovieList(List<Movie> movies) {
         isLoading = false;
+
         adapter.addMovies(movies);
     }
 
@@ -245,6 +246,10 @@ public class MovieListFragment extends Fragment
     @Override
     public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
         LOG.e(Tags.REMOTE, logMessage, t);
+        LOG.e(Tags.REMOTE, "null: " + (t==null));
+        LOG.e(Tags.REMOTE, t.getClass().getSimpleName());
+        LOG.e(Tags.REMOTE, t.getMessage());
+
         Toast.makeText(context, resourceId, Toast.LENGTH_SHORT).show();
     }
 

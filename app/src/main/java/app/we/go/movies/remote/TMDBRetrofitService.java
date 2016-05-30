@@ -11,6 +11,9 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 /**
+ * Note that the {@link Observable}s returned by this method are the ones constructed by
+ * retrofit, unmodified, so will be executed synchronously by default.
+ *
  * Created by apapad on 8/03/16.
  */
 public interface TMDBRetrofitService {

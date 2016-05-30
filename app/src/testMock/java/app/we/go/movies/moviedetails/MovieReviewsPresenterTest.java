@@ -31,7 +31,7 @@ public class MovieReviewsPresenterTest extends BasePresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(null);
+        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
         presenter = new MovieReviewsPresenter(service);
         presenter.bindView(view);

@@ -32,7 +32,7 @@ public class MovieListPresenterTest {
 
         MockitoAnnotations.initMocks(this);
 
-        service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(null);
+        service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
         presenter = new MovieListPresenter(service);
         presenter.bindView(view);

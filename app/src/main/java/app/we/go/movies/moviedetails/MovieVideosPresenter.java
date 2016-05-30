@@ -62,7 +62,6 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
 
                             @Override
                             public void onNext(Response<VideoList> response) {
-                                if (getBoundView() != null) {
                                     if (response.isSuccessful()) {
                                         videos = response.body().getVideos();
                                         getBoundView().displayVideos(videos);
@@ -73,7 +72,6 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
                                                 R.string.error_generic,
                                                 error);
                                     }
-                                }
                             }
                         }
                 );

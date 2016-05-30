@@ -58,7 +58,7 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
         // setup SharedPreferences mock
         when(sharedPreferencesHelper.formatDate(DummyData.MOVIE_RELEASE_DATE)).thenReturn(DummyData.MOVIE_RELEASE_DATE_STR);
 
-        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(null);
+        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
 
         presenter = new MovieDetailsPresenter(service,

@@ -115,4 +115,10 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
         BaseView.Helper.showError(getContext(), logMessage, resourceId, t);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.unbindInfoView();
+    }
 }

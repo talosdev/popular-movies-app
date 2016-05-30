@@ -71,7 +71,6 @@ public class MainActivityTest {
         onView(withRecyclerView(R.id.movie_recycler_view).atPosition(0)).
                 check(matches(withContentDescription(firstMovie.getTitle())));
 
-        Thread.sleep(5000);
         // Check that only 20 movies have been loaded, the RecyclerView should not
         // contain anything at position 20 and after that
         onView(withRecyclerView(R.id.movie_recycler_view).atPosition(20)).
@@ -81,7 +80,6 @@ public class MainActivityTest {
         // Scroll towards the last items of the first batch
         onView(withId(R.id.movie_recycler_view)).
                 perform(RecyclerViewActions.scrollToPosition(19));
-        Thread.sleep(5000);
 
         Movie m = DummyData.MOVIE_LIST_POPULAR_2.getMovies().get(0);
 
