@@ -15,7 +15,7 @@ public class MovieDetailsPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_TABS = 3;
     private final long movieId;
-    private Fragment[] tabFragments = new Fragment[NUM_TABS];
+    private final Fragment[] tabFragments = new Fragment[NUM_TABS];
     // TODO get from resources
     public static final String[] TAB_TITLES = new String[]{"INFO", "REVIEWS", "VIDEOS"};
 

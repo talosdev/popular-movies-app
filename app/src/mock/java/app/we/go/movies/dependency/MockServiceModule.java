@@ -54,7 +54,7 @@ public class MockServiceModule {
 
         private static FakeTMDBService INSTANCE;
 
-        private static Transformer<Response<?>, Response<?>> syncTransformer =
+        private static final Transformer<Response<?>, Response<?>> syncTransformer =
                 new Transformer<Response<?>, Response<?>>() {
                     @Override
                     public Observable<Response<?>> call(Observable<Response<?>> responseObservable) {
@@ -62,7 +62,7 @@ public class MockServiceModule {
                     }
                 };
 
-        private static Transformer<Response<?>, Response<?>> asyncTransformer =
+        private static final Transformer<Response<?>, Response<?>> asyncTransformer =
                 new Transformer<Response<?>, Response<?>>() {
                     @Override
                     public Observable<Response<?>> call(Observable<Response<?>> responseObservable) {

@@ -15,7 +15,7 @@ import app.we.go.movies.remote.DummyData;
  */
 public class BaseMovieDetailsActivityTest {
     @Rule
-    public ActivityTestRule<MovieDetailsActivity> testRule =
+    public final ActivityTestRule<MovieDetailsActivity> testRule =
             new ActivityTestRule<>(MovieDetailsActivity.class, true,
                     false);
 

@@ -12,7 +12,7 @@ public enum SortByCriterion   {
     /**
      * The index of the criterion, that must match the order in which it is displayed in the UI.
      */
-    private int index;
+    private final int index;
 
     SortByCriterion(int index) {
         this.index = index;

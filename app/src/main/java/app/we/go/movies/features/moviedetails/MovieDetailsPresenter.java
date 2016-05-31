@@ -19,9 +19,9 @@ import rx.Subscription;
  */
 public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContract.View> implements MovieDetailsContract.Presenter {
 
-    private TMDBService service;
-    private SharedPreferencesHelper sharedPrefsHelper;
-    private FavoriteMovieDAO favoriteMovieDAO;
+    private final TMDBService service;
+    private final SharedPreferencesHelper sharedPrefsHelper;
+    private final FavoriteMovieDAO favoriteMovieDAO;
 
     // Presenter holds the "favorite" state
     private boolean isFavorite;

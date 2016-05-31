@@ -17,7 +17,7 @@ import dagger.Provides;
 public class MovieListModule {
 
 
-    private Activity activity;
+    private final Activity activity;
 
 
     public MovieListModule(Activity activity) {

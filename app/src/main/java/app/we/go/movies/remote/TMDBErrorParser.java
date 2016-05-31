@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
  */
 public class TMDBErrorParser {
 
-    Retrofit retrofit;
+    final Retrofit retrofit;
     private final Converter<ResponseBody, TMDBError> converter;
 
 

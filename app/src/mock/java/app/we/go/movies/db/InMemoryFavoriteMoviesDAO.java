@@ -12,7 +12,7 @@ import app.we.go.movies.model.db.FavoriteMovie;
  */
 public class InMemoryFavoriteMoviesDAO implements FavoriteMovieDAO {
 
-    private Map<Long, FavoriteMovie> map =
+    private final Map<Long, FavoriteMovie> map =
             new HashMap<>();
 
 

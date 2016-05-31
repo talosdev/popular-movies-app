@@ -19,9 +19,9 @@ public class TMDBNonRxServiceImpl implements TMDBNonRxService {
     public static final int MINIMUM_VOTES = 500;
 
 
-    private TMDBRetrofitNonRxService retrofitService;
+    private final TMDBRetrofitNonRxService retrofitService;
 
-    private TMDBErrorParser errorParser;
+    private final TMDBErrorParser errorParser;
 
     public TMDBNonRxServiceImpl(TMDBRetrofitNonRxService retrofitService,
                                 TMDBErrorParser errorParser) {

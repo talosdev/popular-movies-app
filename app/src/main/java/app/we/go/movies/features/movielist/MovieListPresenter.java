@@ -21,7 +21,7 @@ import rx.Subscription;
 public class MovieListPresenter extends AbstractPresenter<MovieListContract.View>
         implements MovieListContract.Presenter {
 
-    private TMDBService service;
+    private final TMDBService service;
 
     private int currentPage = 1;
     private Subscription subscription;
@@ -30,7 +30,7 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
         this.service = service;
     }
 
-    private List<Movie> cachedMovies = new ArrayList<>();
+    private final List<Movie> cachedMovies = new ArrayList<>();
 
     @Override
     public void unbindView() {

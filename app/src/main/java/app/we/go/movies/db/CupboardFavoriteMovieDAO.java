@@ -14,7 +14,7 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 public class CupboardFavoriteMovieDAO implements FavoriteMovieDAO {
 
     private static final String COLUMN_MOVIE_ID = "movieId";
-    private SQLiteDatabase db;
+    private final SQLiteDatabase db;
 
     public CupboardFavoriteMovieDAO(SQLiteDatabase db) {
         this.db = db;

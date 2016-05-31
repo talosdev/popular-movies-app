@@ -30,7 +30,7 @@
     <string name="sort_by_popularity">Most popular movies</string>
     <string name="sort_by_vote">Best voted movies</string>
     <string name="favorites">Favorite movies</string>
-    <string name="pref_dateFormat_entry_a">yyyy-MM-dd (eg. 2016-12-25)</string>
+    <string name="pref_dateFormat_entry_a">yyyy–MM-dd (eg. 2016-12-25)</string>
     <string name="pref_dateFormat_entry_b">yyyy/MM/dd (eg. 2016/12/25)</string>
     <string name="pref_dateFormat_entry_c">yyyy-dd-MM (eg. 2016-25-12)</string>
     <string name="pref_dateFormat_entry_d">yyyy/dd/MM (eg. 2016/25/12)</string>

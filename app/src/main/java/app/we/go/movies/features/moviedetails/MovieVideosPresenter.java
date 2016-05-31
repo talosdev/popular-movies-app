@@ -22,7 +22,7 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
 
 
     private final TMDBService service;
-    private URLBuilder urlBuilder;
+    private final URLBuilder urlBuilder;
 
     private List<Video> videos;
     private Subscription subscription;

@@ -8,10 +8,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by apapad on 13/11/15.
  */
 public class URLBuilderTest {
-    String backdrop = "/a.jpg";
-    String BACKDROP_URL_300 = "http://image.tmdb.org/t/p/w300/a.jpg";
-    String BACKDROP_URL_780 = "http://image.tmdb.org/t/p/w780/a.jpg";
-    String BACKDROP_URL_1280 = "http://image.tmdb.org/t/p/w1280/a.jpg";
+    final String backdrop = "/a.jpg";
+    final String BACKDROP_URL_300 = "http://image.tmdb.org/t/p/w300/a.jpg";
+    final String BACKDROP_URL_780 = "http://image.tmdb.org/t/p/w780/a.jpg";
+    final String BACKDROP_URL_1280 = "http://image.tmdb.org/t/p/w1280/a.jpg";
 
     @Test
     public void testBackrdropURLs() throws Exception {

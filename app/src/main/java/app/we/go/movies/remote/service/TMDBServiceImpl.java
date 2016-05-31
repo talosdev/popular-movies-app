@@ -23,10 +23,10 @@ public class TMDBServiceImpl implements TMDBService {
     public static final int MINIMUM_VOTES = 500;
 
 
-    private TMDBRetrofitService retrofitService;
+    private final TMDBRetrofitService retrofitService;
 
-    private TMDBErrorParser errorParser;
-    private Transformer transformer;
+    private final TMDBErrorParser errorParser;
+    private final Transformer transformer;
 
     public TMDBServiceImpl(TMDBRetrofitService retrofitService,
                            TMDBErrorParser errorParser,

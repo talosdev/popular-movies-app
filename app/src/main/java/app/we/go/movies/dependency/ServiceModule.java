@@ -51,7 +51,8 @@ public class ServiceModule {
     @Provides
     @Singleton
     public Transformer<Response<?>, Response<?>> provideTransformer() {
-        Transformer<Response<?>, Response<?>> transformer = new Transformer<Response<?>, Response<?>>() {
+
+        return new Transformer<Response<?>, Response<?>>() {
 
 
             @Override
@@ -62,8 +63,6 @@ public class ServiceModule {
             }
         };
 
-        return transformer;
-
     }
 
 
@@ -73,14 +72,12 @@ public class ServiceModule {
                                     OkHttpClient okHttpClient,
                                     CallAdapter.Factory callAdapterFactory) {
 
-        Retrofit retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                 .baseUrl(TMDB.BASE_URL)
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
-
-        return retrofit;
 
     }
 

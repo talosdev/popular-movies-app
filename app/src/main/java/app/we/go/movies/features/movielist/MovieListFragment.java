@@ -272,7 +272,7 @@ public class MovieListFragment extends Fragment
      * when user selects a movie in the list.
      * Created by apapad on 28/01/16.
      */
-    public static interface MovieSelectedCallback {
+    public interface MovieSelectedCallback {
         void onMovieSelected(Movie movie);
     }
 }

@@ -24,8 +24,8 @@ import dagger.Provides;
 public class MovieDetailsModule {
 
 
-    private Activity activity;
-    private long movieId;
+    private final Activity activity;
+    private final long movieId;
 
 
     public MovieDetailsModule(Activity activity, long movieId) {

@@ -31,8 +31,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
     private final Context context;
     private final MovieClickListener eventClickListener;
 
-    private List<Movie> movies;
-    private URLBuilder urlBuilder;
+    private final List<Movie> movies;
+    private final URLBuilder urlBuilder;
 
     public MovieAdapter(Context context, MovieClickListener listener, URLBuilder urlBuilder) {
         movies = new ArrayList<>();

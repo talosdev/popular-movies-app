@@ -30,7 +30,7 @@ public class MovieGsonBuilder {
 
     public Gson create() {
         builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-            DateFormat df = new SimpleDateFormat(TMDB.DATE_FORMAT);
+            final DateFormat df = new SimpleDateFormat(TMDB.DATE_FORMAT);
 
             @Override
             public Date deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)

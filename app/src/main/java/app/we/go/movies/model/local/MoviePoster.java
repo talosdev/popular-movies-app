@@ -7,8 +7,8 @@ import java.io.Serializable;
  * Created by apapad on 26/11/15.
  */
 public class MoviePoster implements Serializable {
-    private long movieId;
-    private String posterPath;
+    private final long movieId;
+    private final String posterPath;
 
     public MoviePoster(long movieId, String posterPath) {
         this.movieId = movieId;

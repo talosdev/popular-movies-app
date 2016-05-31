@@ -36,7 +36,7 @@ public class FakeTMDBService implements TMDBService {
     private final ResponseBody errorBody;
 
     private final BehaviorDelegate<TMDBService> delegate;
-    private Transformer transformer;
+    private final Transformer transformer;
 
     public FakeTMDBService(BehaviorDelegate<TMDBService> delegate,
                            Transformer<Response<?>, Response<?>> transformer) {
