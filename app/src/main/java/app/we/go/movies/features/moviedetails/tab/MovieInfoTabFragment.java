@@ -1,5 +1,6 @@
 package app.we.go.movies.features.moviedetails.tab;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,8 +16,8 @@ import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.dependency.HasMovieDetailsComponent;
-import app.we.go.movies.mvp.BaseView;
 import app.we.go.movies.model.remote.Movie;
+import app.we.go.movies.mvp.BaseView;
 import app.we.go.movies.util.LOG;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,6 +43,8 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     @Inject
     MovieDetailsContract.Presenter presenter;
 
+    @Inject
+    Context context;
 
     public static MovieInfoTabFragment newInstance(long movieId) {
         MovieInfoTabFragment f = new MovieInfoTabFragment();
@@ -103,7 +106,10 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
         descriptionView.setText(movie.getOverview());
 
         voteAverageView.setText(movie.getVoteAverage() + "");
-        voteCountView.setText("(" + movie.getVoteCount() + " votes)");
+
+        voteCountView.setText(
+                String.format(context.getResources().getString(R.string.votes),
+                        movie.getVoteCount()));
     }
 
     @Override

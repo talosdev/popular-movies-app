@@ -23,12 +23,13 @@ public class VideoArrayAdapter extends ArrayAdapter {
     private final int rowLayout;
     private final List<Video> videos;
     private final VideoClickListener videoClickListener;
-
+    private final Context context;
 
 
     public VideoArrayAdapter(Context context, int rowLayout, List<Video> videos, LayoutInflater layoutInflater,
                              VideoClickListener videoClickListener) {
         super(context, rowLayout, videos);
+        this.context = context;
         this.inflater = layoutInflater;
         this.rowLayout = rowLayout;
         this.videos = videos;
@@ -54,7 +55,11 @@ public class VideoArrayAdapter extends ArrayAdapter {
 
         Video v = videos.get(position);
         viewHolder.videoName.setText(v.getName());
-        viewHolder.videoDetails.setText(v.getType() + " [" + v.getSite() + "]");
+        viewHolder.videoDetails.setText(
+                String.format(
+                        context.getResources().getString(R.string.video_desc),
+                        v.getType(),
+                        v.getSite()));
         viewHolder.videoKey = v.getKey();
 
         return rowView;
