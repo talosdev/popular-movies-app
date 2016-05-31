@@ -2,6 +2,7 @@ package app.we.go.movies.dependency;
 
 import javax.inject.Singleton;
 
+import app.we.go.movies.remote.FakeURLBuilder;
 import dagger.Component;
 
 /**

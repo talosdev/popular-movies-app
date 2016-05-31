@@ -2,7 +2,7 @@ package app.we.go.movies.db;
 
 import java.util.List;
 
-import app.we.go.movies.model.FavoriteMovie;
+import app.we.go.movies.model.db.FavoriteMovie;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).

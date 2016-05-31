@@ -13,7 +13,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import app.we.go.movies.TestData;
-import app.we.go.movies.model.FavoriteMovie;
+import app.we.go.movies.model.db.FavoriteMovie;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

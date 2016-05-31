@@ -9,7 +9,7 @@ import java.net.URL;
 import javax.inject.Inject;
 
 import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.data.SortByCriterion;
+import app.we.go.movies.model.local.SortByCriterion;
 
 /**
  * Created by apapad on 29/11/15.

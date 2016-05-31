@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnitRunner;
 
-import app.we.go.movies.dependency.TestMoviesApplication;
+import app.we.go.movies.application.TestMoviesApplication;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).

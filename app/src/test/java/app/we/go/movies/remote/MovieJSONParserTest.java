@@ -8,11 +8,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import app.we.go.movies.TestData;
-import app.we.go.movies.JsonUtils;
+import app.we.go.movies.util.JsonUtils;
 import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.remote.json.MovieJSONParser;
-import app.we.go.movies.remote.json.MovieList;
+import app.we.go.movies.model.remote.Movie;
+import app.we.go.movies.model.remote.MovieList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import app.we.go.movies.model.FavoriteMovie;
+import app.we.go.movies.model.db.FavoriteMovie;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 

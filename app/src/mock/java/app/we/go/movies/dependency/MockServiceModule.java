@@ -4,7 +4,9 @@ import android.os.AsyncTask;
 
 import javax.inject.Singleton;
 
-import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.remote.FakeTMDBService;
+import app.we.go.movies.remote.FakeURLBuilder;
+import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;

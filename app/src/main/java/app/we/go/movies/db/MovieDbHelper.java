@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import app.we.go.movies.contract.MoviesContract.FavoriteMovieEntry;
+import app.we.go.movies.db.DatabaseContract.FavoriteMoviesTable;
 
 /**
  * Created by apapad on 2016-01-??.
@@ -16,10 +16,10 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "pop_movies.db";
 
-    public static final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + FavoriteMovieEntry.TABLE_ΝΑΜΕ + " (" +
-            FavoriteMovieEntry._ID + " INTEGER  PRIMARY KEY AUTOINCREMENT, " +
-            FavoriteMovieEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
-            FavoriteMovieEntry.COLUMN_POSTER_PATH + " TEXT " +
+    public static final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + FavoriteMoviesTable.TABLE_ΝΑΜΕ + " (" +
+            FavoriteMoviesTable._ID + " INTEGER  PRIMARY KEY AUTOINCREMENT, " +
+            FavoriteMoviesTable.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
+            FavoriteMoviesTable.COLUMN_POSTER_PATH + " TEXT " +
             ");";
 
     public MovieDbHelper(Context context) {
@@ -46,6 +46,6 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     }
 
     private void dropFavoritesTable(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS '" + FavoriteMovieEntry.TABLE_ΝΑΜΕ + "'");
+        db.execSQL("DROP TABLE IF EXISTS '" + FavoriteMoviesTable.TABLE_ΝΑΜΕ + "'");
     }
 }

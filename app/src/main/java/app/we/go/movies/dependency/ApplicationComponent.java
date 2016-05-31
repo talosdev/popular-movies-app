@@ -6,11 +6,11 @@ package app.we.go.movies.dependency;
 
 import javax.inject.Singleton;
 
-import app.we.go.movies.moviedetails.MovieDetailsActivity;
-import app.we.go.movies.moviedetails.dependency.MovieDetailsComponent;
-import app.we.go.movies.moviedetails.dependency.MovieDetailsModule;
-import app.we.go.movies.movielist.dependency.MovieListComponent;
-import app.we.go.movies.movielist.dependency.MovieListModule;
+import app.we.go.movies.features.moviedetails.MovieDetailsActivity;
+import app.we.go.movies.features.moviedetails.dependency.MovieDetailsComponent;
+import app.we.go.movies.features.moviedetails.dependency.MovieDetailsModule;
+import app.we.go.movies.features.movielist.dependency.MovieListComponent;
+import app.we.go.movies.features.movielist.dependency.MovieListModule;
 import dagger.Component;
 
 

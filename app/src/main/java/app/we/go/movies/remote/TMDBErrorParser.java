@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 
 import app.we.go.movies.constants.Tags;
-import app.we.go.movies.remote.json.TMDBError;
+import app.we.go.movies.model.remote.TMDBError;
 import app.we.go.movies.util.LOG;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;

@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.remote.json.MovieList;
-import app.we.go.movies.remote.json.Review;
-import app.we.go.movies.remote.json.ReviewList;
-import app.we.go.movies.remote.json.Video;
-import app.we.go.movies.remote.json.VideoList;
+import app.we.go.movies.model.remote.Movie;
+import app.we.go.movies.model.remote.MovieList;
+import app.we.go.movies.model.remote.Review;
+import app.we.go.movies.model.remote.ReviewList;
+import app.we.go.movies.model.remote.Video;
+import app.we.go.movies.model.remote.VideoList;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
