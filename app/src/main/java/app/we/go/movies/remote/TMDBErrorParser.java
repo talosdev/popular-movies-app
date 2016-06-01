@@ -11,6 +11,10 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 
 /**
+ * An alternative would be to use the approach described here:
+ * http://bytes.babbel.com/en/articles/2016-03-16-retrofit2-rxjava-error-handling.html
+ * and incorporate the error parsing code into a call adapter factory.
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class TMDBErrorParser {

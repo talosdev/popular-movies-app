@@ -87,6 +87,7 @@ public class ServiceModule {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(apiKeyInterceptor);
 
+
         // add logging as last interceptor
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BASIC);

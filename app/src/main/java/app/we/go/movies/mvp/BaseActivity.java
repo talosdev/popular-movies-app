@@ -7,4 +7,13 @@ import android.support.v7.app.AppCompatActivity;
  */
 public class BaseActivity extends AppCompatActivity {
 
+    @Override
+    public Object getLastCustomNonConfigurationInstance() {
+        return super.getLastCustomNonConfigurationInstance();
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return super.onRetainCustomNonConfigurationInstance();
+    }
 }
