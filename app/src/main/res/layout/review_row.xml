@@ -16,7 +16,7 @@
 
             <TextView
                 android:id="@+id/reviewAuthor"
-                style="@style/cardHeader"></TextView>
+                style="@style/cardHeader"/>
 
 
             <TextView

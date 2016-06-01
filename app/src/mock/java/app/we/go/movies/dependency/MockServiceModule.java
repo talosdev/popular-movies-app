@@ -4,7 +4,9 @@ import android.os.AsyncTask;
 
 import javax.inject.Singleton;
 
-import app.we.go.movies.remote.TMDBService;
+import app.we.go.movies.remote.FakeTMDBService;
+import app.we.go.movies.remote.FakeURLBuilder;
+import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
@@ -52,7 +54,7 @@ public class MockServiceModule {
 
         private static FakeTMDBService INSTANCE;
 
-        private static Transformer<Response<?>, Response<?>> syncTransformer =
+        private static final Transformer<Response<?>, Response<?>> syncTransformer =
                 new Transformer<Response<?>, Response<?>>() {
                     @Override
                     public Observable<Response<?>> call(Observable<Response<?>> responseObservable) {
@@ -60,7 +62,7 @@ public class MockServiceModule {
                     }
                 };
 
-        private static Transformer<Response<?>, Response<?>> asyncTransformer =
+        private static final Transformer<Response<?>, Response<?>> asyncTransformer =
                 new Transformer<Response<?>, Response<?>>() {
                     @Override
                     public Observable<Response<?>> call(Observable<Response<?>> responseObservable) {

@@ -9,7 +9,7 @@ import java.net.URL;
 import javax.inject.Inject;
 
 import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.data.SortByCriterion;
+import app.we.go.movies.model.local.SortByCriterion;
 
 /**
  * Created by apapad on 29/11/15.
@@ -36,8 +36,7 @@ public class URLBuilder {
                 appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).
                 appendQueryParameter(TMDB.PARAM_VOTE_COUNT_MINIMUM, MINIMUM_VOTES + "").build();
 
-        URL url = new URL(uri.toString());
-        return url;
+        return new URL(uri.toString());
     }
 
     /**
@@ -93,9 +92,8 @@ public class URLBuilder {
 
 
     public Uri buildYoutubeUri(String key)   {
-        Uri uri = Uri.parse(TMDB.YOUTUBE_BASE_URL).buildUpon().
+        return Uri.parse(TMDB.YOUTUBE_BASE_URL).buildUpon().
                 appendQueryParameter(TMDB.YOUTUBE_VIDEO_PARAM, key).build();
-        return uri;
     }
 
 

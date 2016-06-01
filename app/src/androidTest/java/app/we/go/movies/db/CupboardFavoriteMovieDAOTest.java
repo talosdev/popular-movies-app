@@ -6,7 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import org.junit.BeforeClass;
 
 /**
- * Cupboard-based implementation
+ * Base class for tests that test the cupboard-based implementation
  *
  * Created by Aristides Papadopoulos (github:talosdev).
  */

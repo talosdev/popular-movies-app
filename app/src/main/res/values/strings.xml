@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Popular movies app</string>
-    <string name="based_on">based on</string>
-    <string name="votes">votes</string>
+    <string name="votes">( %1$s votes)</string>
     <string name="synopsis">Synopsis</string>
 
     <string name="release_date">Release date</string>
@@ -16,5 +15,6 @@
     <string name="empty_videos">No videos found.</string>
     <string name="share_chooser_title">Share trailer`</string>
     <string name="error_network">There was an error contacting the server.</string>
-    <string name="error_generic">An error occured</string>
+    <string name="error_generic">An error occurred</string>
+    <string name="video_desc">%1$s [%2$s]</string>
 </resources>

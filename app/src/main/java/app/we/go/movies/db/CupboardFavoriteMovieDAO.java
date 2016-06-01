@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.List;
 
-import app.we.go.movies.model.FavoriteMovie;
+import app.we.go.movies.model.db.FavoriteMovie;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
@@ -14,7 +14,7 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 public class CupboardFavoriteMovieDAO implements FavoriteMovieDAO {
 
     private static final String COLUMN_MOVIE_ID = "movieId";
-    private SQLiteDatabase db;
+    private final SQLiteDatabase db;
 
     public CupboardFavoriteMovieDAO(SQLiteDatabase db) {
         this.db = db;
@@ -58,6 +58,7 @@ public class CupboardFavoriteMovieDAO implements FavoriteMovieDAO {
                 List<FavoriteMovie> favoriteMovieList = cupboard().
                         withDatabase(db).
                         query(FavoriteMovie.class).
+                        // TODO
                         // orderBy().
                         list();
                 callback.onSuccess(favoriteMovieList);

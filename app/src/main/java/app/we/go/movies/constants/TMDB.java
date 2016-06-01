@@ -27,12 +27,6 @@ public class TMDB {
      */
     public static final String URL_MOVIES = BASE_URL + "discover/movie";
 
-    /**
-     * The URL for getting the details of a movie
-     */
-    public static final String URL_MOVIE_DETAILS = BASE_URL + "movie/";
-    public static final String URL_MOVIE_REVIEWS_SUFFIX = "reviews";
-    public static final String URL_MOVIE_TRAILERS_SUFFIX = "videos";
 
 
     public static final String DATE_FORMAT = "yyyy-MM-dd";

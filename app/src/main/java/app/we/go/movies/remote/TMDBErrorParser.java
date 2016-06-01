@@ -4,18 +4,22 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 
 import app.we.go.movies.constants.Tags;
-import app.we.go.movies.remote.json.TMDBError;
+import app.we.go.movies.model.remote.TMDBError;
 import app.we.go.movies.util.LOG;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
 /**
+ * An alternative would be to use the approach described here:
+ * http://bytes.babbel.com/en/articles/2016-03-16-retrofit2-rxjava-error-handling.html
+ * and incorporate the error parsing code into a call adapter factory.
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class TMDBErrorParser {
 
-    Retrofit retrofit;
+    final Retrofit retrofit;
     private final Converter<ResponseBody, TMDBError> converter;
 
 

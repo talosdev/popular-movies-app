@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     package="app.we.go.movies">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,7 +13,7 @@
         android:theme="@style/AppTheme"
 
         android:hardwareAccelerated="true">
-        <activity android:name=".movielist.MainActivity"
+        <activity android:name=".features.movielist.MainActivity"
             android:launchMode="singleTop"
             >
             <intent-filter>
@@ -23,12 +22,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".moviedetails.MovieDetailsActivity"
-            android:parentActivityName=".movielist.MainActivity">
+        <activity android:name=".features.moviedetails.MovieDetailsActivity"
+            android:parentActivityName=".features.movielist.MainActivity">
         </activity>
 
-        <activity android:name=".ui.activity.PreferencesActivity"
-            android:parentActivityName=".movielist.MainActivity">
+        <activity android:name=".features.preferences.activity.PreferencesActivity"
+            android:parentActivityName=".features.movielist.MainActivity">
         </activity>
 
 

@@ -22,7 +22,7 @@ public class StringUtils {
     public static String convertSetToMultilineString(Set<String> set) {
         StringBuilder sb = new StringBuilder();
         for (String table: set) {
-            sb.append("\n" + table);
+            sb.append("\n").append(table);
         }
         return sb.toString();
     }
@@ -37,7 +37,7 @@ public class StringUtils {
         InputStream is = context.getResources().openRawResource(resourceId);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String readLine = null;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         try {
             while ((readLine = br.readLine()) != null) {

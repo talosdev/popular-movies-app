@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import app.we.go.movies.remote.json.Movie;
-import app.we.go.movies.remote.json.MovieList;
-import app.we.go.movies.remote.json.Review;
-import app.we.go.movies.remote.json.ReviewList;
-import app.we.go.movies.remote.json.Video;
-import app.we.go.movies.remote.json.VideoList;
+import app.we.go.movies.model.remote.Movie;
+import app.we.go.movies.model.remote.MovieList;
+import app.we.go.movies.model.remote.Review;
+import app.we.go.movies.model.remote.ReviewList;
+import app.we.go.movies.model.remote.Video;
+import app.we.go.movies.model.remote.VideoList;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -19,7 +19,7 @@ import app.we.go.movies.remote.json.VideoList;
 public class DummyData {
 
     public static final String MOCK_BASE_URL = "http://www.example.com";
-    public static Movie DUMMY_MOVIE;
+    public static final Movie DUMMY_MOVIE;
     public static final long INEXISTENT_MOVIE_ID = 9999L;
 
 
@@ -92,10 +92,10 @@ public class DummyData {
             "Trailer"
     };
 
-    public static MovieList MOVIE_LIST_POPULAR_1 = new MovieList();
-    public static MovieList MOVIE_LIST_POPULAR_2 = new MovieList();
-    public static MovieList MOVIE_LIST_VOTES = new MovieList();
-    public static MovieList MOVIE_LIST_FAVORITES = new MovieList();
+    public static final MovieList MOVIE_LIST_POPULAR_1 = new MovieList();
+    public static final MovieList MOVIE_LIST_POPULAR_2 = new MovieList();
+    public static final MovieList MOVIE_LIST_VOTES = new MovieList();
+    public static final MovieList MOVIE_LIST_FAVORITES = new MovieList();
 
 
     static {
@@ -110,7 +110,7 @@ public class DummyData {
 
 
         Calendar cal = GregorianCalendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, 01);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.YEAR, 2015);
         cal.set(Calendar.MONTH, Calendar.JANUARY);
         MOVIE_RELEASE_DATE = cal.getTime();
@@ -172,7 +172,6 @@ public class DummyData {
         for (int i = 0; i < 20; i++) {
             favoriteMovies.add(createMovie("FAVORITE", i, 3000));
         }
-        MOVIE_LIST_FAVORITES = new MovieList();
         MOVIE_LIST_FAVORITES.setPage(1);
         MOVIE_LIST_FAVORITES.setMovies(favoriteMovies);
 

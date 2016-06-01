@@ -4,7 +4,7 @@ import android.content.Context;
 
 import javax.inject.Singleton;
 
-import app.we.go.movies.SharedPreferencesHelper;
+import app.we.go.movies.helpers.SharedPreferencesHelper;
 import dagger.Module;
 import dagger.Provides;
 
@@ -16,7 +16,7 @@ import dagger.Provides;
 @Module
 public class ApplicationAndroidModule {
 
-    Context context;
+    final Context context;
 
     public ApplicationAndroidModule(Context context) {
         this.context = context;

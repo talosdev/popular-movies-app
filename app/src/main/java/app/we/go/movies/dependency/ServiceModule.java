@@ -8,9 +8,9 @@ import javax.inject.Singleton;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.remote.TMDBApiKeyInterceptor;
 import app.we.go.movies.remote.TMDBErrorParser;
-import app.we.go.movies.remote.TMDBRetrofitService;
-import app.we.go.movies.remote.TMDBService;
-import app.we.go.movies.remote.TMDBServiceImpl;
+import app.we.go.movies.remote.service.TMDBRetrofitService;
+import app.we.go.movies.remote.service.TMDBService;
+import app.we.go.movies.remote.service.TMDBServiceImpl;
 import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
@@ -51,7 +51,8 @@ public class ServiceModule {
     @Provides
     @Singleton
     public Transformer<Response<?>, Response<?>> provideTransformer() {
-        Transformer<Response<?>, Response<?>> transformer = new Transformer<Response<?>, Response<?>>() {
+
+        return new Transformer<Response<?>, Response<?>>() {
 
 
             @Override
@@ -62,8 +63,6 @@ public class ServiceModule {
             }
         };
 
-        return transformer;
-
     }
 
 
@@ -73,14 +72,12 @@ public class ServiceModule {
                                     OkHttpClient okHttpClient,
                                     CallAdapter.Factory callAdapterFactory) {
 
-        Retrofit retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                 .baseUrl(TMDB.BASE_URL)
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
-
-        return retrofit;
 
     }
 
@@ -89,6 +86,7 @@ public class ServiceModule {
     public OkHttpClient provideOkHttpClient(TMDBApiKeyInterceptor apiKeyInterceptor) {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(apiKeyInterceptor);
+
 
         // add logging as last interceptor
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
