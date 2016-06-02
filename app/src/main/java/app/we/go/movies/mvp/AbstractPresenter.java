@@ -8,8 +8,15 @@ import app.we.go.movies.model.remote.TMDBError;
  */
 public abstract class AbstractPresenter<V extends BaseView> implements  BasePresenter<V> {
 
+    private final String tag;
+    private final PresenterCache cache;
+
     protected V boundView;
 
+    public AbstractPresenter(PresenterCache cache, String tag) {
+        this.cache = cache;
+        this.tag = tag;
+    }
 
     @Override
     public void bindView(V view) {
@@ -39,5 +46,15 @@ public abstract class AbstractPresenter<V extends BaseView> implements  BasePres
         if (getBoundView() != null) {
             getBoundView().showError(logMessage, R.string.error_network, t);
         }
+    }
+
+    @Override
+    public boolean isViewBound() {
+        return getBoundView() != null;
+    }
+
+    @Override
+    public void clear() {
+        cache.removePresenter(tag);
     }
 }

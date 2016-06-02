@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import javax.inject.Singleton;
 
 import app.we.go.movies.constants.TMDB;
+import app.we.go.movies.mvp.PresenterCache;
 import dagger.Module;
 import dagger.Provides;
 
@@ -25,6 +26,14 @@ public class ApplicationModule {
         return new GsonBuilder()
                 .setDateFormat(TMDB.DATE_FORMAT)
                 .create();
+    }
+
+
+
+    @Provides
+    @Singleton
+    public PresenterCache providePresenterCache() {
+        return new PresenterCache();
     }
 
 

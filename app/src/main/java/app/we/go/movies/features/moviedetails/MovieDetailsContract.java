@@ -72,6 +72,8 @@ public interface MovieDetailsContract {
 
     interface ReviewsPresenter extends BasePresenter<ReviewsView> {
         void loadMovieReviews(long movieId);
+
+        void onRestoreFromCache();
     }
 
     interface VideosPresenter extends BasePresenter<VideosView> {

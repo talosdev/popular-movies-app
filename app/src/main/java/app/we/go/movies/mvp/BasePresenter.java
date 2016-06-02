@@ -9,4 +9,8 @@ public interface BasePresenter<V extends BaseView> {
     void unbindView();
 
     V getBoundView();
+
+    boolean isViewBound();
+
+    void clear();
 }

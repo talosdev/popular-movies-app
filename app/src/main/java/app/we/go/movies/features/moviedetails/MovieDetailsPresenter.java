@@ -5,6 +5,7 @@ import app.we.go.movies.helpers.SharedPreferencesHelper;
 import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.mvp.AbstractPresenter;
+import app.we.go.movies.mvp.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.model.remote.TMDBError;
@@ -33,7 +34,9 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
 
     public MovieDetailsPresenter(TMDBService service,
                                  SharedPreferencesHelper sharedPrefsHelper,
-                                 FavoriteMovieDAO favoriteMovieDAO) {
+                                 FavoriteMovieDAO favoriteMovieDAO,
+                                 PresenterCache cache, String tag) {
+        super(cache, tag);
         this.service = service;
         this.sharedPrefsHelper = sharedPrefsHelper;
         this.favoriteMovieDAO = favoriteMovieDAO;
@@ -115,7 +118,7 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
     public void checkFavorite(long movieId) {
         boolean isFavorite = favoriteMovieDAO.get(movieId);
         this.isFavorite = isFavorite;
-        if (getBoundView() != null) {
+        if (isViewBound()) {
             getBoundView().toggleFavorite(isFavorite);
         }
     }
@@ -132,7 +135,7 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
         isFavorite = !isFavorite;
 
         // reflect the change in the ui
-        if (getBoundView() != null) {
+        if (isViewBound()) {
             getBoundView().toggleFavorite(isFavorite);
         }
 

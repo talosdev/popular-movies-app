@@ -4,6 +4,7 @@ import java.util.List;
 
 import app.we.go.movies.R;
 import app.we.go.movies.mvp.AbstractPresenter;
+import app.we.go.movies.mvp.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.model.remote.Review;
 import app.we.go.movies.model.remote.ReviewList;
@@ -25,7 +26,9 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
     private Subscription subscription;
 
 
-    public MovieReviewsPresenter(TMDBService service) {
+    public MovieReviewsPresenter(TMDBService service,
+                                 PresenterCache cache, String presenterTag) {
+        super(cache, presenterTag);
         this.service = service;
     }
 
@@ -70,6 +73,13 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
                             }
                         }
                 );
+    }
+
+    @Override
+    public void onRestoreFromCache() {
+        if (isViewBound()) {
+            getBoundView().displayReviews(reviews);
+        }
     }
 
 }

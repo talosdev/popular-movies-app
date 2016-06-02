@@ -6,6 +6,7 @@ import java.util.List;
 import app.we.go.movies.R;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.mvp.AbstractPresenter;
+import app.we.go.movies.mvp.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.model.remote.MovieList;
@@ -26,7 +27,10 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
     private int currentPage = 1;
     private Subscription subscription;
 
-    public MovieListPresenter(TMDBService service) {
+    public MovieListPresenter(TMDBService service,
+                              PresenterCache cache,
+                              String tag) {
+        super(cache, tag);
         this.service = service;
     }
 
@@ -65,7 +69,7 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
                                 if (movieList.getMovies() != null) {
                                     cachedMovies.addAll(movieList.getMovies());
                                 }
-                                if (getBoundView() != null) {
+                                if (isViewBound()) {
                                     getBoundView().showMovieList(movieList.getMovies());
                                 }
                             }
@@ -81,7 +85,7 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
 
     @Override
     public void openMovieDetails(Movie movie) {
-        if (getBoundView() != null) {
+        if (isViewBound()) {
             getBoundView().navigateToMovieDetails(movie);
         }
     }

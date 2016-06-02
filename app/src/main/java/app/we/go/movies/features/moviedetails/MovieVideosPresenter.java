@@ -5,6 +5,7 @@ import java.util.List;
 import app.we.go.movies.R;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract.VideosView;
 import app.we.go.movies.mvp.AbstractPresenter;
+import app.we.go.movies.mvp.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.model.remote.TMDBError;
@@ -29,7 +30,10 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
 
 
     public MovieVideosPresenter(TMDBService service,
-                                URLBuilder urlBuilder) {
+                                URLBuilder urlBuilder,
+                                PresenterCache cache,
+                                String tag) {
+        super(cache, tag);
         this.service = service;
         this.urlBuilder = urlBuilder;
     }
@@ -81,14 +85,14 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
 
     @Override
     public void onVideoClicked(String videoKey) {
-        if (getBoundView() != null) {
+        if (isViewBound()) {
             getBoundView().openVideo(urlBuilder.buildYoutubeUri(videoKey));
         }
     }
 
     @Override
     public void onShareVideoClicked(String videoKey, String videoName) {
-        if (getBoundView() != null) {
+        if (isViewBound()) {
             getBoundView().shareVideo(urlBuilder.buildYoutubeUri(videoKey), videoName);
         }
     }

@@ -27,6 +27,7 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
 
 
     private MovieDetailsComponent movieDetailsComponent;
+    private String presenterTag;
 
 
     @DebugLog
@@ -54,7 +55,7 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
         }
 
         movieDetailsComponent = MovieApplication.get(this).getComponent().
-                plus(new MovieDetailsModule(this, movieId));
+                plus(new MovieDetailsModule(this, movieId, presenterTag));
     }
 
 

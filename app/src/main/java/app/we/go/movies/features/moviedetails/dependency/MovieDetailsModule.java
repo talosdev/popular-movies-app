@@ -5,15 +5,13 @@ import android.content.Context;
 
 import javax.inject.Named;
 
-import app.we.go.movies.helpers.SharedPreferencesHelper;
 import app.we.go.movies.db.FavoriteMovieDAO;
-import app.we.go.movies.dependency.ActivityScope;
+import app.we.go.movies.dependency.ScreenScope;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.MovieDetailsPresenter;
-import app.we.go.movies.features.moviedetails.MovieReviewsPresenter;
-import app.we.go.movies.features.moviedetails.MovieVideosPresenter;
+import app.we.go.movies.helpers.SharedPreferencesHelper;
+import app.we.go.movies.mvp.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
-import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
 
@@ -26,16 +24,17 @@ public class MovieDetailsModule {
 
     private final Activity activity;
     private final long movieId;
+    private String presenterTag;
 
 
-    public MovieDetailsModule(Activity activity, long movieId) {
+    public MovieDetailsModule(Activity activity, long movieId, String presenterTag) {
         this.activity = activity;
         this.movieId = movieId;
+        this.presenterTag = presenterTag;
     }
 
-
     @Provides
-    @ActivityScope
+    @ScreenScope
     public Context provideContext() {
         return activity;
     }
@@ -46,7 +45,7 @@ public class MovieDetailsModule {
      * @return
      */
     @Provides
-    @ActivityScope
+    @ScreenScope
     @Named("movieId")
     public long provideMovieId() {
         return movieId;
@@ -56,26 +55,21 @@ public class MovieDetailsModule {
 
 
     @Provides
-    @ActivityScope
+    @ScreenScope
     public MovieDetailsContract.Presenter providePresenter(TMDBService service,
                                                            SharedPreferencesHelper sharedPrefsHelper,
-                                                           FavoriteMovieDAO favoriteMovieDAO) {
-        return new MovieDetailsPresenter(service, sharedPrefsHelper, favoriteMovieDAO);
+                                                           FavoriteMovieDAO favoriteMovieDAO,
+                                                           PresenterCache cache) {
+        return new MovieDetailsPresenter(service,
+                sharedPrefsHelper,
+                favoriteMovieDAO,
+                cache,
+                presenterTag);
     }
 
 
-    @Provides
-    @ActivityScope
-    public MovieDetailsContract.ReviewsPresenter provideReviewsPresenter(TMDBService service) {
-        return new MovieReviewsPresenter(service);
-    }
 
-    @Provides
-    @ActivityScope
-    public MovieDetailsContract.VideosPresenter provideVideosPresenter(TMDBService service,
-                                                                       URLBuilder urlBuilder) {
-        return new MovieVideosPresenter(service, urlBuilder);
-    }
+
 }
 
 

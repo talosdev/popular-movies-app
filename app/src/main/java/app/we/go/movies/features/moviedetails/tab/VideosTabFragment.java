@@ -20,9 +20,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import app.we.go.movies.R;
+import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.features.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
+import app.we.go.movies.features.moviedetails.dependency.MovieVideosModule;
 import app.we.go.movies.model.remote.Video;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,6 +52,7 @@ public class VideosTabFragment extends Fragment implements MovieDetailsContract.
 
 
     private ArrayAdapter<Video> adapter;
+    private String presenterTag;
 
     public static VideosTabFragment newInstance(long movieId) {
         VideosTabFragment f = new VideosTabFragment();
@@ -78,8 +80,10 @@ public class VideosTabFragment extends Fragment implements MovieDetailsContract.
 
         ButterKnife.bind(this, view);
 
-        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
-
+        MovieApplication.get(getActivity()).
+                getComponent().
+                plus(new MovieVideosModule(getActivity(), presenterTag)).
+                inject(this);
         presenter.bindView(this);
 
         adapter = new VideoArrayAdapter(context, R.layout.video_row, new ArrayList<Video>(), getActivity().getLayoutInflater(), this);

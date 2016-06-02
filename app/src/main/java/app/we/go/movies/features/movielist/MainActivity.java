@@ -41,6 +41,7 @@ public class MainActivity extends BaseActivity implements MovieListFragment.Movi
 
 
     private MovieListComponent movieListComponent;
+    private String presenterTag;
 
 
     @DebugLog
@@ -111,7 +112,7 @@ public class MainActivity extends BaseActivity implements MovieListFragment.Movi
         }
 
         movieListComponent = MovieApplication.get(this).getComponent().
-                plus(new MovieListModule(this));
+                plus(new MovieListModule(this, presenterTag));
     }
 
     @DebugLog
