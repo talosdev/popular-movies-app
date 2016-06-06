@@ -2,10 +2,10 @@ package app.we.go.movies.features.moviedetails.dependency;
 
 import android.content.Context;
 
-import app.we.go.movies.dependency.ScreenScope;
+import app.we.go.framework.mvp.presenter.PresenterCache;
+import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.MovieReviewsPresenter;
-import app.we.go.movies.mvp.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import dagger.Module;
 import dagger.Provides;
@@ -25,24 +25,23 @@ public class MovieReviewsModule {
     }
 
     @Provides
-    @ScreenScope
+    @FragmentScope
     public Context provideContext() {
         return context;
     }
 
     @Provides
-    @ScreenScope
+    @FragmentScope
     public MovieDetailsContract.ReviewsPresenter provideReviewsPresenter(PresenterCache cache,
-                                                                         TMDBService service) {
-        MovieDetailsContract.ReviewsPresenter presenter = cache.getPresenter(presenterTag);
+            MovieReviewsPresenter.Factory factory) {
+        return cache.getPresenter(presenterTag, factory);
+    }
 
-        if (presenter == null) {
-            presenter = new MovieReviewsPresenter(service,
-                    cache,
-                    presenterTag);
-            cache.putPresenter(presenterTag, presenter);
-        }
-        return presenter;
+    @Provides
+    @FragmentScope
+    public MovieReviewsPresenter.Factory provideRPresenterFactory(PresenterCache cache,
+                                                                  TMDBService service) {
+        return new MovieReviewsPresenter.Factory(cache, service);
     }
 
 }

@@ -25,7 +25,6 @@ import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.features.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.features.moviedetails.tab.MovieDetailsPagerAdapter;
-import app.we.go.movies.mvp.BaseView;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.util.LOG;
 import butterknife.Bind;
@@ -222,14 +221,15 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     }
 
 
-    @Override
-    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
-        BaseView.Helper.showError(context, logMessage, resourceId, t);
-    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         presenter.unbindView();
+    }
+
+    @Override
+    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
+
     }
 }

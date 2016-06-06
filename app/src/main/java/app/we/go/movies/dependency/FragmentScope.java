@@ -6,11 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import javax.inject.Scope;
 
 /**
- * Activity or fragment-based scope.
+ * Fragment-based scope.
  *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ScreenScope {
+public @interface FragmentScope {
 }

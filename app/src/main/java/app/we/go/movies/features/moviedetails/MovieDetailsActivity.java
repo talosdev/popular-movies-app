@@ -10,7 +10,7 @@ import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.features.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.features.moviedetails.dependency.MovieDetailsComponent;
 import app.we.go.movies.features.moviedetails.dependency.MovieDetailsModule;
-import app.we.go.movies.mvp.BaseActivity;
+import app.we.go.framework.mvp.BaseActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;

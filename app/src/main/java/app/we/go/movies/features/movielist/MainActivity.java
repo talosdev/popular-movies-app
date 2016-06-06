@@ -19,7 +19,7 @@ import app.we.go.movies.features.moviedetails.MovieDetailsFragment;
 import app.we.go.movies.features.movielist.dependency.HasMovieListComponent;
 import app.we.go.movies.features.movielist.dependency.MovieListComponent;
 import app.we.go.movies.features.movielist.dependency.MovieListModule;
-import app.we.go.movies.mvp.BaseActivity;
+import app.we.go.framework.mvp.BaseActivity;
 import app.we.go.movies.model.remote.Movie;
 import butterknife.Bind;
 import butterknife.ButterKnife;

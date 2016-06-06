@@ -1,4 +1,4 @@
-package app.we.go.movies.mvp;
+package app.we.go.framework.mvp;
 
 import android.support.v7.app.AppCompatActivity;
 

@@ -4,8 +4,8 @@ import java.util.List;
 
 import app.we.go.movies.R;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract.VideosView;
-import app.we.go.movies.mvp.AbstractPresenter;
-import app.we.go.movies.mvp.PresenterCache;
+import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
+import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.model.remote.TMDBError;
@@ -19,7 +19,7 @@ import rx.Subscription;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MovieVideosPresenter extends AbstractPresenter<VideosView> implements MovieDetailsContract.VideosPresenter {
+public class MovieVideosPresenter extends BaseCacheablePresenter<VideosView> implements MovieDetailsContract.VideosPresenter {
 
 
     private final TMDBService service;
@@ -97,4 +97,8 @@ public class MovieVideosPresenter extends AbstractPresenter<VideosView> implemen
         }
     }
 
+    @Override
+    public void onRestoreFromCache() {
+
+    }
 }

@@ -17,7 +17,6 @@ import app.we.go.movies.constants.Tags;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.model.remote.Movie;
-import app.we.go.movies.mvp.BaseView;
 import app.we.go.movies.util.LOG;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -118,8 +117,8 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     }
 
     @Override
-    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
-        BaseView.Helper.showError(getContext(), logMessage, resourceId, t);
+    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
+//        showError(getContext(), logMessage, resourceId, t);
     }
 
     @Override

@@ -6,11 +6,11 @@ import android.content.Context;
 import javax.inject.Named;
 
 import app.we.go.movies.db.FavoriteMovieDAO;
-import app.we.go.movies.dependency.ScreenScope;
+import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.MovieDetailsPresenter;
 import app.we.go.movies.helpers.SharedPreferencesHelper;
-import app.we.go.movies.mvp.PresenterCache;
+import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import dagger.Module;
 import dagger.Provides;
@@ -34,7 +34,7 @@ public class MovieDetailsModule {
     }
 
     @Provides
-    @ScreenScope
+    @FragmentScope
     public Context provideContext() {
         return activity;
     }
@@ -45,7 +45,7 @@ public class MovieDetailsModule {
      * @return
      */
     @Provides
-    @ScreenScope
+    @FragmentScope
     @Named("movieId")
     public long provideMovieId() {
         return movieId;
@@ -55,7 +55,7 @@ public class MovieDetailsModule {
 
 
     @Provides
-    @ScreenScope
+    @FragmentScope
     public MovieDetailsContract.Presenter providePresenter(TMDBService service,
                                                            SharedPreferencesHelper sharedPrefsHelper,
                                                            FavoriteMovieDAO favoriteMovieDAO,

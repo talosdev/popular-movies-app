@@ -139,7 +139,7 @@ public class VideosTabFragment extends Fragment implements MovieDetailsContract.
     }
 
     @Override
-    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
+    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
         // Do nothing, do not display the error message, just leave the empty list message
     }
 

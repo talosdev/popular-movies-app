@@ -5,8 +5,8 @@ import java.util.List;
 
 import app.we.go.movies.R;
 import app.we.go.movies.model.local.SortByCriterion;
-import app.we.go.movies.mvp.AbstractPresenter;
-import app.we.go.movies.mvp.PresenterCache;
+import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
+import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.model.remote.MovieList;
@@ -19,7 +19,7 @@ import rx.Subscription;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MovieListPresenter extends AbstractPresenter<MovieListContract.View>
+public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract.View>
         implements MovieListContract.Presenter {
 
     private final TMDBService service;
@@ -88,5 +88,10 @@ public class MovieListPresenter extends AbstractPresenter<MovieListContract.View
         if (isViewBound()) {
             getBoundView().navigateToMovieDetails(movie);
         }
+    }
+
+    @Override
+    public void onRestoreFromCache() {
+
     }
 }

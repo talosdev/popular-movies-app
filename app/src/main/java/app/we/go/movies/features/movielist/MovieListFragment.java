@@ -242,13 +242,13 @@ public class MovieListFragment extends Fragment
     }
 
 
-    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
+    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
         LOG.e(Tags.REMOTE, logMessage, t);
         LOG.e(Tags.REMOTE, "null: " + (t==null));
         LOG.e(Tags.REMOTE, t.getClass().getSimpleName());
         LOG.e(Tags.REMOTE, t.getMessage());
 
-        Toast.makeText(context, resourceId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.context, resourceId, Toast.LENGTH_SHORT).show();
     }
 
     @Override

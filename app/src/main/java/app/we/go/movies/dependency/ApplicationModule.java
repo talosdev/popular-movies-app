@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import javax.inject.Singleton;
 
 import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.mvp.PresenterCache;
+import app.we.go.framework.mvp.presenter.PresenterCache;
 import dagger.Module;
 import dagger.Provides;
 

@@ -4,8 +4,8 @@ import app.we.go.movies.R;
 import app.we.go.movies.helpers.SharedPreferencesHelper;
 import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
-import app.we.go.movies.mvp.AbstractPresenter;
-import app.we.go.movies.mvp.PresenterCache;
+import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
+import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.model.remote.TMDBError;
@@ -18,7 +18,7 @@ import rx.Subscription;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContract.View> implements MovieDetailsContract.Presenter {
+public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsContract.View> implements MovieDetailsContract.Presenter {
 
     private final TMDBService service;
     private final SharedPreferencesHelper sharedPrefsHelper;
@@ -142,4 +142,8 @@ public class MovieDetailsPresenter extends AbstractPresenter<MovieDetailsContrac
     }
 
 
+    @Override
+    public void onRestoreFromCache() {
+
+    }
 }
