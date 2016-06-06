@@ -2,10 +2,10 @@ package app.we.go.movies.features.moviedetails.dependency;
 
 import android.content.Context;
 
+import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.MovieVideosPresenter;
-import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.service.TMDBService;
 import dagger.Module;
@@ -34,12 +34,21 @@ public class MovieVideosModule {
 
     @Provides
     @FragmentScope
-    public MovieDetailsContract.VideosPresenter provideVideosPresenter(TMDBService service,
-                                                                       URLBuilder urlBuilder,
+    public MovieDetailsContract.VideosPresenter provideVideosPresenter(MovieVideosPresenter.Factory factory,
                                                                        PresenterCache cache) {
-        return new MovieVideosPresenter(service,
-                urlBuilder,
-                cache,
-                presenterTag);
+        return cache.getPresenter(presenterTag, factory);
     }
+
+
+    @Provides
+    @FragmentScope
+    public MovieVideosPresenter.Factory providePresenterFactory(TMDBService service,
+                                                                              URLBuilder urlBuilder,
+                                                                              PresenterCache cache) {
+        return new MovieVideosPresenter.Factory(service,
+                urlBuilder,
+                cache);
+    }
+
+
 }

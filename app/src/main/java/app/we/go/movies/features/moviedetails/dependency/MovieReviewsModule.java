@@ -39,7 +39,7 @@ public class MovieReviewsModule {
 
     @Provides
     @FragmentScope
-    public MovieReviewsPresenter.Factory provideRPresenterFactory(PresenterCache cache,
+    public MovieReviewsPresenter.Factory providePresenterFactory(PresenterCache cache,
                                                                   TMDBService service) {
         return new MovieReviewsPresenter.Factory(cache, service);
     }

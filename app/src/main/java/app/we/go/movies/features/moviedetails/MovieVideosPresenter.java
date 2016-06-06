@@ -1,7 +1,10 @@
 package app.we.go.movies.features.moviedetails;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
+import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.movies.R;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract.VideosView;
 import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
@@ -39,15 +42,7 @@ public class MovieVideosPresenter extends BaseCacheablePresenter<VideosView> imp
     }
 
     @Override
-    public void unbindView() {
-        super.unbindView();
-        RxUtils.unsubscribe(subscription);
-    }
-
-    @Override
     public void loadMovieVideos(final long movieId) {
-
-
         subscription = service.getVideos(movieId).
                 subscribe(
                         new Observer<Response<VideoList>>() {
@@ -84,6 +79,13 @@ public class MovieVideosPresenter extends BaseCacheablePresenter<VideosView> imp
     }
 
     @Override
+    public void onRestoreFromCache() {
+        if (isViewBound()) {
+            getBoundView().displayVideos(videos);
+        }
+    }
+
+    @Override
     public void onVideoClicked(String videoKey) {
         if (isViewBound()) {
             getBoundView().openVideo(urlBuilder.buildYoutubeUri(videoKey));
@@ -98,7 +100,34 @@ public class MovieVideosPresenter extends BaseCacheablePresenter<VideosView> imp
     }
 
     @Override
-    public void onRestoreFromCache() {
+    public void unbindView() {
+        super.unbindView();
+        RxUtils.unsubscribe(subscription);
+    }
 
+
+    public static class Factory implements PresenterFactory<MovieVideosPresenter> {
+
+        private TMDBService service;
+        private URLBuilder urlBuilder;
+        private PresenterCache cache;
+
+        public Factory(TMDBService service,
+                       URLBuilder urlBuilder,
+                       PresenterCache cache) {
+
+            this.service = service;
+            this.urlBuilder = urlBuilder;
+            this.cache = cache;
+        }
+
+        @NonNull
+        @Override
+        public MovieVideosPresenter createPresenter(String tag) {
+            return new MovieVideosPresenter(service,
+                    urlBuilder,
+                    cache,
+                    tag);
+        }
     }
 }

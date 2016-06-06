@@ -1,18 +1,14 @@
 package app.we.go.movies.features.moviedetails;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
 import java.util.List;
 
 import app.we.go.framework.mvp.presenter.CacheablePresenter;
-import app.we.go.framework.mvp.presenter.PresenterCache;
-import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.framework.mvp.view.ViewMVP;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.model.remote.Review;
 import app.we.go.movies.model.remote.Video;
-import app.we.go.movies.remote.service.TMDBService;
 
 /**
  * The MVP contract for the movie details feature.
@@ -80,7 +76,7 @@ public interface MovieDetailsContract {
 
     }
 
-    interface VideosPresenter extends app.we.go.framework.mvp.presenter.Presenter<VideosView> {
+    interface VideosPresenter extends CacheablePresenter<VideosView> {
         void loadMovieVideos(long movieId);
 
         void onVideoClicked(String videoKey);

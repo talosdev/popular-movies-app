@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Args;
@@ -26,23 +25,16 @@ import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.dependency.MovieVideosModule;
 import app.we.go.movies.model.remote.Video;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
 /**
  *
  * Created by apapad on 26/02/16.
  */
-public class VideosTabFragment extends Fragment implements MovieDetailsContract.VideosView,
+public class VideosTabFragment extends CacheablePresenterBasedFragment<MovieDetailsContract.VideosPresenter>
+        implements MovieDetailsContract.VideosView,
         VideoArrayAdapter.VideoClickListener{
 
-
-    @Inject
-    MovieDetailsContract.VideosPresenter presenter;
-
-
-    @Inject
-    Context context;
 
     @Bind(R.id.videos_list)
     ListView listView;
@@ -51,15 +43,17 @@ public class VideosTabFragment extends Fragment implements MovieDetailsContract.
     TextView emptyView;
 
 
+    @Inject
+    Context context;
+
     private ArrayAdapter<Video> adapter;
-    private String presenterTag;
+
 
     public static VideosTabFragment newInstance(long movieId) {
         VideosTabFragment f = new VideosTabFragment();
         Bundle b = new Bundle();
         b.putLong(Args.ARG_MOVIE_ID, movieId);
         f.setArguments(b);
-        Log.d("ZZ", "Args " + movieId);
         return f;
     }
 
@@ -68,39 +62,33 @@ public class VideosTabFragment extends Fragment implements MovieDetailsContract.
     @DebugLog
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.movie_details_video_tab, container, false);
+        return inflater.inflate(R.layout.movie_details_video_tab, container, false);
 
-        return v;
     }
 
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        ButterKnife.bind(this, view);
-
+    protected void injectDependencies(String presenterTag) {
         MovieApplication.get(getActivity()).
                 getComponent().
                 plus(new MovieVideosModule(getActivity(), presenterTag)).
                 inject(this);
-        presenter.bindView(this);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         adapter = new VideoArrayAdapter(context, R.layout.video_row, new ArrayList<Video>(), getActivity().getLayoutInflater(), this);
         listView.setAdapter(adapter);
         listView.setEmptyView(emptyView);
     }
 
-    @DebugLog
+
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
+    protected void initViewNoCache() {
         presenter.loadMovieVideos(getArguments().getLong(Args.ARG_MOVIE_ID));
     }
-
-
 
 
     @Override
@@ -143,9 +131,5 @@ public class VideosTabFragment extends Fragment implements MovieDetailsContract.
         // Do nothing, do not display the error message, just leave the empty list message
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        presenter.unbindView();
-    }
+
 }

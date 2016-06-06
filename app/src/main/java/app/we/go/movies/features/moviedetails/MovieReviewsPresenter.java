@@ -36,14 +36,7 @@ public class MovieReviewsPresenter extends BaseCacheablePresenter<MovieDetailsCo
     }
 
     @Override
-    public void unbindView() {
-        super.unbindView();
-        RxUtils.unsubscribe(subscription);
-    }
-
-    @Override
     public void loadMovieReviews(final long movieId) {
-
         subscription = service.getReviews(movieId).
                 subscribe(
                         new Observer<Response<ReviewList>>() {
@@ -83,6 +76,12 @@ public class MovieReviewsPresenter extends BaseCacheablePresenter<MovieDetailsCo
         if (isViewBound()) {
             getBoundView().displayReviews(reviews);
         }
+    }
+
+    @Override
+    public void unbindView() {
+        super.unbindView();
+        RxUtils.unsubscribe(subscription);
     }
 
 
