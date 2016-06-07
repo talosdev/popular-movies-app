@@ -6,6 +6,7 @@ import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.MovieDetailsPresenter;
 import app.we.go.movies.model.remote.Movie;
+import app.we.go.movies.remote.service.TMDBService;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Response;
@@ -34,10 +35,11 @@ public class MovieDetailsModule {
     @Provides
     @FragmentScope
     public MovieDetailsPresenter.Factory provideDetailsPresenterFactory(
-            Observable<Response<Movie>> service,
+            TMDBService service,
+            Observable<Response<Movie>> observable,
             FavoriteMovieDAO favoriteMovieDAO,
             PresenterCache cache) {
-        return new MovieDetailsPresenter.Factory(service, favoriteMovieDAO, cache);
+        return new MovieDetailsPresenter.Factory(service, observable, favoriteMovieDAO, cache);
     }
 
 

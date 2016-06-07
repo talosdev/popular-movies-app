@@ -9,6 +9,7 @@ import app.we.go.movies.R;
 import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.model.remote.Movie;
+import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.util.RxUtils;
 import retrofit2.Response;
 import rx.Observable;
@@ -21,6 +22,7 @@ import rx.Subscription;
 public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsContract.DetailsView>
         implements MovieDetailsContract.DetailsPresenter {
 
+    private TMDBService service;
     private Observable<Response<Movie>> observable;
     private final FavoriteMovieDAO favoriteMovieDAO;
 
@@ -31,17 +33,18 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
     private Movie movie;
 
 
-    public MovieDetailsPresenter(Observable<Response<Movie>> observable,
+    public MovieDetailsPresenter(TMDBService service, Observable<Response<Movie>> observable,
                                  FavoriteMovieDAO favoriteMovieDAO,
                                  PresenterCache cache,
                                  String tag) {
         super(cache, tag);
+        this.service = service;
         this.observable = observable;
         this.favoriteMovieDAO = favoriteMovieDAO;
     }
 
     @Override
-    public void loadMovieInfo(long movieId) {
+    public void loadMovieInfo() {
 
         subscription = observable.
                 subscribe(
@@ -66,7 +69,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
                                     populateViews(movie);
                                 } else {
                                     onCallError("The call to get the movie details was not successful",
-                                            R.string.error_generic, null);
+                                            R.string.error_generic, service.parse(response.errorBody()));
                                 }
                             }
                         }
@@ -127,13 +130,15 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
     public static class Factory implements PresenterFactory<MovieDetailsPresenter> {
 
+        private TMDBService service;
         private Observable<Response<Movie>> observable;
         private FavoriteMovieDAO favoriteMovieDAO;
         private PresenterCache cache;
 
-        public Factory(Observable<Response<Movie>> observable,
+        public Factory(TMDBService service, Observable<Response<Movie>> observable,
                        FavoriteMovieDAO favoriteMovieDAO,
                        PresenterCache cache) {
+            this.service = service;
 
             this.observable = observable;
             this.favoriteMovieDAO = favoriteMovieDAO;
@@ -144,7 +149,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
         @NonNull
         @Override
         public MovieDetailsPresenter createPresenter(String tag) {
-            return new MovieDetailsPresenter(observable,
+            return new MovieDetailsPresenter(service, observable,
                     favoriteMovieDAO,
                     cache,
                     tag);

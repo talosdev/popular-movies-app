@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.dependency.MockServiceModule;
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
@@ -24,6 +25,8 @@ public class MovieReviewsPresenterTest extends BasePresenterTest {
     @Mock
     MovieDetailsContract.ReviewsView view;
 
+    @Mock
+    PresenterCache cache;
 
     MovieReviewsPresenter presenter;
 
@@ -33,7 +36,7 @@ public class MovieReviewsPresenterTest extends BasePresenterTest {
 
         TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
-        presenter = new MovieReviewsPresenter(service);
+        presenter = new MovieReviewsPresenter(service, cache, "TAG");
         presenter.bindView(view);
     }
 

@@ -99,11 +99,11 @@ public class MovieDetailsFragment extends CacheablePresenterBasedFragment<MovieD
         MovieApplication.get(getActivity()).getComponent().
                 plus(((HasDetailsServiceModule) getActivity()).getModule(),
                         new MovieDetailsModule(presenterTag)).inject(this);
-git    }
+    }
 
     @Override
     protected void initViewNoCache() {
-        presenter.loadMovieInfo(currentMovieId);
+        presenter.loadMovieInfo();
 
     }
 
