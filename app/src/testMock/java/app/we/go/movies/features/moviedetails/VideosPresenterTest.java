@@ -50,7 +50,6 @@ public class VideosPresenterTest extends BasePresenterTest {
 
         when(urlBuilder.buildYoutubeUri(VIDEO_KEY)).thenReturn(uri);
 
-
         TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
         presenter = new MovieVideosPresenter(service, urlBuilder, cache, "TAG");

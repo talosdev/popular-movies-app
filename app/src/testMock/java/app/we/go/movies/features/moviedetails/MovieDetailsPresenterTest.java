@@ -13,10 +13,8 @@ import org.mockito.MockitoAnnotations;
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.dependency.MockServiceModule;
-import app.we.go.movies.helpers.SharedPreferencesHelper;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.mvp.BasePresenterTest;
-import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.service.TMDBService;
 
 import static app.we.go.movies.remote.DummyData.INEXISTENT_MOVIE_ID;
@@ -41,9 +39,6 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     MovieDetailsContract.DetailsView view;
 
     @Mock
-    SharedPreferencesHelper sharedPreferencesHelper;
-
-    @Mock
     FavoriteMovieDAO favoriteMovieDAO;
 
     @Mock
@@ -55,9 +50,6 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-
-        // setup SharedPreferences mock
-        when(sharedPreferencesHelper.formatDate(DummyData.MOVIE_RELEASE_DATE)).thenReturn(DummyData.MOVIE_RELEASE_DATE_STR);
 
         service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 

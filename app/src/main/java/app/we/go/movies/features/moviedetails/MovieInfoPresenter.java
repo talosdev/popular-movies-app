@@ -44,7 +44,7 @@ public class MovieInfoPresenter extends BaseCacheablePresenter<MovieDetailsContr
 
 
     @Override
-    public void loadMovieInfo(long movieId) {
+    public void loadMovieInfo() {
 
         subscription = observable.
                 subscribe(

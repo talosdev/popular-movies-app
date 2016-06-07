@@ -61,7 +61,7 @@ public interface MovieDetailsContract {
 
     interface MovieInfoPresenter extends CacheablePresenter<InfoView> {
 
-        void loadMovieInfo(long movieId);
+        void loadMovieInfo();
     }
 
 

@@ -81,7 +81,7 @@ public class MovieInfoTabFragment extends CacheablePresenterBasedFragment<MovieD
     protected void initViewNoCache() {
         long movieId = getArguments().getLong(Args.ARG_MOVIE_ID);
         LOG.d(Tags.REMOTE, "Fetching movie details for: %d", movieId);
-        presenter.loadMovieInfo(movieId);
+        presenter.loadMovieInfo();
     }
 
     @Override
