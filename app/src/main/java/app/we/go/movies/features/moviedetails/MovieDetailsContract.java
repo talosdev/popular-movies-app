@@ -51,17 +51,16 @@ public interface MovieDetailsContract {
      */
     interface DetailsPresenter extends CacheablePresenter<DetailsView> {
 
-        void loadMovieInfo();
+        void loadMovieInfo(long movieId);
 
         void checkFavorite(long movieId);
-
 
         void onFavoriteClick(long movieId, String posterPath);
     }
 
     interface MovieInfoPresenter extends CacheablePresenter<InfoView> {
 
-        void loadMovieInfo();
+        void loadMovieInfo(long movieId);
     }
 
 

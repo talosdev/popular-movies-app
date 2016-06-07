@@ -103,7 +103,7 @@ public class MovieDetailsFragment extends CacheablePresenterBasedFragment<MovieD
 
     @Override
     protected void initViewNoCache() {
-        presenter.loadMovieInfo();
+        presenter.loadMovieInfo(currentMovieId);
 
     }
 

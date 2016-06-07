@@ -71,9 +71,10 @@ public class MovieInfoPresenterTest extends BasePresenterTest {
     @Test
     public void testLoadMovieInfo() throws InterruptedException {
 
-        MovieInfoPresenter presenter = getPresenter(MOVIE_ID);
+        long movieId = MOVIE_ID;
+        MovieInfoPresenter presenter = getPresenter(movieId);
 
-        presenter.loadMovieInfo();
+        presenter.loadMovieInfo(movieId);
 
         verify(view).displayInfo(DUMMY_MOVIE);
         verify(view).displayFormattedDate(DummyData.MOVIE_RELEASE_DATE_STR);
@@ -84,7 +85,9 @@ public class MovieInfoPresenterTest extends BasePresenterTest {
     @Test
     public void testLoadInfoWithWrongData() throws Exception {
 
-        getPresenter(INEXISTENT_MOVIE_ID).loadMovieInfo();
+        long movieId = INEXISTENT_MOVIE_ID;
+
+        getPresenter(movieId).loadMovieInfo(movieId);
 
         verifyError(view);
     }
@@ -92,7 +95,8 @@ public class MovieInfoPresenterTest extends BasePresenterTest {
 
     @Test
     public void testLoadInfoWithServerError() throws Exception {
-        getPresenter(MOVIE_ID_CAUSES_SERVER_ERROR).loadMovieInfo();
+        long movieId = MOVIE_ID_CAUSES_SERVER_ERROR;
+        getPresenter(movieId).loadMovieInfo(movieId);
 
         verifyFail(view);
     }

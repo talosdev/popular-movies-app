@@ -52,9 +52,6 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
         MockitoAnnotations.initMocks(this);
 
         service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
-
-
-
     }
 
     @After
@@ -65,9 +62,10 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     @Test
     public void testLoadMovieInfo() throws InterruptedException {
 
-        MovieDetailsPresenter presenter = getPresenter(MOVIE_ID);
+        long movieId = MOVIE_ID;
+        MovieDetailsPresenter presenter = getPresenter(movieId);
 
-        presenter.loadMovieInfo();
+        presenter.loadMovieInfo(movieId);
 
         verify(view).displayTitle(eq(MOVIE_TITLE));
         verify(view).displayImage(eq(MOVIE_BACKDROP_PATH));
@@ -90,8 +88,8 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
 
     @Test
     public void testLoadInfoWithWrongData() throws Exception {
-
-        getPresenter(INEXISTENT_MOVIE_ID).loadMovieInfo();
+        long movieId = INEXISTENT_MOVIE_ID;
+        getPresenter(movieId).loadMovieInfo(movieId);
 
         verifyError(view);
     }
@@ -99,7 +97,8 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
 
     @Test
     public void testLoadInfoWithServerError() throws Exception {
-        getPresenter(MOVIE_ID_CAUSES_SERVER_ERROR).loadMovieInfo();
+        long movieId = MOVIE_ID_CAUSES_SERVER_ERROR;
+        getPresenter(movieId).loadMovieInfo(movieId);
 
         verifyFail(view);
     }
@@ -108,9 +107,10 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     @Test
     public void testCheckFavoriteTrue() throws Exception {
         // setup DAO mock
-        when(favoriteMovieDAO.get(MOVIE_ID)).thenReturn(true);
+        long movieId = MOVIE_ID;
+        when(favoriteMovieDAO.get(movieId)).thenReturn(true);
 
-        getPresenter(MOVIE_ID).checkFavorite(MOVIE_ID);
+        getPresenter(movieId).checkFavorite(movieId);
 
         verify(view).toggleFavorite(true);
 
@@ -121,9 +121,10 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     @Test
     public void testCheckFavoriteFalse() throws Exception {
         // setup DAO mock
-        when(favoriteMovieDAO.get(INEXISTENT_MOVIE_ID)).thenReturn(false);
+        long movieId = INEXISTENT_MOVIE_ID;
+        when(favoriteMovieDAO.get(movieId)).thenReturn(false);
 
-        getPresenter(INEXISTENT_MOVIE_ID).checkFavorite(INEXISTENT_MOVIE_ID);
+        getPresenter(movieId).checkFavorite(movieId);
         verify(view).toggleFavorite(false);
 
         verifyNoMoreInteractions(view);
@@ -132,16 +133,17 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
 
     @Test
     public void testFavoriteClickDisable() throws Exception {
+        long movieId = MOVIE_ID;
         // setup DAO mock
-        when(favoriteMovieDAO.get(MOVIE_ID)).thenReturn(true);
-        MovieDetailsContract.DetailsPresenter presenter = getPresenter(MOVIE_ID);
+        when(favoriteMovieDAO.get(movieId)).thenReturn(true);
+        MovieDetailsContract.DetailsPresenter presenter = getPresenter(movieId);
 
         // We need to call checkFavorite first so that the "favorite" state is
         // set in the presenter
-        presenter.checkFavorite(MOVIE_ID);
+        presenter.checkFavorite(movieId);
         verify(view).toggleFavorite(true);
-        presenter.onFavoriteClick(MOVIE_ID, MOVIE_POSTER_PATH);
-        verify(favoriteMovieDAO).delete(MOVIE_ID);
+        presenter.onFavoriteClick(movieId, MOVIE_POSTER_PATH);
+        verify(favoriteMovieDAO).delete(movieId);
         verify(view).toggleFavorite(false);
 
         verifyNoMoreInteractions(view);
