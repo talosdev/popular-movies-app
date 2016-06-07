@@ -7,8 +7,11 @@ package app.we.go.movies.dependency;
 import javax.inject.Singleton;
 
 import app.we.go.movies.features.moviedetails.MovieDetailsActivity;
+import app.we.go.movies.features.moviedetails.dependency.DetailsServiceModule;
 import app.we.go.movies.features.moviedetails.dependency.MovieDetailsComponent;
 import app.we.go.movies.features.moviedetails.dependency.MovieDetailsModule;
+import app.we.go.movies.features.moviedetails.dependency.MovieInfoComponent;
+import app.we.go.movies.features.moviedetails.dependency.MovieInfoModule;
 import app.we.go.movies.features.moviedetails.dependency.MovieReviewsComponent;
 import app.we.go.movies.features.moviedetails.dependency.MovieReviewsModule;
 import app.we.go.movies.features.moviedetails.dependency.MovieVideosComponent;
@@ -25,13 +28,17 @@ import dagger.Component;
         DatabaseModule.class})
 public interface ApplicationComponent {
 
-    MovieDetailsComponent plus(MovieDetailsModule module);
+    MovieDetailsComponent plus(DetailsServiceModule detailsServiceModule,
+                               MovieDetailsModule movieDetailsModule);
     MovieReviewsComponent plus(MovieReviewsModule module);
     MovieVideosComponent plus(MovieVideosModule module);
 
+    MovieInfoComponent plus(DetailsServiceModule detailsServiceModule,
+                            MovieInfoModule movieInfoModule);
+
+
+
     MovieListComponent plus(MovieListModule movieListModule);
-
-
 
     void inject(MovieDetailsActivity movieDetailsActivity);
 }

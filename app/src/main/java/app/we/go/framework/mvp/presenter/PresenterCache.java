@@ -3,6 +3,9 @@ package app.we.go.framework.mvp.presenter;
 import android.support.annotation.Nullable;
 import android.support.v4.util.SimpleArrayMap;
 
+import app.we.go.framework.mvp.MVP;
+import app.we.go.movies.util.LOG;
+
 /**
  * Cache for {@link Presenter}s.
  * <p/>
@@ -47,10 +50,15 @@ public class PresenterCache {
     public final <T extends CacheablePresenter> T getPresenter(
             String tag, PresenterFactory factory) {
 
+        LOG.d(MVP.TAG, "Requesting presenter with tag %s", tag);
+
         T p = (T) presenters.get(tag);
         if (p == null) {
+            LOG.d(MVP.TAG, "Presenter for tag %s not found in cache, creating it...", tag);
             p = (T) factory.createPresenter(tag);
             putPresenter(tag, p);
+        } else {
+            LOG.d(MVP.TAG, "Presenter for tag %s found in cache", tag);
         }
         return p;
     }

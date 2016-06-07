@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,22 +19,25 @@ import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
+import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
+import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
-import app.we.go.movies.features.moviedetails.dependency.HasMovieDetailsComponent;
+import app.we.go.movies.features.moviedetails.dependency.HasDetailsServiceModule;
+import app.we.go.movies.features.moviedetails.dependency.MovieDetailsModule;
 import app.we.go.movies.features.moviedetails.tab.MovieDetailsPagerAdapter;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.util.LOG;
 import butterknife.Bind;
 import butterknife.BindDrawable;
-import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
 /**
  * Created by apapad on 3/01/16.
  */
-public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.View {
+public class MovieDetailsFragment extends CacheablePresenterBasedFragment<MovieDetailsContract.DetailsPresenter>
+        implements MovieDetailsContract.DetailsView {
 
 
     private long currentMovieId;
@@ -47,7 +49,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @BindDrawable(R.drawable.ic_favorite_border_blue_24dp)
     Drawable icon_favorite_unselected;
 
-
     @Bind(R.id.imageView)
     ImageView imageView;
 
@@ -57,8 +58,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Bind(R.id.details_pager)
     ViewPager pager;
 
-    @Inject
-    MovieDetailsContract.Presenter presenter;
 
     @Inject
     Context context;
@@ -94,10 +93,17 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
         }
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
+    @Override
+    protected void injectDependencies(String presenterTag) {
+        MovieApplication.get(getActivity()).getComponent().
+                plus(((HasDetailsServiceModule) getActivity()).getModule(),
+                        new MovieDetailsModule(presenterTag)).inject(this);
+git    }
+
+    @Override
+    protected void initViewNoCache() {
+        presenter.loadMovieInfo(currentMovieId);
 
     }
 
@@ -131,10 +137,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
         setHasOptionsMenu(true);
 
-        ButterKnife.bind(this, view);
-        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
-
-        presenter.bindView(this);
 
         pagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager(), currentMovieId);
 

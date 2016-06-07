@@ -2,17 +2,15 @@ package app.we.go.movies.features.moviedetails.dependency;
 
 import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.moviedetails.MovieDetailsFragment;
-import app.we.go.movies.features.moviedetails.tab.MovieInfoTabFragment;
 import dagger.Subcomponent;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-@Subcomponent(modules = {MovieDetailsModule.class})
 @FragmentScope
+@Subcomponent(modules = {DetailsServiceModule.class, MovieDetailsModule.class})
 public interface MovieDetailsComponent {
     void inject(MovieDetailsFragment movieDetailsFragment);
 
-    void inject(MovieInfoTabFragment movieInfoTabFragment);
 }
 

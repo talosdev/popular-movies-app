@@ -6,8 +6,10 @@ import android.view.View;
 
 import java.util.UUID;
 
+import app.we.go.framework.mvp.MVP;
 import app.we.go.framework.mvp.presenter.CacheablePresenter;
 import app.we.go.movies.constants.Tags;
+import app.we.go.movies.util.LOG;
 import hugo.weaving.DebugLog;
 
 /**
@@ -52,6 +54,9 @@ public abstract class CacheablePresenterBasedFragment<P extends CacheablePresent
         } else {
             fromCache = true;
         }
+        LOG.v(MVP.TAG, "Fragment %s is using the tag %s", this.getClass().getSimpleName(), presenterTag);
+
+
 
         // super assumes that presenterTag is set, so this needs to be at the end of the method
         super.onViewCreated(view, savedInstanceState);
@@ -66,6 +71,8 @@ public abstract class CacheablePresenterBasedFragment<P extends CacheablePresent
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         isDestroyedBySystem = true;
+        LOG.v(MVP.TAG, "Fragment %s is storing the tag %s to the instance state",
+                this.getClass().getSimpleName(), presenterTag);
         outState.putString(Tags.PRESENTER_TAG, presenterTag);
     }
 
@@ -104,6 +111,8 @@ public abstract class CacheablePresenterBasedFragment<P extends CacheablePresent
     public void onDestroy() {
         super.onDestroy();
         if (!isDestroyedBySystem) {
+            LOG.v(MVP.TAG, "Fragment %s will clear the presenter with tag %s",
+                    this.getClass().getSimpleName(), presenterTag);
             presenter.clear();
         }
     }

@@ -37,7 +37,7 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
 
 
     @Mock
-    MovieDetailsContract.View view;
+    MovieDetailsContract.DetailsView view;
 
     @Mock
     MovieDetailsContract.InfoView infoView;

@@ -7,6 +7,6 @@ package app.we.go.movies.features.moviedetails.dependency;
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 
-public interface HasMovieDetailsComponent {
-    MovieDetailsComponent getComponent();
+public interface HasDetailsServiceModule {
+    DetailsServiceModule getModule();
 }

@@ -6,9 +6,10 @@ import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.movies.R;
-import app.we.go.movies.db.FavoriteMovieDAO;
-import app.we.go.movies.model.db.FavoriteMovie;
+import app.we.go.movies.helpers.SharedPreferencesHelper;
 import app.we.go.movies.model.remote.Movie;
+import app.we.go.movies.model.remote.TMDBError;
+import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.util.RxUtils;
 import retrofit2.Response;
 import rx.Observable;
@@ -18,27 +19,29 @@ import rx.Subscription;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsContract.DetailsView>
-        implements MovieDetailsContract.DetailsPresenter {
+public class MovieInfoPresenter extends BaseCacheablePresenter<MovieDetailsContract.InfoView>
+        implements MovieDetailsContract.MovieInfoPresenter {
 
-    private Observable<Response<Movie>> observable;
-    private final FavoriteMovieDAO favoriteMovieDAO;
-
-    // DetailsPresenter holds the "favorite" state
-    private boolean isFavorite;
+    private final Observable<Response<Movie>> observable;
+    private final SharedPreferencesHelper sharedPrefsHelper;
+    private final TMDBService service;
 
     private Subscription subscription;
+
     private Movie movie;
 
-
-    public MovieDetailsPresenter(Observable<Response<Movie>> observable,
-                                 FavoriteMovieDAO favoriteMovieDAO,
-                                 PresenterCache cache,
-                                 String tag) {
+    public MovieInfoPresenter(TMDBService service,
+                              Observable<Response<Movie>> observable,
+                              SharedPreferencesHelper sharedPrefsHelper,
+                              PresenterCache cache,
+                              String tag) {
         super(cache, tag);
+        this.service = service;
         this.observable = observable;
-        this.favoriteMovieDAO = favoriteMovieDAO;
+        this.sharedPrefsHelper = sharedPrefsHelper;
     }
+
+
 
     @Override
     public void loadMovieInfo(long movieId) {
@@ -65,8 +68,9 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
                                     populateViews(movie);
                                 } else {
+                                    TMDBError error = service.parse(response.errorBody());
                                     onCallError("The call to get the movie details was not successful",
-                                            R.string.error_generic, null);
+                                            R.string.error_generic, error);
                                 }
                             }
                         }
@@ -76,41 +80,14 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
     }
 
-
-
     private void populateViews(Movie movie) {
         if (movie != null) {
-            getBoundView().displayTitle(movie.getTitle());
-            getBoundView().displayImage(movie.getBackdropPath());
+            getBoundView().displayInfo(movie);
+            getBoundView().displayFormattedDate(sharedPrefsHelper.formatDate(movie.getReleaseDate()));
+
         }
     }
 
-
-    @Override
-    public void checkFavorite(long movieId) {
-        boolean isFavorite = favoriteMovieDAO.get(movieId);
-        this.isFavorite = isFavorite;
-        if (isViewBound()) {
-            getBoundView().toggleFavorite(isFavorite);
-        }
-    }
-
-
-    @Override
-    public void onFavoriteClick(long movieId, String posterPath) {
-        if (isFavorite) {
-            favoriteMovieDAO.delete(movieId);
-        } else {
-            favoriteMovieDAO.put(new FavoriteMovie(movieId, posterPath));
-        }
-
-        isFavorite = !isFavorite;
-
-        // reflect the change in the ui
-        if (isViewBound()) {
-            getBoundView().toggleFavorite(isFavorite);
-        }
-    }
 
 
     @Override
@@ -118,34 +95,36 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
         populateViews(movie);
     }
 
-
     @Override
     public void unbindView() {
         super.unbindView();
         RxUtils.unsubscribe(subscription);
     }
 
-    public static class Factory implements PresenterFactory<MovieDetailsPresenter> {
+    public static class Factory implements PresenterFactory<MovieInfoPresenter> {
 
+        private TMDBService service;
         private Observable<Response<Movie>> observable;
-        private FavoriteMovieDAO favoriteMovieDAO;
+        private SharedPreferencesHelper sharedPrefsHelper;
         private PresenterCache cache;
 
-        public Factory(Observable<Response<Movie>> observable,
-                       FavoriteMovieDAO favoriteMovieDAO,
+        public Factory(TMDBService service,
+                       Observable<Response<Movie>> observable,
+                       SharedPreferencesHelper sharedPrefsHelper,
                        PresenterCache cache) {
 
+            this.service = service;
             this.observable = observable;
-            this.favoriteMovieDAO = favoriteMovieDAO;
+            this.sharedPrefsHelper = sharedPrefsHelper;
             this.cache = cache;
         }
 
 
         @NonNull
         @Override
-        public MovieDetailsPresenter createPresenter(String tag) {
-            return new MovieDetailsPresenter(observable,
-                    favoriteMovieDAO,
+        public MovieInfoPresenter createPresenter(String tag) {
+            return new MovieInfoPresenter(service, observable,
+                    sharedPrefsHelper,
                     cache,
                     tag);
         }

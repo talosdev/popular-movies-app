@@ -11,9 +11,9 @@ import app.we.go.framework.mvp.view.ViewMVP;
 public interface CacheablePresenter<V extends ViewMVP> extends Presenter<V> {
 
     /**
-     * Defines the actions that the Presenter should take after being re-attached to a View.
-     * Typically, the implementations should call the appropriate View methods in order to
-     * populate the View with the data that the Presenter has already loaded (without, for example
+     * Defines the actions that the DetailsPresenter should take after being re-attached to a DetailsView.
+     * Typically, the implementations should call the appropriate DetailsView methods in order to
+     * populate the DetailsView with the data that the DetailsPresenter has already loaded (without, for example
      * making additional network calls).
      */
     void onRestoreFromCache();

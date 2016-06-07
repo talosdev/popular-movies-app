@@ -13,14 +13,14 @@ public interface Presenter<V extends ViewMVP> {
 
     /**
      * Binds a view to the presenter. Should be called in the appropriate lifecycle method
-     * of the class that implements the View.
+     * of the class that implements the DetailsView.
      * @param view
      */
     void bindView(V view);
 
     /**
      * Unbinds the view. Should be called in the appropriate lifecycle method
-     * of the class that implements the View.
+     * of the class that implements the DetailsView.
      * @param view
      */
     void unbindView();

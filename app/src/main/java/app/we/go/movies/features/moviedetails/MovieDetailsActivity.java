@@ -5,17 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import app.we.go.framework.mvp.BaseActivity;
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
-import app.we.go.movies.features.moviedetails.dependency.HasMovieDetailsComponent;
-import app.we.go.movies.features.moviedetails.dependency.MovieDetailsComponent;
-import app.we.go.movies.features.moviedetails.dependency.MovieDetailsModule;
-import app.we.go.framework.mvp.BaseActivity;
+import app.we.go.movies.features.moviedetails.dependency.DetailsServiceModule;
+import app.we.go.movies.features.moviedetails.dependency.HasDetailsServiceModule;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
-public class MovieDetailsActivity extends BaseActivity implements HasMovieDetailsComponent {
+public class MovieDetailsActivity extends BaseActivity implements HasDetailsServiceModule {
 
     private static final String EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID";
     private static final String EXTRA_POSTER_PATH = "EXTRA_POSTER_PATH";
@@ -26,8 +25,7 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
     Toolbar toolbar;
 
 
-    private MovieDetailsComponent movieDetailsComponent;
-    private String presenterTag;
+    private DetailsServiceModule detailsServiceModule;
 
 
     @DebugLog
@@ -54,8 +52,7 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
             getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame, fragment).commit();
         }
 
-        movieDetailsComponent = MovieApplication.get(this).getComponent().
-                plus(new MovieDetailsModule(this, movieId, presenterTag));
+        detailsServiceModule = new DetailsServiceModule(this, movieId);
     }
 
 
@@ -108,8 +105,8 @@ public class MovieDetailsActivity extends BaseActivity implements HasMovieDetail
 
 
     @Override
-    public MovieDetailsComponent getComponent() {
-        return movieDetailsComponent;
+    public DetailsServiceModule getModule() {
+        return detailsServiceModule;
     }
 
 }

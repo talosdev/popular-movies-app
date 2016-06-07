@@ -19,7 +19,7 @@ import app.we.go.movies.model.remote.Video;
 public interface MovieDetailsContract {
 
 
-    interface View extends ViewMVP {
+    interface DetailsView extends ViewMVP {
 
         void toggleFavorite(boolean isFavorite);
 
@@ -46,27 +46,22 @@ public interface MovieDetailsContract {
     }
 
     /**
-     * This presenter is supposed to be bound to both a {@link MovieDetailsContract.View} and a
+     * This presenter is supposed to be bound to both a {@link DetailsView} and a
      * {@link MovieDetailsContract.InfoView}
      */
-    interface Presenter extends app.we.go.framework.mvp.presenter.Presenter<View> {
+    interface DetailsPresenter extends CacheablePresenter<DetailsView> {
 
-        void bindInfoView(InfoView infoView);
-
-        void unbindInfoView();
-
-        void unbindAllViews();
-
-        InfoView getInfoView();
-
+        void loadMovieInfo(long movieId);
 
         void checkFavorite(long movieId);
 
 
-        void loadMovieInfo(long movieId);
-
-
         void onFavoriteClick(long movieId, String posterPath);
+    }
+
+    interface MovieInfoPresenter extends CacheablePresenter<InfoView> {
+
+        void loadMovieInfo(long movieId);
     }
 
 
