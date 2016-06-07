@@ -1,8 +1,11 @@
 package app.we.go.movies.features.movielist;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.movies.R;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
@@ -69,9 +72,7 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
                                 if (movieList.getMovies() != null) {
                                     cachedMovies.addAll(movieList.getMovies());
                                 }
-                                if (isViewBound()) {
-                                    getBoundView().showMovieList(movieList.getMovies());
-                                }
+                                getBoundView().showMovieList(movieList.getMovies());
                             }
                         } else {
                             TMDBError error = service.parse(response.errorBody());
@@ -92,6 +93,25 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
 
     @Override
     public void onRestoreFromCache() {
+        if (isViewBound()) {
+            getBoundView().showMovieList(cachedMovies);
+        }
+    }
 
+    public static class Factory implements PresenterFactory<MovieListPresenter> {
+
+        TMDBService service;
+        PresenterCache cache;
+
+        public Factory(TMDBService service, PresenterCache cache) {
+            this.service = service;
+            this.cache = cache;
+        }
+
+        @NonNull
+        @Override
+        public MovieListPresenter createPresenter(String tag) {
+            return new MovieListPresenter(service, cache, tag);
+        }
     }
 }
