@@ -1,9 +1,10 @@
 package app.we.go.movies.features.movielist.dependency;
 
-import android.app.Activity;
 import android.content.Context;
 
-import app.we.go.movies.dependency.ActivityScope;
+import app.we.go.framework.mvp.presenter.PresenterCache;
+import app.we.go.movies.db.FavoriteMovieDAO;
+import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.movielist.MovieListContract;
 import app.we.go.movies.features.movielist.MovieListPresenter;
 import app.we.go.movies.remote.service.TMDBService;
@@ -17,25 +18,36 @@ import dagger.Provides;
 public class MovieListModule {
 
 
-    private final Activity activity;
+    private final Context context;
+    private String presenterTag;
 
 
-    public MovieListModule(Activity activity) {
-        this.activity = activity;
+    public MovieListModule(Context context,
+                           String presenterTag) {
+        this.context = context;
+        this.presenterTag = presenterTag;
     }
 
     @Provides
-    @ActivityScope
+    @FragmentScope
     public Context provideContext() {
-        return activity;
+        return context;
     }
 
 
+    @Provides
+    @FragmentScope
+    public MovieListContract.Presenter providePresenter(PresenterCache cache,
+                                                        MovieListPresenter.Factory factory) {
+        return cache.getPresenter(presenterTag, factory);
+    }
 
     @Provides
-    @ActivityScope
-    public MovieListContract.Presenter providePresenter(TMDBService service) {
-        return new MovieListPresenter(service);
+    @FragmentScope
+    public MovieListPresenter.Factory provideFactory(TMDBService service,
+                                                     PresenterCache cache,
+                                                     FavoriteMovieDAO dao) {
+        return new MovieListPresenter.Factory(service, cache, dao);
     }
 
 

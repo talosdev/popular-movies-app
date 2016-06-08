@@ -1,21 +1,16 @@
 package app.we.go.movies.features.moviedetails.dependency;
 
-import android.app.Activity;
-import android.content.Context;
-
-import javax.inject.Named;
-
-import app.we.go.movies.helpers.SharedPreferencesHelper;
+import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.db.FavoriteMovieDAO;
-import app.we.go.movies.dependency.ActivityScope;
+import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.MovieDetailsPresenter;
-import app.we.go.movies.features.moviedetails.MovieReviewsPresenter;
-import app.we.go.movies.features.moviedetails.MovieVideosPresenter;
+import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.remote.service.TMDBService;
-import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Response;
+import rx.Observable;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -24,58 +19,31 @@ import dagger.Provides;
 public class MovieDetailsModule {
 
 
-    private final Activity activity;
-    private final long movieId;
+    private String presenterTag;
 
-
-    public MovieDetailsModule(Activity activity, long movieId) {
-        this.activity = activity;
-        this.movieId = movieId;
-    }
-
-
-    @Provides
-    @ActivityScope
-    public Context provideContext() {
-        return activity;
-    }
-
-
-    /**
-     * This, at the moment is not used, as all views actually have a copy of the movieId.
-     * @return
-     */
-    @Provides
-    @ActivityScope
-    @Named("movieId")
-    public long provideMovieId() {
-        return movieId;
-    }
-
-
-
-
-    @Provides
-    @ActivityScope
-    public MovieDetailsContract.Presenter providePresenter(TMDBService service,
-                                                           SharedPreferencesHelper sharedPrefsHelper,
-                                                           FavoriteMovieDAO favoriteMovieDAO) {
-        return new MovieDetailsPresenter(service, sharedPrefsHelper, favoriteMovieDAO);
-    }
-
-
-    @Provides
-    @ActivityScope
-    public MovieDetailsContract.ReviewsPresenter provideReviewsPresenter(TMDBService service) {
-        return new MovieReviewsPresenter(service);
+    public MovieDetailsModule(String presenterTag) {
+        this.presenterTag = presenterTag;
     }
 
     @Provides
-    @ActivityScope
-    public MovieDetailsContract.VideosPresenter provideVideosPresenter(TMDBService service,
-                                                                       URLBuilder urlBuilder) {
-        return new MovieVideosPresenter(service, urlBuilder);
+    @FragmentScope
+    public MovieDetailsContract.DetailsPresenter provideDetailsPresenter(PresenterCache cache,
+                                                                         MovieDetailsPresenter.Factory factory) {
+        return cache.getPresenter(presenterTag, factory);
     }
+
+    @Provides
+    @FragmentScope
+    public MovieDetailsPresenter.Factory provideDetailsPresenterFactory(
+            TMDBService service,
+            Observable<Response<Movie>> observable,
+            FavoriteMovieDAO favoriteMovieDAO,
+            PresenterCache cache) {
+        return new MovieDetailsPresenter.Factory(service, observable, favoriteMovieDAO, cache);
+    }
+
+
+
 }
 
 

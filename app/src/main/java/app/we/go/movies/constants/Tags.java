@@ -14,4 +14,5 @@ public class Tags {
     public static final String TEST = "T_TEST";
     public static final String UI = "T_UI";
     public static final String GEN = "T_GEN";
+    public static final java.lang.String PRESENTER_TAG = "T_PRESENTER_TAG";
 }

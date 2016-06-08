@@ -3,7 +3,6 @@ package app.we.go.movies.features.moviedetails.tab;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,22 +10,24 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
+import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
+import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.constants.Tags;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
-import app.we.go.movies.features.moviedetails.dependency.HasMovieDetailsComponent;
+import app.we.go.movies.features.moviedetails.dependency.HasDetailsServiceModule;
+import app.we.go.movies.features.moviedetails.dependency.MovieInfoModule;
 import app.we.go.movies.model.remote.Movie;
-import app.we.go.movies.mvp.BaseView;
 import app.we.go.movies.util.LOG;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
 /**
  * Created by apapad on 26/02/16.
  */
-public class MovieInfoTabFragment extends Fragment implements MovieDetailsContract.InfoView {
+public class MovieInfoTabFragment extends CacheablePresenterBasedFragment<MovieDetailsContract.MovieInfoPresenter>
+        implements MovieDetailsContract.InfoView {
 
     @Bind(R.id.release_date)
     TextView releaseDateView;
@@ -41,9 +42,6 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     TextView descriptionView;
 
     @Inject
-    MovieDetailsContract.Presenter presenter;
-
-    @Inject
     Context context;
 
     public static MovieInfoTabFragment newInstance(long movieId) {
@@ -55,17 +53,12 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     }
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    protected void injectDependencies(String presenterTag) {
+        MovieApplication.get(getActivity()).getComponent().
+                plus(((HasDetailsServiceModule) getActivity()).getModule(),
+                        new MovieInfoModule(presenterTag)).inject(this);
 
     }
 
@@ -85,19 +78,10 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        ButterKnife.bind(this, view);
-
-        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
-
-        presenter.bindInfoView(this);
-
+    protected void initViewNoCache() {
         long movieId = getArguments().getLong(Args.ARG_MOVIE_ID);
         LOG.d(Tags.REMOTE, "Fetching movie details for: %d", movieId);
         presenter.loadMovieInfo(movieId);
-
     }
 
     @Override
@@ -118,13 +102,13 @@ public class MovieInfoTabFragment extends Fragment implements MovieDetailsContra
     }
 
     @Override
-    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
-        BaseView.Helper.showError(getContext(), logMessage, resourceId, t);
+    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
+//        showError(getContext(), logMessage, resourceId, t);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.unbindInfoView();
+        presenter.unbindView();
     }
 }

@@ -32,8 +32,14 @@ public class InMemoryFavoriteMoviesDAO implements FavoriteMovieDAO {
         return map.containsKey(movieId);
     }
 
+    /**
+     * Ignores the offset and limit parameters.
+     * @param callback
+     * @param offset
+     * @param limit
+     */
     @Override
-    public void getAll(Callback<List<FavoriteMovie>> callback) {
+    public void getAll(Callback<List<FavoriteMovie>> callback, int offset, int limit) {
         callback.onSuccess(new ArrayList<>(map.values()));
     }
 }

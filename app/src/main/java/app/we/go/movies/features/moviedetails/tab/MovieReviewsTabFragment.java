@@ -1,8 +1,8 @@
 package app.we.go.movies.features.moviedetails.tab;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,23 +16,21 @@ import java.util.List;
 import javax.inject.Inject;
 
 import app.we.go.movies.R;
+import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.features.moviedetails.dependency.HasMovieDetailsComponent;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
+import app.we.go.movies.features.moviedetails.dependency.MovieReviewsModule;
 import app.we.go.movies.model.remote.Review;
+import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
 /**
- *
  * Created by apapad on 26/02/16.
  */
-public class MovieReviewsTabFragment extends Fragment implements MovieDetailsContract.ReviewsView {
+public class MovieReviewsTabFragment extends CacheablePresenterBasedFragment<MovieDetailsContract.ReviewsPresenter>
+        implements MovieDetailsContract.ReviewsView {
 
-
-    @Inject
-    MovieDetailsContract.ReviewsPresenter presenter;
 
     @Bind(R.id.reviews_list)
     ListView listView;
@@ -40,6 +38,9 @@ public class MovieReviewsTabFragment extends Fragment implements MovieDetailsCon
     @Bind(R.id.reviews_list_empty)
     TextView emptyView;
 
+
+    @Inject
+    Context context;
 
     private ArrayAdapter<Review> adapter;
 
@@ -65,30 +66,21 @@ public class MovieReviewsTabFragment extends Fragment implements MovieDetailsCon
 
 
     @Override
+    protected void injectDependencies(String presenterTag) {
+         MovieApplication.get(getActivity()).
+                getComponent().
+                plus(new MovieReviewsModule(getActivity(), presenterTag)).inject(this);
+
+    }
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ButterKnife.bind(this, view);
-        ((HasMovieDetailsComponent) getActivity()).getComponent().inject(this);
-
-        presenter.bindView(this);
-
-        adapter = new ReviewsArrayAdapter(getActivity(), R.layout.review_row, new ArrayList<Review>(), getActivity().getLayoutInflater());
+        adapter = new ReviewsArrayAdapter(context, R.layout.review_row, new ArrayList<Review>(), getActivity().getLayoutInflater());
         listView.setOnItemClickListener(null);
         listView.setAdapter(adapter);
         listView.setEmptyView(emptyView);
     }
-
-    @DebugLog
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        presenter.loadMovieReviews(getArguments().getLong(Args.ARG_MOVIE_ID));
-    }
-
-
-
 
 
     @Override
@@ -99,14 +91,15 @@ public class MovieReviewsTabFragment extends Fragment implements MovieDetailsCon
 
 
     @Override
-    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
+    protected void initViewNoCache() {
+        presenter.loadMovieReviews(getArguments().getLong(Args.ARG_MOVIE_ID));
+    }
+
+    @Override
+    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
         // Do nothing, do not display the error message, just leave the empty list message
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        presenter.unbindView();
-    }
+
 }

@@ -4,8 +4,8 @@ import android.net.Uri;
 
 import java.util.List;
 
-import app.we.go.movies.mvp.BasePresenter;
-import app.we.go.movies.mvp.BaseView;
+import app.we.go.framework.mvp.presenter.CacheablePresenter;
+import app.we.go.framework.mvp.view.ViewMVP;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.model.remote.Review;
 import app.we.go.movies.model.remote.Video;
@@ -19,7 +19,7 @@ import app.we.go.movies.model.remote.Video;
 public interface MovieDetailsContract {
 
 
-    interface View extends BaseView {
+    interface DetailsView extends ViewMVP {
 
         void toggleFavorite(boolean isFavorite);
 
@@ -28,16 +28,16 @@ public interface MovieDetailsContract {
         void displayImage(String imagePath);
     }
 
-    interface InfoView extends BaseView {
+    interface InfoView extends ViewMVP {
         void displayInfo(Movie movie);
         void displayFormattedDate(String date);
     }
 
-    interface ReviewsView extends BaseView {
+    interface ReviewsView extends ViewMVP {
         void displayReviews(List<Review> body);
     }
 
-    interface VideosView extends BaseView {
+    interface VideosView extends ViewMVP {
         void displayVideos(List<Video> videos);
 
         void openVideo(Uri videoUrl);
@@ -46,35 +46,31 @@ public interface MovieDetailsContract {
     }
 
     /**
-     * This presenter is supposed to be bound to both a {@link MovieDetailsContract.View} and a
+     * This presenter is supposed to be bound to both a {@link DetailsView} and a
      * {@link MovieDetailsContract.InfoView}
      */
-    interface Presenter extends BasePresenter<View> {
-
-        void bindInfoView(InfoView infoView);
-
-        void unbindInfoView();
-
-        void unbindAllViews();
-
-        InfoView getInfoView();
-
-
-        void checkFavorite(long movieId);
-
+    interface DetailsPresenter extends CacheablePresenter<DetailsView> {
 
         void loadMovieInfo(long movieId);
 
+        void checkFavorite(long movieId);
 
         void onFavoriteClick(long movieId, String posterPath);
     }
 
+    interface MovieInfoPresenter extends CacheablePresenter<InfoView> {
 
-    interface ReviewsPresenter extends BasePresenter<ReviewsView> {
-        void loadMovieReviews(long movieId);
+        void loadMovieInfo(long movieId);
     }
 
-    interface VideosPresenter extends BasePresenter<VideosView> {
+
+    interface ReviewsPresenter extends CacheablePresenter<ReviewsView> {
+        void loadMovieReviews(long movieId);
+
+
+    }
+
+    interface VideosPresenter extends CacheablePresenter<VideosView> {
         void loadMovieVideos(long movieId);
 
         void onVideoClicked(String videoKey);

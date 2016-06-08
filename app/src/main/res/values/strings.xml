@@ -17,4 +17,6 @@
     <string name="error_network">There was an error contacting the server.</string>
     <string name="error_generic">An error occurred</string>
     <string name="video_desc">%1$s [%2$s]</string>
+    <string name="database_error">A database error has been encountered.</string>
+    <string name="error_database">A database error has occurred.</string>
 </resources>

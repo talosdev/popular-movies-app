@@ -6,8 +6,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import app.we.go.movies.model.local.SortByCriterion;
+import app.we.go.framework.mvp.presenter.PresenterCache;
+import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.dependency.MockServiceModule;
+import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.service.TMDBService;
 
@@ -23,8 +25,13 @@ public class MovieListPresenterTest {
     @Mock
     MovieListContract.View view;
 
-    MovieListPresenter presenter;
+    @Mock
+    private PresenterCache cache;
 
+    @Mock
+    FavoriteMovieDAO dao;
+
+    MovieListPresenter presenter;
     TMDBService service;
 
     @Before
@@ -34,7 +41,10 @@ public class MovieListPresenterTest {
 
         service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
-        presenter = new MovieListPresenter(service);
+        presenter = new MovieListPresenter(service,
+                dao,
+                cache,
+                "TAG");
         presenter.bindView(view);
     }
 

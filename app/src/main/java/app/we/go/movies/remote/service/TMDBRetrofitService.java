@@ -33,6 +33,6 @@ public interface TMDBRetrofitService {
     @GET("discover/movie")
     Observable<Response<MovieList>> getMovies(@Query("sort_by") String sortBy,
                               @Query("page") int page,
-                              @Query("vote_counter.gte") int minVotes);
+                              @Query("vote_count.gte") int minVotes);
 
 }

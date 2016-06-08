@@ -1,9 +1,13 @@
 package app.we.go.movies.features.moviedetails;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
+import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.movies.R;
-import app.we.go.movies.mvp.AbstractPresenter;
+import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
+import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.model.remote.Review;
 import app.we.go.movies.model.remote.ReviewList;
@@ -16,7 +20,7 @@ import rx.Subscription;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContract.ReviewsView> implements MovieDetailsContract.ReviewsPresenter {
+public class MovieReviewsPresenter extends BaseCacheablePresenter<MovieDetailsContract.ReviewsView> implements MovieDetailsContract.ReviewsPresenter {
 
 
     private final TMDBService service;
@@ -25,19 +29,14 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
     private Subscription subscription;
 
 
-    public MovieReviewsPresenter(TMDBService service) {
+    public MovieReviewsPresenter(TMDBService service,
+                                 PresenterCache cache, String presenterTag) {
+        super(cache, presenterTag);
         this.service = service;
     }
 
     @Override
-    public void unbindView() {
-        super.unbindView();
-        RxUtils.unsubscribe(subscription);
-    }
-
-    @Override
     public void loadMovieReviews(final long movieId) {
-
         subscription = service.getReviews(movieId).
                 subscribe(
                         new Observer<Response<ReviewList>>() {
@@ -72,4 +71,37 @@ public class MovieReviewsPresenter extends AbstractPresenter<MovieDetailsContrac
                 );
     }
 
+    @Override
+    public void onRestoreFromCache() {
+        if (isViewBound()) {
+            getBoundView().displayReviews(reviews);
+        }
+    }
+
+    @Override
+    public void unbindView() {
+        super.unbindView();
+        RxUtils.unsubscribe(subscription);
+    }
+
+
+
+    public static class Factory implements PresenterFactory<MovieReviewsPresenter> {
+        private PresenterCache cache;
+        private TMDBService service;
+
+        public Factory(PresenterCache cache, TMDBService service) {
+            this.cache = cache;
+            this.service = service;
+        }
+
+
+        @NonNull
+        @Override
+        public MovieReviewsPresenter createPresenter(String tag) {
+            return new MovieReviewsPresenter(service,
+                    cache,
+                    tag);
+        }
+    }
 }

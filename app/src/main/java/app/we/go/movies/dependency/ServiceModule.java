@@ -113,7 +113,6 @@ public class ServiceModule {
                                           TMDBErrorParser parser,
                                           Transformer<Response<?>, Response<?>>  transformer) {
 
-//        return MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(null);
         return new TMDBServiceImpl(retrofitService, parser, transformer);
 
     }

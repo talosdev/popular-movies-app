@@ -102,7 +102,7 @@ public abstract class FavoriteMovieDAOTest {
             @Override
             public void onError() {
             }
-        });
+        }, 0, 20);
 
         latch.await(10, TimeUnit.SECONDS);
     }
