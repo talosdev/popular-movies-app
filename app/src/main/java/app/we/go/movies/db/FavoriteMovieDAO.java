@@ -15,7 +15,7 @@ public interface FavoriteMovieDAO {
 
     boolean get(long movieId);
 
-    void getAll(Callback<List<FavoriteMovie>> callback);
+    void getAll(Callback<List<FavoriteMovie>> callback, int offset, int limit);
 
 
     interface Callback<T> {

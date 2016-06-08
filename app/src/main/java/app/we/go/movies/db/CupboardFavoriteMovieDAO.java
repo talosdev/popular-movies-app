@@ -1,14 +1,22 @@
 package app.we.go.movies.db;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+import android.os.Process;
 
 import java.util.List;
 
 import app.we.go.movies.model.db.FavoriteMovie;
+import nl.qbusict.cupboard.DatabaseCompartment;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
+ * All methods, except {@link CupboardFavoriteMovieDAO#getAll(Callback, int, int)}
+ * in this implementation are blocking methods that execute in the calling thread.
+ * The exception method is a non-blocking call, that expects a callback to notify the caller,
+ * though it still executes in the same thread as the caller.
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class CupboardFavoriteMovieDAO implements FavoriteMovieDAO {
@@ -51,19 +59,33 @@ public class CupboardFavoriteMovieDAO implements FavoriteMovieDAO {
     }
 
     @Override
-    public void getAll(final Callback<List<FavoriteMovie>> callback) {
-        (new Runnable() {
+    public void getAll(final Callback<List<FavoriteMovie>> callback, final int offset, final int limit) {
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                List<FavoriteMovie> favoriteMovieList = cupboard().
+                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+
+                DatabaseCompartment.QueryBuilder<FavoriteMovie> queryBuilder = cupboard().
                         withDatabase(db).
                         query(FavoriteMovie.class).
+                        limit(limit);
+
+                if (offset > 0) {
+                    queryBuilder = queryBuilder.offset(offset);
+                }
+
+                List<FavoriteMovie> favoriteMovieList = queryBuilder.
                         // TODO
                         // orderBy().
-                        list();
+                                list();
                 callback.onSuccess(favoriteMovieList);
 
             }
-        }).run();
+        };
+        // Simple handler that will execute the runnable in the same thread
+        // By using a Handler we also go around the problem with the notifyDataSetChanged
+        // method being called while the RecyclerView is laying out itself
+        Handler h = new Handler();
+        h.postDelayed(runnable, 10);
     }
 }

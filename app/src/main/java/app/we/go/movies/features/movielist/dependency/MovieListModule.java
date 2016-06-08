@@ -3,6 +3,7 @@ package app.we.go.movies.features.movielist.dependency;
 import android.content.Context;
 
 import app.we.go.framework.mvp.presenter.PresenterCache;
+import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.movielist.MovieListContract;
 import app.we.go.movies.features.movielist.MovieListPresenter;
@@ -44,8 +45,9 @@ public class MovieListModule {
     @Provides
     @FragmentScope
     public MovieListPresenter.Factory provideFactory(TMDBService service,
-                                                     PresenterCache cache) {
-        return new MovieListPresenter.Factory(service, cache);
+                                                     PresenterCache cache,
+                                                     FavoriteMovieDAO dao) {
+        return new MovieListPresenter.Factory(service, cache, dao);
     }
 
 

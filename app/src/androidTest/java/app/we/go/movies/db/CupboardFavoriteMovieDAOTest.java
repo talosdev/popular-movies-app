@@ -1,6 +1,7 @@
 package app.we.go.movies.db;
 
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 
 import org.junit.BeforeClass;
@@ -19,6 +20,11 @@ public class CupboardFavoriteMovieDAOTest extends FavoriteMovieDAOTest {
                 getTargetContext(), TEST_DB);
         db = helper.getWritableDatabase();
         dao = new CupboardFavoriteMovieDAO(db);
+
+        // Need to turn this thread into a looper. because the implementation
+        // relies on {@link Handler#postDelayed}
+        Looper.prepare();
+        Looper.loop();
     }
 
 

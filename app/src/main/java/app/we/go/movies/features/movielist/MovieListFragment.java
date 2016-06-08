@@ -12,8 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
 
 import com.github.yasevich.endlessrecyclerview.EndlessRecyclerView;
 
@@ -53,10 +51,6 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
 
     private static final int NUM_COLS = 3;
 
-    private ArrayAdapter tmdbAdapter;
-    private CursorAdapter favoritesAdapter;
-
-//    private SortByChangedCallback sortByChangedCallback;
 
     private MovieSelectedCallback movieSelectedCallback;
 
@@ -134,23 +128,12 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
 
         sortBy = SortByCriterion.byIndex(getArguments().getInt(SORT_BY));
 
-        tmdbAdapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
-        favoritesAdapter = new GridViewFavoritesCursorAdapter(getActivity(), null, 0);
     }
 
 
     @Override
     protected void initViewNoCache() {
-        switch (sortBy) {
-
-            case POPULARITY:
-            case VOTE:
-                presenter.loadMovies(sortBy);
-                break;
-            case FAVORITES:
-
-                break;
-        }
+        presenter.loadMovies(sortBy);
     }
 
 

@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import app.we.go.framework.mvp.presenter.PresenterCache;
+import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.dependency.MockServiceModule;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.remote.DummyData;
@@ -27,6 +28,9 @@ public class MovieListPresenterTest {
     @Mock
     private PresenterCache cache;
 
+    @Mock
+    FavoriteMovieDAO dao;
+
     MovieListPresenter presenter;
     TMDBService service;
 
@@ -38,6 +42,7 @@ public class MovieListPresenterTest {
         service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
         presenter = new MovieListPresenter(service,
+                dao,
                 cache,
                 "TAG");
         presenter.bindView(view);
