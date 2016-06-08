@@ -1,6 +1,7 @@
 package app.we.go.movies.util;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,6 +36,11 @@ public class StringUtils {
      */
     public static String readResourceToString(Context context, int resourceId) {
         InputStream is = context.getResources().openRawResource(resourceId);
+        return readInputStreamToString(is);
+    }
+
+    @NonNull
+    public static String readInputStreamToString(InputStream is) {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String readLine = null;
         StringBuilder sb = new StringBuilder();

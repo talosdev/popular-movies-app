@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
-import android.widget.Toast;
 
 import com.github.yasevich.endlessrecyclerview.EndlessRecyclerView;
 
@@ -183,13 +182,6 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
     @Override
     public void navigateToMovieDetails(Movie movie) {
         movieSelectedCallback.onMovieSelected(movie);
-    }
-
-
-    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
-        LOG.e(Tags.REMOTE, logMessage, t);
-
-        Toast.makeText(this.context, resourceId, Toast.LENGTH_SHORT).show();
     }
 
     @Override

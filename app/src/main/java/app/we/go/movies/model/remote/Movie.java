@@ -2,6 +2,7 @@ package app.we.go.movies.model.remote;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -27,6 +28,7 @@ public class Movie implements Parcelable {
     @SerializedName("overview")
     private String overview;
 
+    @Nullable
     @SerializedName("release_date")
     private Date releaseDate;
 
