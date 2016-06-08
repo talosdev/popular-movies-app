@@ -10,24 +10,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
+import app.we.go.framework.mvp.BaseActivity;
 import app.we.go.movies.R;
-import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Tags;
-import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.features.moviedetails.MovieDetailsActivity;
 import app.we.go.movies.features.moviedetails.MovieDetailsFragment;
-import app.we.go.movies.features.movielist.dependency.HasMovieListComponent;
-import app.we.go.movies.features.movielist.dependency.MovieListComponent;
-import app.we.go.movies.features.movielist.dependency.MovieListModule;
-import app.we.go.framework.mvp.BaseActivity;
+import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.model.remote.Movie;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
-public class MainActivity extends BaseActivity implements MovieListFragment.MovieSelectedCallback,
-  //      SortByChangedCallback,
-        HasMovieListComponent {
+public class MainActivity extends BaseActivity implements MovieListFragment.MovieSelectedCallback{
 
 
     private boolean twoPane;
@@ -40,8 +34,6 @@ public class MainActivity extends BaseActivity implements MovieListFragment.Movi
     Spinner spinner;
 
 
-    private MovieListComponent movieListComponent;
-    private String presenterTag;
 
 
     @DebugLog
@@ -90,7 +82,6 @@ public class MainActivity extends BaseActivity implements MovieListFragment.Movi
             }
         });
 
-
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -111,8 +102,7 @@ public class MainActivity extends BaseActivity implements MovieListFragment.Movi
             twoPane = false;
         }
 
-        movieListComponent = MovieApplication.get(this).getComponent().
-                plus(new MovieListModule(this, presenterTag));
+
     }
 
     @DebugLog
@@ -171,9 +161,4 @@ public class MainActivity extends BaseActivity implements MovieListFragment.Movi
 //        spinner.setSelection(index);
 //    }
 
-
-    @Override
-    public MovieListComponent getComponent() {
-        return movieListComponent;
-    }
 }

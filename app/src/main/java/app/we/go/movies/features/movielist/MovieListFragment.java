@@ -25,8 +25,9 @@ import javax.inject.Inject;
 
 import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
+import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Tags;
-import app.we.go.movies.features.movielist.dependency.HasMovieListComponent;
+import app.we.go.movies.features.movielist.dependency.MovieListModule;
 import app.we.go.movies.features.preferences.activity.PreferencesActivity;
 import app.we.go.movies.model.local.MoviePoster;
 import app.we.go.movies.model.local.SortByCriterion;
@@ -99,8 +100,8 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
 
     @Override
     protected void injectDependencies(String presenterTag) {
-        ((HasMovieListComponent) getActivity()).getComponent().inject(this);
-
+        MovieApplication.get(getActivity()).getComponent().
+                plus(new MovieListModule(getActivity(), presenterTag)).inject(this);
     }
 
 
@@ -131,23 +132,11 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
         }
 
         List<MoviePoster> movies = new ArrayList<>();
-        int page = 0;
-//        if (savedInstanceState != null) {
-//            Log.d(Tags.BUNDLE, "Trying to retrieve list from the saved instance state bundle");
-//            movies = (List<MoviePoster>) savedInstanceState.getSerializable(BUNDLE_MOVIE_POSTER);
-//            Log.d(Tags.BUNDLE, String.format("Found %d elements in the saved state bundle", movies.size()));
-//            page = savedInstanceState.getInt(BUNDLE_CURRENT_PAGE, 0);
-//            Log.d(Tags.BUNDLE, String.format("Found current page: %d", page));
-//        }
 
         sortBy = SortByCriterion.byIndex(getArguments().getInt(SORT_BY));
 
-//        sortByChangedCallback.sortByChanged(sortBy);
-
         tmdbAdapter = new GridViewArrayAdapter(getActivity(), R.layout.grid_item, movies);
         favoritesAdapter = new GridViewFavoritesCursorAdapter(getActivity(), null, 0);
-
-
     }
 
 
@@ -163,28 +152,6 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
 
                 break;
         }
-    }
-
-
-    /**
-     * Note that we need to save the current page that we are at, so that when loading back the bundle,
-     * we can correctly initialize the {@link MovieListFragment.MovieEndlessScrollListener}
-     *
-     * @param outState
-     */
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-//        //TODO generalize this so that it uses getAdapter()
-//        if (tmdbAdapter != null) {
-//            int n = tmdbAdapter.getCount();
-//            List<MoviePoster> movies = new ArrayList<>();
-//            for (int i = 0; i < n; i++) {
-//                movies.add((MoviePoster) tmdbAdapter.getItem(i));
-//            }
-//            outState.putSerializable(BUNDLE_MOVIE_POSTER, (ArrayList) movies);
-//            outState.putInt(BUNDLE_CURRENT_PAGE, movies.size() / TMDB.MOVIES_PER_PAGE - 1);
-//        }
     }
 
 
