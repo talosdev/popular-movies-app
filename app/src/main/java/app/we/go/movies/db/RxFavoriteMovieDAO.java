@@ -18,5 +18,11 @@ public interface RxFavoriteMovieDAO {
 
     Observable<List<FavoriteMovie>> get(int offset, int limit);
 
+    /**
+     * This Observable allows Observers to be notified and take appropriate actions
+     * when anything is modified in the database (ie update cached values).
+     *
+     * @return
+     */
     Observable<DatabaseChange<FavoriteMovie>> getChangesObservable();
 }

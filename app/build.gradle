@@ -14,7 +14,7 @@ android {
     dexOptions {
         dexInProcess true
         maxProcessCount 2
-        javaMaxHeapSize "2g"
+        javaMaxHeapSize "3g"
         incremental true
     }
 

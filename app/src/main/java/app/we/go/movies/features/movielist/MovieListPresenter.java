@@ -1,6 +1,7 @@
 package app.we.go.movies.features.movielist;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import app.we.go.movies.model.remote.TMDBError;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.util.LOG;
 import app.we.go.movies.util.RxUtils;
+import nl.nl2312.rxcupboard.DatabaseChange;
 import nl.nl2312.rxcupboard.OnDatabaseChange;
 import retrofit2.Response;
 import rx.Observable;
@@ -29,6 +31,14 @@ import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
+ * If the criterion for this presenter is the FAVORITES one, the presenter needs to be notified
+ * about changes on the favorite movies, so that it can reflect it to is internal cached list of
+ * favorite movies.
+ * <p/>
+ * The presenter uses an Observable of {@linkplain DatabaseChange}, offered by the rxCupboard library,
+ * This allows the presenter to be notified about changes to the favorites, and correctly
+ * notify the view when it is brought out of the cache and re-bound to a view.
+ * <p/>
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract.View>
@@ -42,6 +52,13 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
     private CompositeSubscription composite;
 
     private final List<Movie> cachedMovies = new ArrayList<>();
+
+    /**
+     * Should not be added to the {@link #composite} subscription, since this subscription should
+     * stay alive even when the view is unbound and the presenter is cached. (Remember that
+     * {@link #composite} is unsubscribed in the {@link BaseCacheablePresenter#unbindView()}.)
+     */
+    @Nullable // it is non-null only if sortBy == Favorites
     private Subscription changesSubscription;
 
     public MovieListPresenter(TMDBService service,
@@ -54,14 +71,14 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
         this.dao = dao;
         this.sortBy = sortBy;
         composite = new CompositeSubscription();
-
-
     }
 
 
     @Override
     public void bindView(MovieListContract.View view) {
         super.bindView(view);
+
+        // We only care about changes in favorites, if the current criterion is actually FAVORITES
         if (sortBy == SortByCriterion.FAVORITES) {
             changesSubscription = dao.getChangesObservable().subscribe(
                     new OnDatabaseChange<FavoriteMovie>() {
@@ -152,12 +169,14 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
                 Observable<List<FavoriteMovie>> favoriteMovieObservable = dao.get((currentPage - 1) * TMDB.MOVIES_PER_PAGE,  // offset
                         TMDB.MOVIES_PER_PAGE);// limit)
 
-                Observable<List<Movie>> moviesObservable = favoriteMovieObservable.flatMapIterable(new Func1<List<FavoriteMovie>, Iterable<FavoriteMovie>>() {
-                    @Override
-                    public Iterable<FavoriteMovie> call(List<FavoriteMovie> favoriteMovies) {
-                        return favoriteMovies;
-                    }
-                }).map(new Func1<FavoriteMovie, Movie>() {
+                // Convert List<FavoriteMovie> to List<Movie>
+                Observable<List<Movie>> moviesObservable = favoriteMovieObservable.
+                        flatMapIterable(new Func1<List<FavoriteMovie>, Iterable<FavoriteMovie>>() {
+                            @Override
+                            public Iterable<FavoriteMovie> call(List<FavoriteMovie> favoriteMovies) {
+                                return favoriteMovies;
+                            }
+                        }).map(new Func1<FavoriteMovie, Movie>() {
 
                     @Override
                     public Movie call(FavoriteMovie favoriteMovie) {
@@ -209,9 +228,14 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
     }
 
 
+    /**
+     * The {@link #changesSubscription} is not cleared in the {@link #unbindView()} method like
+     * the {@link #composite}, so we need to 5unsubscribe here.
+     */
     @Override
     public void clear() {
         super.clear();
+        // @nullable
         if (changesSubscription != null) {
             changesSubscription.unsubscribe();
         }
@@ -219,8 +243,8 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
 
     public static class Factory implements PresenterFactory<MovieListPresenter> {
 
-        TMDBService service;
-        PresenterCache cache;
+        private TMDBService service;
+        private PresenterCache cache;
         private RxFavoriteMovieDAO dao;
         private SortByCriterion sortBy;
 
