@@ -4,7 +4,7 @@ import app.we.go.movies.dependency.ApplicationAndroidModule;
 import app.we.go.movies.dependency.ApplicationModule;
 import app.we.go.movies.dependency.DaggerMockApplicationComponent;
 import app.we.go.movies.dependency.MockServiceModule;
-import app.we.go.movies.remote.FakeURLBuilder;
+import app.we.go.movies.remote.MockDatabaseModule;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -18,7 +18,7 @@ public class TestMoviesApplication extends MovieApplication {
                 applicationModule(new ApplicationModule()).
                 mockServiceModule(new MockServiceModule()).
                 applicationAndroidModule(new ApplicationAndroidModule(this)).
-                mockDatabaseModule(new FakeURLBuilder.MockDatabaseModule()).
+                mockDatabaseModule(new MockDatabaseModule()).
                 build();
 
 

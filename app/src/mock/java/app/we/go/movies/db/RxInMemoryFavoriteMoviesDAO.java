@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import app.we.go.movies.model.db.FavoriteMovie;
+import nl.nl2312.rxcupboard.DatabaseChange;
+import rx.Observable;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class InMemoryFavoriteMoviesDAO implements FavoriteMovieDAO {
+public class RxInMemoryFavoriteMoviesDAO implements RxFavoriteMovieDAO {
 
     private final Map<Long, FavoriteMovie> map =
             new HashMap<>();
@@ -28,18 +30,25 @@ public class InMemoryFavoriteMoviesDAO implements FavoriteMovieDAO {
     }
 
     @Override
-    public boolean get(long movieId) {
-        return map.containsKey(movieId);
+    public Observable<FavoriteMovie> get(long movieId) {
+        return Observable.just(map.get(movieId));
     }
 
     /**
-     * Ignores the offset and limit parameters.
-     * @param callback
+     * Ignores offset and limit and returns all elements
      * @param offset
      * @param limit
+     * @return
      */
     @Override
-    public void getAll(Callback<List<FavoriteMovie>> callback, int offset, int limit) {
-        callback.onSuccess(new ArrayList<>(map.values()));
+    public Observable<List<FavoriteMovie>> get(int offset, int limit) {
+        return Observable.from(new ArrayList(map.values()));
     }
+
+    @Override
+    public Observable<DatabaseChange<FavoriteMovie>> getChangesObservable() {
+        return null;
+    }
+
+
 }

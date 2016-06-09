@@ -6,7 +6,7 @@ import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.movies.R;
-import app.we.go.movies.db.RxCupboardFavoriteMovieDAO;
+import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.remote.service.TMDBService;
@@ -24,7 +24,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
     private TMDBService service;
     private Observable<Response<Movie>> observable;
-    private final RxCupboardFavoriteMovieDAO favoriteMovieDAO;
+    private final RxFavoriteMovieDAO favoriteMovieDAO;
 
     // DetailsPresenter holds the "favorite" state
     private boolean isFavorite;
@@ -34,7 +34,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
 
     public MovieDetailsPresenter(TMDBService service, Observable<Response<Movie>> observable,
-                                 RxCupboardFavoriteMovieDAO favoriteMovieDAO,
+                                 RxFavoriteMovieDAO favoriteMovieDAO,
                                  PresenterCache cache,
                                  String tag) {
         super(cache, tag);
@@ -113,7 +113,12 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
     }
 
-
+    /**
+     * Assumes that {@link #checkFavorite(long)} has been called before, so that the
+     * "favorite" status is correctly reflected in the field's {@link #isFavorite} value.
+     * @param movieId
+     * @param posterPath
+     */
     @Override
     public void onFavoriteClick(long movieId, String posterPath) {
         if (isFavorite) {
@@ -147,11 +152,11 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
         private TMDBService service;
         private Observable<Response<Movie>> observable;
-        private RxCupboardFavoriteMovieDAO favoriteMovieDAO;
+        private RxFavoriteMovieDAO favoriteMovieDAO;
         private PresenterCache cache;
 
         public Factory(TMDBService service, Observable<Response<Movie>> observable,
-                       RxCupboardFavoriteMovieDAO favoriteMovieDAO,
+                       RxFavoriteMovieDAO favoriteMovieDAO,
                        PresenterCache cache) {
             this.service = service;
 

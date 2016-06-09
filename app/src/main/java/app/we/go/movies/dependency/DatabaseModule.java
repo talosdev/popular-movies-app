@@ -9,6 +9,7 @@ import app.we.go.movies.db.CupboardFavoriteMovieDAO;
 import app.we.go.movies.db.CupboardSQLiteOpenHelper;
 import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.db.RxCupboardFavoriteMovieDAO;
+import app.we.go.movies.db.RxFavoriteMovieDAO;
 import dagger.Module;
 import dagger.Provides;
 
@@ -31,7 +32,7 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
-    public RxCupboardFavoriteMovieDAO provideRxFavoriteMovieDAO(SQLiteOpenHelper sqLiteOpenHelper) {
+    public RxFavoriteMovieDAO provideRxFavoriteMovieDAO(SQLiteOpenHelper sqLiteOpenHelper) {
         return new RxCupboardFavoriteMovieDAO(sqLiteOpenHelper.getWritableDatabase());
     }
 

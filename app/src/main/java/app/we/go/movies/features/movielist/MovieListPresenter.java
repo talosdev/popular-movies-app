@@ -11,7 +11,7 @@ import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.movies.R;
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.constants.Tags;
-import app.we.go.movies.db.RxCupboardFavoriteMovieDAO;
+import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.model.remote.Movie;
@@ -35,7 +35,8 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
         implements MovieListContract.Presenter {
 
     private final TMDBService service;
-    private RxCupboardFavoriteMovieDAO dao;
+    private RxFavoriteMovieDAO dao;
+    private SortByCriterion sortBy;
 
     private int currentPage = 1;
     private CompositeSubscription composite;
@@ -44,12 +45,14 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
     private Subscription changesSubscription;
 
     public MovieListPresenter(TMDBService service,
-                              RxCupboardFavoriteMovieDAO dao,
+                              RxFavoriteMovieDAO dao,
+                              SortByCriterion sortBy,
                               PresenterCache cache,
                               String tag) {
         super(cache, tag);
         this.service = service;
         this.dao = dao;
+        this.sortBy = sortBy;
         composite = new CompositeSubscription();
 
 
@@ -59,39 +62,40 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
     @Override
     public void bindView(MovieListContract.View view) {
         super.bindView(view);
-        changesSubscription = dao.getChangesObservable().subscribe(
-                new OnDatabaseChange<FavoriteMovie>() {
-                    @Override
-                    public void onInsert(FavoriteMovie entity) {
-                        LOG.d(Tags.DB, "OnInsert handle %d", entity.getMovieId());
-                        boolean contains = false;
-                        for (Movie m:cachedMovies) {
-                            if (m.getId() == entity.getMovieId()) {
-                                contains = true;
-                                break;
+        if (sortBy == SortByCriterion.FAVORITES) {
+            changesSubscription = dao.getChangesObservable().subscribe(
+                    new OnDatabaseChange<FavoriteMovie>() {
+                        @Override
+                        public void onInsert(FavoriteMovie entity) {
+                            LOG.d(Tags.DB, "OnInsert handle %d", entity.getMovieId());
+                            boolean contains = false;
+                            for (Movie m : cachedMovies) {
+                                if (m.getId() == entity.getMovieId()) {
+                                    contains = true;
+                                    break;
+                                }
+                            }
+                            if (!contains) {
+                                Movie newMovie = new Movie();
+                                newMovie.setId(entity.getMovieId());
+                                newMovie.setPosterPath(entity.getPosterPath());
+                                cachedMovies.add(newMovie);
                             }
                         }
-                        if (!contains) {
-                            Movie newMovie = new Movie();
-                            newMovie.setId(entity.getMovieId());
-                            newMovie.setPosterPath(entity.getPosterPath());
-                            cachedMovies.add(newMovie);
-                        }
-                    }
 
-                    // TODO only if sortBy is favorites
-                    @Override
-                    public void onDelete(FavoriteMovie entity) {
-                        LOG.d(Tags.DB, "onDelete handle %d", entity.getMovieId());
-                        for (Movie m : cachedMovies) {
-                            if (m.getId() == entity.getMovieId()) {
-                                LOG.d(Tags.DB, "Removing from presenter's cached movies");
-                                cachedMovies.remove(m);
-                                break;
+                        @Override
+                        public void onDelete(FavoriteMovie entity) {
+                            LOG.d(Tags.DB, "onDelete handle %d", entity.getMovieId());
+                            for (Movie m : cachedMovies) {
+                                if (m.getId() == entity.getMovieId()) {
+                                    LOG.d(Tags.DB, "Removing from presenter's cached movies");
+                                    cachedMovies.remove(m);
+                                    break;
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     @Override
@@ -101,7 +105,7 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
     }
 
     @Override
-    public void loadMovies(SortByCriterion sortBy) {
+    public void loadMovies() {
 
         switch (sortBy) {
 
@@ -208,25 +212,30 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
     @Override
     public void clear() {
         super.clear();
-        changesSubscription.unsubscribe();
+        if (changesSubscription != null) {
+            changesSubscription.unsubscribe();
+        }
     }
 
     public static class Factory implements PresenterFactory<MovieListPresenter> {
 
         TMDBService service;
         PresenterCache cache;
-        private RxCupboardFavoriteMovieDAO dao;
+        private RxFavoriteMovieDAO dao;
+        private SortByCriterion sortBy;
 
-        public Factory(TMDBService service, PresenterCache cache, RxCupboardFavoriteMovieDAO dao) {
+        public Factory(TMDBService service, PresenterCache cache,
+                       RxFavoriteMovieDAO dao, SortByCriterion sortBy) {
             this.service = service;
             this.cache = cache;
             this.dao = dao;
+            this.sortBy = sortBy;
         }
 
         @NonNull
         @Override
         public MovieListPresenter createPresenter(String tag) {
-            return new MovieListPresenter(service, dao, cache, tag);
+            return new MovieListPresenter(service, dao, sortBy, cache, tag);
         }
     }
 }

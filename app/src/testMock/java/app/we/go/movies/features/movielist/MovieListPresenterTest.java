@@ -7,7 +7,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import app.we.go.framework.mvp.presenter.PresenterCache;
-import app.we.go.movies.db.FavoriteMovieDAO;
+import app.we.go.movies.db.RxFavoriteMovieDAO;
+import app.we.go.movies.db.RxInMemoryFavoriteMoviesDAO;
 import app.we.go.movies.dependency.MockServiceModule;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.remote.DummyData;
@@ -28,8 +29,7 @@ public class MovieListPresenterTest {
     @Mock
     private PresenterCache cache;
 
-    @Mock
-    FavoriteMovieDAO dao;
+    RxFavoriteMovieDAO dao = new RxInMemoryFavoriteMoviesDAO();
 
     MovieListPresenter presenter;
     TMDBService service;
@@ -43,6 +43,7 @@ public class MovieListPresenterTest {
 
         presenter = new MovieListPresenter(service,
                 dao,
+                SortByCriterion.POPULARITY,
                 cache,
                 "TAG");
         presenter.bindView(view);
@@ -54,7 +55,7 @@ public class MovieListPresenterTest {
 
     @Test
     public void testLoad() throws Exception {
-        presenter.loadMovies(SortByCriterion.POPULARITY);
+        presenter.loadMovies();
 
         verify(view).showMovieList(DummyData.MOVIE_LIST_POPULAR_1.getMovies());
         verifyNoMoreInteractions(view);

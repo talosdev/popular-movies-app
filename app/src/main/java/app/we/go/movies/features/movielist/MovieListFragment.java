@@ -93,8 +93,9 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
 
     @Override
     protected void injectDependencies(String presenterTag) {
+        sortBy = SortByCriterion.byIndex(getArguments().getInt(SORT_BY));
         MovieApplication.get(getActivity()).getComponent().
-                plus(new MovieListModule(getActivity(), presenterTag)).inject(this);
+                plus(new MovieListModule(getActivity(), sortBy, presenterTag)).inject(this);
     }
 
 
@@ -128,7 +129,6 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
 
         List<MoviePoster> movies = new ArrayList<>();
 
-        sortBy = SortByCriterion.byIndex(getArguments().getInt(SORT_BY));
 
     }
 
@@ -136,7 +136,7 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
     @Override
     protected void initViewNoCache() {
         isLoading = true;
-        presenter.loadMovies(sortBy);
+        presenter.loadMovies();
     }
 
 
@@ -178,7 +178,7 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
     @Override
     public void loadNextPage() {
         isLoading = true;
-        presenter.loadMovies(sortBy);
+        presenter.loadMovies();
     }
 
     @Override

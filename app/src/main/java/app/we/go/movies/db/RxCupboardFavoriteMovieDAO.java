@@ -16,7 +16,7 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class RxCupboardFavoriteMovieDAO {
+public class RxCupboardFavoriteMovieDAO implements RxFavoriteMovieDAO {
 
     private static final String COLUMN_MOVIE_ID = "movieId";
     private final RxDatabase rxdb;
@@ -27,12 +27,14 @@ public class RxCupboardFavoriteMovieDAO {
         this.db = db;
     }
 
+    @Override
     public boolean put(FavoriteMovie favoriteMovie) {
         long id = rxdb.put(favoriteMovie);
         return id != -1;
 
     }
 
+    @Override
     public boolean delete(long movieId) {
 
         FavoriteMovie favoriteMovie = cupboard().
@@ -48,6 +50,7 @@ public class RxCupboardFavoriteMovieDAO {
         }
     }
 
+    @Override
     public Observable<FavoriteMovie> get(long movieId) {
         Observable<FavoriteMovie> observable = rxdb.
                 query(FavoriteMovie.class, COLUMN_MOVIE_ID + " = ?", movieId + "");
@@ -56,6 +59,7 @@ public class RxCupboardFavoriteMovieDAO {
 
     }
 
+    @Override
     public Observable<List<FavoriteMovie>> get(int offset, int limit) {
 
         DatabaseCompartment.QueryBuilder<FavoriteMovie> queryBuilder =
@@ -69,6 +73,7 @@ public class RxCupboardFavoriteMovieDAO {
 
     }
 
+    @Override
     public Observable<DatabaseChange<FavoriteMovie>> getChangesObservable() {
         return rxdb.changes(FavoriteMovie.class);
     }
