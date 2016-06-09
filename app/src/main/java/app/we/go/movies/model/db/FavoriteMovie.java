@@ -12,8 +12,10 @@ public class FavoriteMovie {
 
     private String posterPath;
 
+
     public FavoriteMovie(long movieId, String posterPath) {
-        this(null, movieId, posterPath);
+        // use movieId as tha database id
+        this(movieId, movieId, posterPath);
     }
 
     private FavoriteMovie(Long _id, long movieId, String posterPath) {

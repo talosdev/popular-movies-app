@@ -115,6 +115,8 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
         adapter = new MovieAdapter(getContext(), this, urlBuilder);
         recycler.setAdapter(adapter);
         recycler.setPager(this);
+        recycler.setThreshold(4);
+
 
 
         try {
@@ -133,6 +135,7 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
 
     @Override
     protected void initViewNoCache() {
+        isLoading = true;
         presenter.loadMovies(sortBy);
     }
 

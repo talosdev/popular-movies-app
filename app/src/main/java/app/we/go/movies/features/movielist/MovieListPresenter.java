@@ -10,17 +10,23 @@ import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.movies.R;
 import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.db.FavoriteMovieDAO;
+import app.we.go.movies.constants.Tags;
+import app.we.go.movies.db.RxCupboardFavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.model.remote.MovieList;
 import app.we.go.movies.model.remote.TMDBError;
 import app.we.go.movies.remote.service.TMDBService;
+import app.we.go.movies.util.LOG;
 import app.we.go.movies.util.RxUtils;
+import nl.nl2312.rxcupboard.OnDatabaseChange;
 import retrofit2.Response;
+import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.functions.Func1;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -29,26 +35,54 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
         implements MovieListContract.Presenter {
 
     private final TMDBService service;
-    private FavoriteMovieDAO dao;
+    private RxCupboardFavoriteMovieDAO dao;
 
     private int currentPage = 1;
-    private Subscription subscription;
+    private CompositeSubscription composite;
+
+    private final List<Movie> cachedMovies = new ArrayList<>();
 
     public MovieListPresenter(TMDBService service,
-                              FavoriteMovieDAO dao,
+                              RxCupboardFavoriteMovieDAO dao,
                               PresenterCache cache,
                               String tag) {
         super(cache, tag);
         this.service = service;
         this.dao = dao;
+        composite = new CompositeSubscription();
+
+
     }
 
-    private final List<Movie> cachedMovies = new ArrayList<>();
+
+    @Override
+    public void bindView(MovieListContract.View view) {
+        super.bindView(view);
+        composite.add(dao.getChangesObservable().subscribe(
+                new OnDatabaseChange<FavoriteMovie>() {
+                    @Override
+                    public void onInsert(FavoriteMovie entity) {
+                        super.onInsert(entity);
+                    }
+
+                    @Override
+                    public void onDelete(FavoriteMovie entity) {
+                        LOG.d(Tags.DB, "onDelete handle %d", entity.getId());
+                        for (Movie m : cachedMovies) {
+                            if (m.getId() == entity.getId()) {
+                                LOG.d(Tags.DB, "Removing from presenter's cached movies");
+                                cachedMovies.remove(m);
+                                break;
+                            }
+                        }
+                    }
+                }));
+    }
 
     @Override
     public void unbindView() {
         super.unbindView();
-        RxUtils.unsubscribe(subscription);
+        RxUtils.unsubscribe(composite);
     }
 
     @Override
@@ -58,7 +92,7 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
 
             case POPULARITY:
             case VOTE:
-                subscription = service.getMovies(sortBy, currentPage).
+                Subscription serviceSubscription = service.getMovies(sortBy, currentPage).
                         subscribe(new Observer<Response<MovieList>>() {
                             @Override
                             public void onCompleted() {
@@ -91,31 +125,50 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
                                 }
                             }
                         });
+
+                composite.add(serviceSubscription);
                 break;
             case FAVORITES:
-                dao.getAll(new FavoriteMovieDAO.Callback<List<FavoriteMovie>>() {
+
+                Observable<List<FavoriteMovie>> favoriteMovieObservable = dao.get((currentPage - 1) * TMDB.MOVIES_PER_PAGE,  // offset
+                        TMDB.MOVIES_PER_PAGE);// limit)
+
+                Observable<List<Movie>> moviesObservable = favoriteMovieObservable.flatMapIterable(new Func1<List<FavoriteMovie>, Iterable<FavoriteMovie>>() {
                     @Override
-                    public void onSuccess(List<FavoriteMovie> result) {
-                        currentPage++;
-                        // TODO: observable transformations???
-                        List<Movie> movies = new ArrayList<Movie>();
-                        for (FavoriteMovie fm: result) {
-                            Movie m = new Movie();
-                            m.setId(fm.getMovieId());
-                            m.setPosterPath(fm.getPosterPath());
-                            movies.add(m);
-                        }
-                        cachedMovies.addAll(movies);
-                        getBoundView().showMovieList(movies);
+                    public Iterable<FavoriteMovie> call(List<FavoriteMovie> favoriteMovies) {
+                        return favoriteMovies;
+                    }
+                }).map(new Func1<FavoriteMovie, Movie>() {
+
+                    @Override
+                    public Movie call(FavoriteMovie favoriteMovie) {
+                        Movie m = new Movie();
+                        m.setId(favoriteMovie.getMovieId());
+                        m.setPosterPath(favoriteMovie.getPosterPath());
+                        return m;
+                    }
+                }).toList();
+
+
+                moviesObservable.subscribe(new Observer<List<Movie>>() {
+                    @Override
+                    public void onCompleted() {
+
                     }
 
                     @Override
-                    public void onError() {
-                        getBoundView().showError(null, "Database error", R.string.error_database, null);
+                    public void onError(Throwable e) {
+
                     }
-                },
-                        (currentPage - 1) * TMDB.MOVIES_PER_PAGE,  // offset
-                        TMDB.MOVIES_PER_PAGE); // limit
+
+                    @Override
+                    public void onNext(List<Movie> movies) {
+                        currentPage++;
+                        cachedMovies.addAll(movies);
+                        getBoundView().showMovieList(movies);
+                    }
+                });
+
                 break;
         }
 
@@ -140,9 +193,9 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
 
         TMDBService service;
         PresenterCache cache;
-        private FavoriteMovieDAO dao;
+        private RxCupboardFavoriteMovieDAO dao;
 
-        public Factory(TMDBService service, PresenterCache cache, FavoriteMovieDAO dao) {
+        public Factory(TMDBService service, PresenterCache cache, RxCupboardFavoriteMovieDAO dao) {
             this.service = service;
             this.cache = cache;
             this.dao = dao;

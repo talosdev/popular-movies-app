@@ -6,7 +6,7 @@ import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.movies.R;
-import app.we.go.movies.db.FavoriteMovieDAO;
+import app.we.go.movies.db.RxCupboardFavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.remote.service.TMDBService;
@@ -24,7 +24,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
     private TMDBService service;
     private Observable<Response<Movie>> observable;
-    private final FavoriteMovieDAO favoriteMovieDAO;
+    private final RxCupboardFavoriteMovieDAO favoriteMovieDAO;
 
     // DetailsPresenter holds the "favorite" state
     private boolean isFavorite;
@@ -34,7 +34,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
 
     public MovieDetailsPresenter(TMDBService service, Observable<Response<Movie>> observable,
-                                 FavoriteMovieDAO favoriteMovieDAO,
+                                 RxCupboardFavoriteMovieDAO favoriteMovieDAO,
                                  PresenterCache cache,
                                  String tag) {
         super(cache, tag);
@@ -91,11 +91,26 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
     @Override
     public void checkFavorite(long movieId) {
-        boolean isFavorite = favoriteMovieDAO.get(movieId);
-        this.isFavorite = isFavorite;
-        if (isViewBound()) {
-            getBoundView().toggleFavorite(isFavorite);
-        }
+        Observable<FavoriteMovie> favoriteMovieObservable = favoriteMovieDAO.get(movieId);
+        favoriteMovieObservable.subscribe(new Observer<FavoriteMovie>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(FavoriteMovie favoriteMovie) {
+                MovieDetailsPresenter.this.isFavorite = favoriteMovie != null;
+                getBoundView().toggleFavorite(isFavorite);
+
+            }
+        });
+
     }
 
 
@@ -132,11 +147,11 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
         private TMDBService service;
         private Observable<Response<Movie>> observable;
-        private FavoriteMovieDAO favoriteMovieDAO;
+        private RxCupboardFavoriteMovieDAO favoriteMovieDAO;
         private PresenterCache cache;
 
         public Factory(TMDBService service, Observable<Response<Movie>> observable,
-                       FavoriteMovieDAO favoriteMovieDAO,
+                       RxCupboardFavoriteMovieDAO favoriteMovieDAO,
                        PresenterCache cache) {
             this.service = service;
 
