@@ -41,6 +41,7 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
     private CompositeSubscription composite;
 
     private final List<Movie> cachedMovies = new ArrayList<>();
+    private Subscription changesSubscription;
 
     public MovieListPresenter(TMDBService service,
                               RxCupboardFavoriteMovieDAO dao,
@@ -58,25 +59,39 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
     @Override
     public void bindView(MovieListContract.View view) {
         super.bindView(view);
-        composite.add(dao.getChangesObservable().subscribe(
+        changesSubscription = dao.getChangesObservable().subscribe(
                 new OnDatabaseChange<FavoriteMovie>() {
                     @Override
                     public void onInsert(FavoriteMovie entity) {
-                        super.onInsert(entity);
+                        LOG.d(Tags.DB, "OnInsert handle %d", entity.getMovieId());
+                        boolean contains = false;
+                        for (Movie m:cachedMovies) {
+                            if (m.getId() == entity.getMovieId()) {
+                                contains = true;
+                                break;
+                            }
+                        }
+                        if (!contains) {
+                            Movie newMovie = new Movie();
+                            newMovie.setId(entity.getMovieId());
+                            newMovie.setPosterPath(entity.getPosterPath());
+                            cachedMovies.add(newMovie);
+                        }
                     }
 
+                    // TODO only if sortBy is favorites
                     @Override
                     public void onDelete(FavoriteMovie entity) {
-                        LOG.d(Tags.DB, "onDelete handle %d", entity.getId());
+                        LOG.d(Tags.DB, "onDelete handle %d", entity.getMovieId());
                         for (Movie m : cachedMovies) {
-                            if (m.getId() == entity.getId()) {
+                            if (m.getId() == entity.getMovieId()) {
                                 LOG.d(Tags.DB, "Removing from presenter's cached movies");
                                 cachedMovies.remove(m);
                                 break;
                             }
                         }
                     }
-                }));
+                });
     }
 
     @Override
@@ -187,6 +202,13 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
         if (isViewBound()) {
             getBoundView().showMovieList(cachedMovies);
         }
+    }
+
+
+    @Override
+    public void clear() {
+        super.clear();
+        changesSubscription.unsubscribe();
     }
 
     public static class Factory implements PresenterFactory<MovieListPresenter> {

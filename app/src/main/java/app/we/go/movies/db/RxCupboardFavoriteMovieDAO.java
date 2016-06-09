@@ -20,10 +20,11 @@ public class RxCupboardFavoriteMovieDAO {
 
     private static final String COLUMN_MOVIE_ID = "movieId";
     private final RxDatabase rxdb;
+    private final SQLiteDatabase db;
 
     public RxCupboardFavoriteMovieDAO(SQLiteDatabase db) {
         rxdb = RxCupboard.with(cupboard(), db);
-//        this.db = db;
+        this.db = db;
     }
 
     public boolean put(FavoriteMovie favoriteMovie) {
@@ -33,7 +34,18 @@ public class RxCupboardFavoriteMovieDAO {
     }
 
     public boolean delete(long movieId) {
-        return rxdb.delete(FavoriteMovie.class, movieId);
+
+        FavoriteMovie favoriteMovie = cupboard().
+                withDatabase(db).
+                query(FavoriteMovie.class).
+                withSelection("movieId = ?", movieId + "").
+                query().get();
+
+        if (favoriteMovie == null) {
+            return false;
+        } else {
+            return rxdb.delete(FavoriteMovie.class, favoriteMovie.getId());
+        }
     }
 
     public Observable<FavoriteMovie> get(long movieId) {
