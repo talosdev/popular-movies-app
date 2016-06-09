@@ -1,4 +1,4 @@
-package app.we.go.movies.remote;
+package app.we.go.movies.dependency;
 
 import javax.inject.Singleton;
 

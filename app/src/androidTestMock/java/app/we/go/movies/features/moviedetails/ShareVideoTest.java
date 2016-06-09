@@ -34,7 +34,7 @@ public class ShareVideoTest extends BaseMovieDetailsActivityTest{
 
     @Parameterized.Parameters(name = "{index}: value: {0}")
     public static Iterable<Integer> data() {
-        return Arrays.asList(new Integer[] {0, 1});
+        return Arrays.asList(0, 1);
     }
 
     @Parameterized.Parameter

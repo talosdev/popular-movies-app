@@ -3,8 +3,8 @@ package app.we.go.movies.application;
 import app.we.go.movies.dependency.ApplicationAndroidModule;
 import app.we.go.movies.dependency.ApplicationModule;
 import app.we.go.movies.dependency.DaggerMockApplicationComponent;
+import app.we.go.movies.dependency.MockDatabaseModule;
 import app.we.go.movies.dependency.MockServiceModule;
-import app.we.go.movies.remote.MockDatabaseModule;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
