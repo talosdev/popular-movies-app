@@ -1,6 +1,5 @@
 package app.we.go.framework.mvp.view;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 
 /**
@@ -11,6 +10,6 @@ import android.support.annotation.Nullable;
  */
 public interface ViewMVP {
 
-    void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t);
+    void showError(String logMessage, int resourceId, @Nullable Throwable t);
 
 }

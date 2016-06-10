@@ -1,6 +1,5 @@
 package app.we.go.movies.features.moviedetails;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import javax.inject.Inject;
 
 import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
@@ -58,9 +55,6 @@ public class MovieDetailsFragment extends CacheablePresenterBasedFragment<MovieD
     @Bind(R.id.details_pager)
     ViewPager pager;
 
-
-    @Inject
-    Context context;
 
     private MenuItem favItem;
     private MovieDetailsPagerAdapter pagerAdapter;
@@ -231,7 +225,7 @@ public class MovieDetailsFragment extends CacheablePresenterBasedFragment<MovieD
     }
 
     @Override
-    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
 
     }
 }

@@ -1,7 +1,6 @@
 package app.we.go.movies.features.movielist;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -56,9 +55,6 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
 
     @Inject
     MovieListContract.Presenter presenter;
-
-    @Inject
-    Context context;
 
     @Inject
     URLBuilder urlBuilder;

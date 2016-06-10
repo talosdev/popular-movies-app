@@ -63,9 +63,9 @@ public class MovieListPresenterTest {
 
     @Test
     public void testOpenMovie() throws Exception {
-        presenter.openMovieDetails(DummyData.DUMMY_MOVIE);
+        presenter.openMovieDetails(DummyData.DUMMY_MOVIE_1);
 
-        verify(view).navigateToMovieDetails(eq(DummyData.DUMMY_MOVIE));
+        verify(view).navigateToMovieDetails(eq(DummyData.DUMMY_MOVIE_1));
         verifyNoMoreInteractions(view);
     }
 

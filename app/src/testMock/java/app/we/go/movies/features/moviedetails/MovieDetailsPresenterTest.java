@@ -18,9 +18,9 @@ import app.we.go.movies.remote.service.TMDBService;
 
 import static app.we.go.movies.remote.DummyData.INEXISTENT_MOVIE_ID;
 import static app.we.go.movies.remote.DummyData.MOVIE_BACKDROP_PATH;
-import static app.we.go.movies.remote.DummyData.MOVIE_ID;
+import static app.we.go.movies.remote.DummyData.MOVIE_ID_1;
 import static app.we.go.movies.remote.DummyData.MOVIE_ID_CAUSES_SERVER_ERROR;
-import static app.we.go.movies.remote.DummyData.MOVIE_POSTER_PATH;
+import static app.we.go.movies.remote.DummyData.MOVIE_POSTER_PATH_1;
 import static app.we.go.movies.remote.DummyData.MOVIE_TITLE;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
@@ -49,7 +49,7 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
 
         service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
-        FavoriteMovie fm = new FavoriteMovie(MOVIE_ID, MOVIE_POSTER_PATH);
+        FavoriteMovie fm = new FavoriteMovie(MOVIE_ID_1, MOVIE_POSTER_PATH_1);
         dao.put(fm);
     }
 
@@ -61,7 +61,7 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     @Test
     public void testLoadMovieInfo() throws InterruptedException {
 
-        long movieId = MOVIE_ID;
+        long movieId = MOVIE_ID_1;
         MovieDetailsPresenter presenter = getPresenter(movieId);
 
         presenter.loadMovieInfo(movieId);
@@ -106,7 +106,7 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     @Test
     public void testCheckFavoriteTrue() throws Exception {
         // setup DAO mock
-        long movieId = MOVIE_ID;
+        long movieId = MOVIE_ID_1;
 //        when(dao.get(movieId)).thenReturn(true);
 
         getPresenter(movieId).checkFavorite(movieId);

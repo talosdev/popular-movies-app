@@ -1,14 +1,11 @@
 package app.we.go.movies.features.moviedetails.tab;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import javax.inject.Inject;
 
 import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
@@ -41,8 +38,6 @@ public class MovieInfoTabFragment extends CacheablePresenterBasedFragment<MovieD
     @Bind(R.id.synopsis)
     TextView descriptionView;
 
-    @Inject
-    Context context;
 
     public static MovieInfoTabFragment newInstance(long movieId) {
         MovieInfoTabFragment f = new MovieInfoTabFragment();
@@ -102,7 +97,7 @@ public class MovieInfoTabFragment extends CacheablePresenterBasedFragment<MovieD
     }
 
     @Override
-    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
 //        showError(getContext(), logMessage, resourceId, t);
     }
 

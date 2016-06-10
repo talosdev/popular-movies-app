@@ -12,7 +12,7 @@ import dagger.Component;
 @Component(modules = {ApplicationModule.class,
         MockServiceModule.class,
         ApplicationAndroidModule.class,
-        MockDatabaseModule.class})
+        DatabaseModule.class})
 public interface MockApplicationComponent extends ApplicationComponent {
     void inject(FavoritesTest favoritesTest);
 }

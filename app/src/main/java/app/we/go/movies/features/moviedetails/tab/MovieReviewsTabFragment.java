@@ -1,6 +1,5 @@
 package app.we.go.movies.features.moviedetails.tab;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,15 +12,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
+import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Args;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.dependency.MovieReviewsModule;
 import app.we.go.movies.model.remote.Review;
-import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import butterknife.Bind;
 import hugo.weaving.DebugLog;
 
@@ -37,10 +34,6 @@ public class MovieReviewsTabFragment extends CacheablePresenterBasedFragment<Mov
 
     @Bind(R.id.reviews_list_empty)
     TextView emptyView;
-
-
-    @Inject
-    Context context;
 
     private ArrayAdapter<Review> adapter;
 
@@ -96,7 +89,7 @@ public class MovieReviewsTabFragment extends CacheablePresenterBasedFragment<Mov
     }
 
     @Override
-    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
         // Do nothing, do not display the error message, just leave the empty list message
 
     }
