@@ -10,6 +10,7 @@ import nl.nl2312.rxcupboard.RxCupboard;
 import nl.nl2312.rxcupboard.RxDatabase;
 import nl.qbusict.cupboard.DatabaseCompartment;
 import rx.Observable;
+import rx.Scheduler;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
@@ -21,10 +22,20 @@ public class RxCupboardFavoriteMovieDAO implements RxFavoriteMovieDAO {
     private static final String COLUMN_MOVIE_ID = "movieId";
     private final RxDatabase rxdb;
     private final SQLiteDatabase db;
+    private final Observable.Transformer<?, ?> transformer;
 
-    public RxCupboardFavoriteMovieDAO(SQLiteDatabase db) {
+    public RxCupboardFavoriteMovieDAO(SQLiteDatabase db, final Scheduler observeOnScheduler, final Scheduler subscribeOnScheduler) {
         rxdb = RxCupboard.with(cupboard(), db);
         this.db = db;
+        this.transformer = new Observable.Transformer<Object, Object>() {
+
+            @Override
+            public Observable<Object> call(Observable<Object> obs) {
+                return obs.
+                        subscribeOn(subscribeOnScheduler).
+                        observeOn(observeOnScheduler);
+            }
+        };
     }
 
     @Override
@@ -55,7 +66,7 @@ public class RxCupboardFavoriteMovieDAO implements RxFavoriteMovieDAO {
         Observable<FavoriteMovie> observable = rxdb.
                 query(FavoriteMovie.class, COLUMN_MOVIE_ID + " = ?", movieId + "");
 
-        return observable;
+        return observable;//.compose((Observable.Transformer<FavoriteMovie, FavoriteMovie>) transformer);
 
     }
 
@@ -69,7 +80,9 @@ public class RxCupboardFavoriteMovieDAO implements RxFavoriteMovieDAO {
             queryBuilder = queryBuilder.offset(offset);
         }
 
-        return rxdb.query(queryBuilder).toList();
+        return rxdb.query(queryBuilder).
+                toList().
+                compose((Observable.Transformer<List<FavoriteMovie>, List<FavoriteMovie>>) transformer);
 
     }
 

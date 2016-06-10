@@ -6,10 +6,12 @@ import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.framework.mvp.presenter.PresenterFactory;
 import app.we.go.movies.R;
+import app.we.go.movies.constants.Tags;
 import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.remote.service.TMDBService;
+import app.we.go.movies.util.LOG;
 import app.we.go.movies.util.RxUtils;
 import retrofit2.Response;
 import rx.Observable;
@@ -92,24 +94,26 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
     @Override
     public void checkFavorite(long movieId) {
         Observable<FavoriteMovie> favoriteMovieObservable = favoriteMovieDAO.get(movieId);
-        favoriteMovieObservable.subscribe(new Observer<FavoriteMovie>() {
-            @Override
-            public void onCompleted() {
+        favoriteMovieObservable.
+                isEmpty().
+                subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+                        LOG.d(Tags.GEN, "Completed");
+                    }
 
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        LOG.d(Tags.GEN, "Error", e);
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onNext(Boolean isEmpty) {
+                        LOG.d(Tags.GEN, "Next");
+                        getBoundView().toggleFavorite(!isEmpty);
 
-            }
-
-            @Override
-            public void onNext(FavoriteMovie favoriteMovie) {
-                MovieDetailsPresenter.this.isFavorite = favoriteMovie != null;
-                getBoundView().toggleFavorite(isFavorite);
-
-            }
-        });
+                    }
+                });
 
     }
 

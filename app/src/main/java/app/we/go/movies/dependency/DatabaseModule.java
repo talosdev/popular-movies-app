@@ -3,15 +3,15 @@ package app.we.go.movies.dependency;
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
-import app.we.go.movies.db.CupboardFavoriteMovieDAO;
 import app.we.go.movies.db.CupboardSQLiteOpenHelper;
-import app.we.go.movies.db.FavoriteMovieDAO;
 import app.we.go.movies.db.RxCupboardFavoriteMovieDAO;
 import app.we.go.movies.db.RxFavoriteMovieDAO;
 import dagger.Module;
 import dagger.Provides;
+import rx.Scheduler;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -32,13 +32,12 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
-    public RxFavoriteMovieDAO provideRxFavoriteMovieDAO(SQLiteOpenHelper sqLiteOpenHelper) {
-        return new RxCupboardFavoriteMovieDAO(sqLiteOpenHelper.getWritableDatabase());
+    public RxFavoriteMovieDAO provideRxFavoriteMovieDAO(SQLiteOpenHelper sqLiteOpenHelper,
+                                                        @Named("observeOn") Scheduler observeOnScheduler,
+                                                        @Named("subscribeOn")Scheduler subscribeOnScheduler) {
+        return new RxCupboardFavoriteMovieDAO(sqLiteOpenHelper.getWritableDatabase(),
+                observeOnScheduler,
+                subscribeOnScheduler);
     }
 
-    // NOT A SINGLETON, in order to not maintain a connection to the database always
-    @Provides
-    public FavoriteMovieDAO provideFavoriteMovieDAO(SQLiteOpenHelper sqLiteOpenHelper) {
-        return new CupboardFavoriteMovieDAO(sqLiteOpenHelper.getWritableDatabase());
-    }
 }

@@ -16,8 +16,8 @@ public class TestMoviesApplication extends MovieApplication {
         component = DaggerMockApplicationComponent.
                 builder().
                 applicationModule(new ApplicationModule()).
-                mockServiceModule(new MockServiceModule()).
                 mockApplicationAndroidModule(new MockApplicationAndroidModule(this)).
+                mockServiceModule(new MockServiceModule()).
                 databaseModule(new DatabaseModule(this)).
                 build();
 

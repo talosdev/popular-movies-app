@@ -6,9 +6,9 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import app.we.go.movies.R;
-import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.model.remote.Review;
 import app.we.go.movies.model.remote.Video;
+import app.we.go.movies.remote.DummyData;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -89,6 +89,7 @@ public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
     @Test
     @UiThreadTest
     public void testFavoriteButton() throws Exception {
+
         onView(withId(R.id.menu_favorite)).
                 check(matches(withDrawable(R.drawable.ic_favorite_border_blue_24dp)));
 
