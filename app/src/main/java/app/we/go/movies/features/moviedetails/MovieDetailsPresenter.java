@@ -110,7 +110,8 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
                     @Override
                     public void onNext(Boolean isEmpty) {
                         LOG.d(Tags.GEN, "Next");
-                        getBoundView().toggleFavorite(!isEmpty);
+                        isFavorite = !isEmpty;
+                        getBoundView().toggleFavorite(isFavorite);
 
                     }
                 });

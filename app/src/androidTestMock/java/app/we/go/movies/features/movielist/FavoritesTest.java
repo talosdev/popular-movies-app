@@ -2,12 +2,15 @@ package app.we.go.movies.features.movielist;
 
 import android.app.Instrumentation;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -25,6 +28,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static app.we.go.movies.espresso.matchers.Matchers.withDrawable;
 import static app.we.go.movies.espresso.matchers.Matchers.withRecyclerView;
 
 /**
@@ -50,6 +54,12 @@ public class FavoritesTest {
                 = (TestMoviesApplication) instrumentation.getTargetContext().getApplicationContext();
         MockApplicationComponent component = (MockApplicationComponent) app.getComponent();
         component.inject(this);
+
+
+        List<FavoriteMovie> iterator = dao.get(0, 100).toBlocking().first();
+        for (FavoriteMovie fm: iterator) {
+            dao.delete(fm.getMovieId());
+        }
 
 
         //Init the DAO with 2 favorite movies
@@ -83,6 +93,29 @@ public class FavoritesTest {
         onView(withRecyclerView(R.id.movie_recycler_view).atPosition(1)).
                 check(matches(isDisplayed()));
         onView(withRecyclerView(R.id.movie_recycler_view).atPosition(2)).
+                check(doesNotExist());
+
+        // click on the first favorite movie
+        onView(withRecyclerView(R.id.movie_recycler_view).atPosition(0)).
+                perform(click());
+
+        // the details page opens
+
+        // click on the favorite icon
+        onView(withId(R.id.menu_favorite)).perform(click());
+
+        // check that the icon has changed
+        onView(withId(R.id.menu_favorite)).
+                check(matches(withDrawable(R.drawable.ic_favorite_border_blue_24dp)));
+
+        // go back
+        Espresso.pressBack();
+
+
+        // Check that there is only one movie
+        onView(withRecyclerView(R.id.movie_recycler_view).atPosition(0)).
+                check(matches(isDisplayed()));
+        onView(withRecyclerView(R.id.movie_recycler_view).atPosition(1)).
                 check(doesNotExist());
 
 

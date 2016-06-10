@@ -90,6 +90,11 @@ public class FakeTMDBService implements TMDBService {
                     returningResponse(DummyData.VIDEOS).
                     getVideos(movieId).
                     compose(transformer);
+        } else if (movieId == DummyData.MOVIE_ID_2) {
+            return delegate.
+                    returningResponse(DummyData.VIDEOS).
+                    getVideos(movieId).
+                    compose(transformer);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
             return delegate.
                     returning(Calls.response(Response.error(404, errorBody))).
@@ -106,6 +111,11 @@ public class FakeTMDBService implements TMDBService {
     @Override
     public Observable<Response<ReviewList>> getReviews(@Path("id") long movieId) {
         if (movieId == DummyData.MOVIE_ID_1) {
+            return delegate.
+                    returningResponse(DummyData.REVIEWS).
+                    getReviews(movieId)
+                    .compose(transformer);
+        } else if (movieId == DummyData.MOVIE_ID_2) {
             return delegate.
                     returningResponse(DummyData.REVIEWS).
                     getReviews(movieId)
