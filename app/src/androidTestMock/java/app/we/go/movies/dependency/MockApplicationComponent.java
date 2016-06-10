@@ -11,7 +11,7 @@ import dagger.Component;
 @Singleton
 @Component(modules = {ApplicationModule.class,
         MockServiceModule.class,
-        ApplicationAndroidModule.class,
+        MockApplicationAndroidModule.class,
         DatabaseModule.class})
 public interface MockApplicationComponent extends ApplicationComponent {
     void inject(FavoritesTest favoritesTest);

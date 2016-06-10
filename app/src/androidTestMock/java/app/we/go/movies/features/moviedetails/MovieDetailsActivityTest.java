@@ -89,7 +89,6 @@ public class MovieDetailsActivityTest extends BaseMovieDetailsActivityTest {
     @Test
     @UiThreadTest
     public void testFavoriteButton() throws Exception {
-        Thread.sleep(2000);
         onView(withId(R.id.menu_favorite)).
                 check(matches(withDrawable(R.drawable.ic_favorite_border_blue_24dp)));
 

@@ -1,6 +1,7 @@
 package app.we.go.movies.dependency;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -13,24 +14,26 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Application-scoped module with android dependencies.
- *
- * Created by apapad on 9/03/16.
+ * Created by Aristides Papadopoulos (github:talosdev).
  */
 @Module
-public class ApplicationAndroidModule {
+public class MockApplicationAndroidModule {
 
-    final Context context;
+    private Context context;
 
-    public ApplicationAndroidModule(Context context) {
+    public MockApplicationAndroidModule(Context context) {
         this.context = context;
     }
 
+
+
+    // TODO think about this
     @Provides
     @Singleton
     public SharedPreferencesHelper provideSharedPreferencesHelper() {
         return new SharedPreferencesHelper(context);
     }
+
 
     @Provides
     @Singleton
@@ -43,11 +46,8 @@ public class ApplicationAndroidModule {
     @Singleton
     @Named("subscribeOn")
     public Scheduler provideSubscribeOnScheduler() {
-        return Schedulers.io();
+        return Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-
-
-
 
 
 }

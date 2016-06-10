@@ -3,26 +3,25 @@ package app.we.go.movies.dependency;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import app.we.go.movies.constants.TMDB;
 import app.we.go.movies.remote.TMDBApiKeyInterceptor;
 import app.we.go.movies.remote.TMDBErrorParser;
+import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.remote.service.TMDBRetrofitService;
 import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.remote.service.TMDBServiceImpl;
-import app.we.go.movies.remote.URLBuilder;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.CallAdapter;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
-import rx.Observable.Transformer;
+import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -48,22 +47,8 @@ public class ServiceModule {
         return RxJavaCallAdapterFactory.create();
     }
 
-    @Provides
-    @Singleton
-    public Transformer<Response<?>, Response<?>> provideTransformer() {
-
-        return new Transformer<Response<?>, Response<?>>() {
 
 
-            @Override
-            public Observable<Response<?>> call(Observable<Response<?>> obs) {
-                return obs.
-                        subscribeOn(Schedulers.io()).
-                        observeOn(AndroidSchedulers.mainThread());
-            }
-        };
-
-    }
 
 
     @Provides
@@ -111,9 +96,10 @@ public class ServiceModule {
     @Singleton
     public TMDBService provideTMDBService(TMDBRetrofitService retrofitService,
                                           TMDBErrorParser parser,
-                                          Transformer<Response<?>, Response<?>>  transformer) {
+                                          @Named("observeOn")Scheduler observeOnScheduler,
+                                          @Named("subscribeOn")Scheduler subscribeOnScheduler) {
 
-        return new TMDBServiceImpl(retrofitService, parser, transformer);
+        return new TMDBServiceImpl(retrofitService, parser, observeOnScheduler, subscribeOnScheduler);
 
     }
 
