@@ -11,6 +11,7 @@ import nl.nl2312.rxcupboard.RxDatabase;
 import nl.qbusict.cupboard.DatabaseCompartment;
 import rx.Observable;
 import rx.Scheduler;
+import rx.functions.Func1;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
@@ -62,12 +63,18 @@ public class RxCupboardFavoriteMovieDAO implements RxFavoriteMovieDAO {
     }
 
     @Override
-    public Observable<FavoriteMovie> get(long movieId) {
+    public Observable<Boolean> check(long movieId) {
         Observable<FavoriteMovie> observable = rxdb.
                 query(FavoriteMovie.class, COLUMN_MOVIE_ID + " = ?", movieId + "");
 
-        return observable;//.compose((Observable.Transformer<FavoriteMovie, FavoriteMovie>) transformer);
+        return observable.isEmpty().map(new Func1<Boolean, Boolean>(){
 
+            @Override
+            public Boolean call(Boolean aBoolean) {
+                return !aBoolean;
+            }
+
+        });
     }
 
     @Override

@@ -74,7 +74,7 @@ public class MovieApplication extends Application {
 
     /**
      * Static method that can be used by any class that isn't a Context, but
-     * does have access to Context object, in order to get the Application object.
+     * does have access to Context object, in order to check the Application object.
      *
      * @param context
      * @return

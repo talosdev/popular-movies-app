@@ -67,7 +67,7 @@ public class MovieVideosPresenter extends BaseCacheablePresenter<VideosView> imp
                                     } else {
                                         TMDBError error = service.parse(response.errorBody());
 
-                                        onCallError("The get videos call was unsuccessfull",
+                                        onCallError("The check videos call was unsuccessfull",
                                                 R.string.error_generic,
                                                 error);
                                     }

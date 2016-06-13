@@ -2,6 +2,7 @@ package app.we.go.movies.features.moviedetails;
 
 import android.support.annotation.NonNull;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,12 +17,11 @@ import app.we.go.movies.dependency.MockServiceModule;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.service.TMDBService;
+import rx.observers.TestObserver;
 import rx.observers.TestSubscriber;
 
 import static app.we.go.movies.remote.DummyData.MOVIE_ID_1;
 import static app.we.go.movies.remote.DummyData.MOVIE_POSTER_PATH_1;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -53,6 +53,21 @@ public class MovieDetailsPresenterFavoritesTest extends BasePresenterTest {
 
     }
 
+    @After
+    public void tearDown() throws Exception {
+
+
+        TestObserver<List<FavoriteMovie>> observer = new TestObserver();
+        dao.get(0, 100).subscribe(observer);
+        List<List<FavoriteMovie>> onNextEvents = observer.getOnNextEvents();
+        if (onNextEvents.size() >0) {
+            List<FavoriteMovie> favoriteMovies = onNextEvents.get(0);
+            for (FavoriteMovie fm : favoriteMovies) {
+                dao.delete(fm.getMovieId());
+            }
+        }
+
+    }
 
     @NonNull
     private MovieDetailsPresenter getPresenter(long movieId) {
@@ -79,14 +94,13 @@ public class MovieDetailsPresenterFavoritesTest extends BasePresenterTest {
         verify(view).toggleFavorite(true);
 
         // Using the DAO, check that the movie is now marked as favorite
-        TestSubscriber<FavoriteMovie> ts1 = new TestSubscriber<>();
-        dao.get(MOVIE_ID_1).subscribe(ts1);
+        TestSubscriber<Boolean> ts1 = new TestSubscriber<>();
+        dao.check(MOVIE_ID_1).subscribe(ts1);
         ts1.assertNoErrors();
         ts1.assertValueCount(1);
-        List<FavoriteMovie> onNextEvents = ts1.getOnNextEvents();
+        List<Boolean> onNextEvents = ts1.getOnNextEvents();
 
-        assertNotNull(onNextEvents.get(0));
-        assertThat(onNextEvents.get(0).getMovieId()).isEqualTo(MOVIE_ID_1);
+        assertThat(onNextEvents.get(0)).isTrue();
 
         verifyNoMoreInteractions(view);
     }
@@ -111,13 +125,13 @@ public class MovieDetailsPresenterFavoritesTest extends BasePresenterTest {
         verify(view).toggleFavorite(false);
 
         // Using the DAO, check that the movie is now NOT marked as favorite
-        TestSubscriber<FavoriteMovie> ts1 = new TestSubscriber<>();
-        dao.get(MOVIE_ID_1).subscribe(ts1);
+        TestSubscriber<Boolean> ts1 = new TestSubscriber<>();
+        dao.check(MOVIE_ID_1).subscribe(ts1);
         ts1.assertNoErrors();
         ts1.assertValueCount(1);
-        List<FavoriteMovie> onNextEvents = ts1.getOnNextEvents();
+        List<Boolean> onNextEvents = ts1.getOnNextEvents();
 
-        assertNull(onNextEvents.get(0));
+        assertThat(onNextEvents.get(0)).isFalse();
 
         verifyNoMoreInteractions(view);
     }

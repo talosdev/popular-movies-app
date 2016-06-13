@@ -30,19 +30,21 @@ public class RxInMemoryFavoriteMoviesDAO implements RxFavoriteMovieDAO {
     }
 
     @Override
-    public Observable<FavoriteMovie> get(long movieId) {
-        return Observable.just(map.get(movieId));
+    public Observable<Boolean> check(long movieId) {
+        return Observable.just(map.containsKey(movieId));
     }
 
     /**
      * Ignores offset and limit and returns all elements
+     *
      * @param offset
      * @param limit
      * @return
      */
     @Override
     public Observable<List<FavoriteMovie>> get(int offset, int limit) {
-        return Observable.from(new ArrayList(map.values()));
+        List<FavoriteMovie> arrayList = new ArrayList(map.values());
+        return Observable.just(arrayList);
     }
 
     @Override

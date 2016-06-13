@@ -69,7 +69,7 @@ public class MovieInfoPresenter extends BaseCacheablePresenter<MovieDetailsContr
                                     populateViews(movie);
                                 } else {
                                     TMDBError error = service.parse(response.errorBody());
-                                    onCallError("The call to get the movie details was not successful",
+                                    onCallError("The call to check the movie details was not successful",
                                             R.string.error_generic, error);
                                 }
                             }

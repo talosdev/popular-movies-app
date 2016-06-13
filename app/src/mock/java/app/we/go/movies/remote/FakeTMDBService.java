@@ -44,7 +44,7 @@ public class FakeTMDBService implements TMDBService {
         this.transformer = transformer;
 
 
-        // Using the Dagger module to get the same Gson instance as in production code
+        // Using the Dagger module to check the same Gson instance as in production code
         // This is not absolutely necessary though...
         ApplicationModule module = new ApplicationModule();
         Gson gson = module.provideGson();

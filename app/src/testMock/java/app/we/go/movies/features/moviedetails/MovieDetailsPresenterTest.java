@@ -107,7 +107,7 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     public void testCheckFavoriteTrue() throws Exception {
         // setup DAO mock
         long movieId = MOVIE_ID_1;
-//        when(dao.get(movieId)).thenReturn(true);
+//        when(dao.check(movieId)).thenReturn(true);
 
         getPresenter(movieId).checkFavorite(movieId);
 
@@ -121,7 +121,7 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     public void testCheckFavoriteFalse() throws Exception {
         // setup DAO mock
         long movieId = INEXISTENT_MOVIE_ID;
-//        when(dao.get(movieId)).thenReturn(false);
+//        when(dao.check(movieId)).thenReturn(false);
 
         getPresenter(movieId).checkFavorite(movieId);
         verify(view).toggleFavorite(false);

@@ -20,7 +20,7 @@ import hugo.weaving.DebugLog;
  * to decide when it has to remove the presenter from the cache.
  *
  * The main idea is that the class holds the actual's presenter's tag as instance state and
- * tries to get it from cache and reconnect to it, if it is available.
+ * tries to check it from cache and reconnect to it, if it is available.
  *
  *
  * Created by Aristides Papadopoulos (github:talosdev).

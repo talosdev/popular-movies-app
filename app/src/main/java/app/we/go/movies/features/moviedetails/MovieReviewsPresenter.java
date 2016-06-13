@@ -47,7 +47,7 @@ public class MovieReviewsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
                             @Override
                             public void onError(Throwable t) {
-                                onCallFail("Network error in call to get reviews list",
+                                onCallFail("Network error in call to check reviews list",
                                         R.string.error_generic,
                                         t);
                             }
@@ -62,7 +62,7 @@ public class MovieReviewsPresenter extends BaseCacheablePresenter<MovieDetailsCo
                                     TMDBError error = service.parse(response.errorBody());
 
 
-                                    onCallError("The call to get the reviews list was unsuccessful",
+                                    onCallError("The call to check the reviews list was unsuccessful",
                                             R.string.error_generic,
                                             error);
                                 }

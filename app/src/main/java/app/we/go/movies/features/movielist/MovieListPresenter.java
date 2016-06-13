@@ -156,7 +156,7 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
                                     }
                                 } else {
                                     TMDBError error = service.parse(response.errorBody());
-                                    onCallError("The call to get the movie list was not successful",
+                                    onCallError("The call to check the movie list was not successful",
                                             R.string.error_generic, error);
                                 }
                             }

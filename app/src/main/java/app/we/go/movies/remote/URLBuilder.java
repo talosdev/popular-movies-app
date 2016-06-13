@@ -36,7 +36,7 @@ public class URLBuilder {
 
 
     /**
-     * Calculates the resolution of the backdrop image to get from the API, taking into account
+     * Calculates the resolution of the backdrop image to check from the API, taking into account
      * the available space in the UI
      *
      * @param imageViewWidth in pixels

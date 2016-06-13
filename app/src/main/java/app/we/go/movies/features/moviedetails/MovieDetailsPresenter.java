@@ -5,14 +5,12 @@ import android.support.annotation.NonNull;
 import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.framework.mvp.presenter.PresenterFactory;
+import app.we.go.framework.util.RxUtils;
 import app.we.go.movies.R;
-import app.we.go.framework.log.Tags;
 import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.remote.service.TMDBService;
-import app.we.go.framework.log.LOG;
-import app.we.go.framework.util.RxUtils;
 import retrofit2.Response;
 import rx.Observable;
 import rx.Observer;
@@ -70,7 +68,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
                                     populateViews(movie);
                                 } else {
-                                    onCallError("The call to get the movie details was not successful",
+                                    onCallError("The call to check the movie details was not successful",
                                             R.string.error_generic, service.parse(response.errorBody()));
                                 }
                             }
@@ -93,24 +91,20 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
     @Override
     public void checkFavorite(long movieId) {
-        Observable<FavoriteMovie> favoriteMovieObservable = favoriteMovieDAO.get(movieId);
+        Observable<Boolean> favoriteMovieObservable = favoriteMovieDAO.check(movieId);
         favoriteMovieObservable.
-                isEmpty().
                 subscribe(new Observer<Boolean>() {
                     @Override
                     public void onCompleted() {
-                        LOG.d(Tags.GEN, "Completed");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        LOG.d(Tags.GEN, "Error", e);
                     }
 
                     @Override
                     public void onNext(Boolean isEmpty) {
-                        LOG.d(Tags.GEN, "Next");
-                        isFavorite = !isEmpty;
+                        isFavorite = isEmpty;
                         getBoundView().toggleFavorite(isFavorite);
 
                     }
