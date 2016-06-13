@@ -25,9 +25,17 @@ public class DatabaseModule {
         this.context = context;
     }
 
+
     @Provides
-    public SQLiteOpenHelper provideSqLiteOpenHelper() {
-        return new CupboardSQLiteOpenHelper(context, CupboardSQLiteOpenHelper.DATABASE_NAME);
+    @Singleton
+    @Named("database")
+    public String provideDatabaseName() {
+        return CupboardSQLiteOpenHelper.DATABASE_NAME;
+    }
+
+    @Provides
+    public SQLiteOpenHelper provideSqLiteOpenHelper(@Named("database") String database) {
+        return new CupboardSQLiteOpenHelper(context, database);
     }
 
     @Provides

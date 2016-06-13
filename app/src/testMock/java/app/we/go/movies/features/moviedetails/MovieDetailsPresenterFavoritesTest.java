@@ -17,7 +17,6 @@ import app.we.go.movies.dependency.MockServiceModule;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.service.TMDBService;
-import rx.observers.TestObserver;
 import rx.observers.TestSubscriber;
 
 import static app.we.go.movies.remote.DummyData.MOVIE_ID_1;
@@ -36,6 +35,7 @@ public class MovieDetailsPresenterFavoritesTest extends BasePresenterTest {
     MovieDetailsContract.DetailsView view;
 
     RxFavoriteMovieDAO dao;
+
     @Mock
     PresenterCache cache;
 
@@ -57,7 +57,7 @@ public class MovieDetailsPresenterFavoritesTest extends BasePresenterTest {
     public void tearDown() throws Exception {
 
 
-        TestObserver<List<FavoriteMovie>> observer = new TestObserver();
+        TestSubscriber<List<FavoriteMovie>> observer = new TestSubscriber();
         dao.get(0, 100).subscribe(observer);
         List<List<FavoriteMovie>> onNextEvents = observer.getOnNextEvents();
         if (onNextEvents.size() >0) {

@@ -25,9 +25,6 @@ public class MovieApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        createApplicationComponent();
-
         initStetho();
 
     }
@@ -68,6 +65,9 @@ public class MovieApplication extends Application {
     }
 
     public ApplicationComponent getComponent() {
+        if (component == null) {
+            createApplicationComponent();
+        }
         return component;
     }
 

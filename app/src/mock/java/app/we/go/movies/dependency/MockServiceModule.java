@@ -88,6 +88,7 @@ public class MockServiceModule {
 
                 NetworkBehavior networkBehavior = NetworkBehavior.create();
                 //    networkBehavior.setDelay(30, TimeUnit.SECONDS);
+                networkBehavior.setFailurePercent(0);
                 MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit)
                         .networkBehavior(networkBehavior).build();
 

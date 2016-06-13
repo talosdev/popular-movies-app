@@ -88,8 +88,8 @@ public class RxCupboardFavoriteMovieDAO implements RxFavoriteMovieDAO {
         }
 
         return rxdb.query(queryBuilder).
-                toList().
-                compose((Observable.Transformer<List<FavoriteMovie>, List<FavoriteMovie>>) transformer);
+                compose((Observable.Transformer<FavoriteMovie, FavoriteMovie>) transformer).
+                toList();
 
     }
 
