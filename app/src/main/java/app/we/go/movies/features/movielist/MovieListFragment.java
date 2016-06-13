@@ -22,14 +22,14 @@ import javax.inject.Inject;
 import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
-import app.we.go.movies.constants.Tags;
+import app.we.go.framework.log.Tags;
 import app.we.go.movies.features.movielist.dependency.MovieListModule;
 import app.we.go.movies.features.preferences.activity.PreferencesActivity;
 import app.we.go.movies.model.local.MoviePoster;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.remote.URLBuilder;
-import app.we.go.movies.util.LOG;
+import app.we.go.framework.log.LOG;
 import butterknife.Bind;
 import hugo.weaving.DebugLog;
 

@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.SimpleArrayMap;
 
 import app.we.go.framework.mvp.MVP;
-import app.we.go.movies.util.LOG;
+import app.we.go.framework.log.LOG;
 
 /**
  * Cache for {@link Presenter}s.

@@ -8,8 +8,8 @@ import java.util.UUID;
 
 import app.we.go.framework.mvp.MVP;
 import app.we.go.framework.mvp.presenter.CacheablePresenter;
-import app.we.go.movies.constants.Tags;
-import app.we.go.movies.util.LOG;
+import app.we.go.framework.log.Tags;
+import app.we.go.framework.log.LOG;
 import hugo.weaving.DebugLog;
 
 /**

@@ -22,15 +22,7 @@ public class TMDB {
      */
     public final static String BASE_URL = "https://api.themoviedb.org/3/";
 
-    /**
-     * The URL for getting the list of popular movies
-     */
-    public static final String URL_MOVIES = BASE_URL + "discover/movie";
-
-
-
     public static final String DATE_FORMAT = "yyyy-MM-dd";
-
 
     /**
      * The base URL for getting the poster image
@@ -52,5 +44,4 @@ public class TMDB {
 
     public static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch";
     public static final String YOUTUBE_VIDEO_PARAM = "v";
-    public static final String PARAM_VOTE_COUNT_MINIMUM = "vote_count.gte";
 }

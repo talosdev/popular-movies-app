@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.we.go.movies.R;
-import app.we.go.movies.constants.Tags;
+import app.we.go.framework.log.Tags;
 import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.model.remote.Movie;
 import butterknife.Bind;

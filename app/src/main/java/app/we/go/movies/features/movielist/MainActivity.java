@@ -12,7 +12,7 @@ import android.widget.SpinnerAdapter;
 
 import app.we.go.framework.mvp.BaseActivity;
 import app.we.go.movies.R;
-import app.we.go.movies.constants.Tags;
+import app.we.go.framework.log.Tags;
 import app.we.go.movies.features.moviedetails.MovieDetailsActivity;
 import app.we.go.movies.features.moviedetails.MovieDetailsFragment;
 import app.we.go.movies.model.local.SortByCriterion;

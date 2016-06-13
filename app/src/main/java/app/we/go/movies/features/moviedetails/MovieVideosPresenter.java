@@ -14,7 +14,7 @@ import app.we.go.movies.remote.URLBuilder;
 import app.we.go.movies.model.remote.TMDBError;
 import app.we.go.movies.model.remote.Video;
 import app.we.go.movies.model.remote.VideoList;
-import app.we.go.movies.util.RxUtils;
+import app.we.go.framework.util.RxUtils;
 import retrofit2.Response;
 import rx.Observer;
 import rx.Subscription;

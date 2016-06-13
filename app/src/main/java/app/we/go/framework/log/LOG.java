@@ -1,12 +1,17 @@
-package app.we.go.movies.util;
+package app.we.go.framework.log;
 
 import android.util.Log;
 
 /**
+ * Alternative logging class that supports building messages using formatted strings
+ * and vararg parameters.
+ * Note that in the method versions that accept a {@link Throwable}, that parameter
+ * has been moved before the message parameter compared to the original
+ * {@link Log} methods (for overloading reasons).
+ *
  * Created by apapad on 2/04/16.
  */
 public class LOG  {
-
 
     public static void v(String tag, String msg, Object... params) {
         Log.v(tag, String.format(msg, params));

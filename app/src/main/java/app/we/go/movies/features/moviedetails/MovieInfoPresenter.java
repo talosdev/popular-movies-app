@@ -10,7 +10,7 @@ import app.we.go.movies.helpers.SharedPreferencesHelper;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.model.remote.TMDBError;
 import app.we.go.movies.remote.service.TMDBService;
-import app.we.go.movies.util.RxUtils;
+import app.we.go.framework.util.RxUtils;
 import retrofit2.Response;
 import rx.Observable;
 import rx.Observer;

@@ -10,8 +10,8 @@ import android.widget.Toast;
 import javax.inject.Inject;
 
 import app.we.go.framework.mvp.presenter.Presenter;
-import app.we.go.movies.constants.Tags;
-import app.we.go.movies.util.LOG;
+import app.we.go.framework.log.Tags;
+import app.we.go.framework.log.LOG;
 import butterknife.ButterKnife;
 
 /**

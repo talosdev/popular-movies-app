@@ -11,12 +11,12 @@ import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.constants.Tags;
+import app.we.go.framework.log.Tags;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.dependency.HasDetailsServiceModule;
 import app.we.go.movies.features.moviedetails.dependency.MovieInfoModule;
 import app.we.go.movies.model.remote.Movie;
-import app.we.go.movies.util.LOG;
+import app.we.go.framework.log.LOG;
 import butterknife.Bind;
 import hugo.weaving.DebugLog;
 
