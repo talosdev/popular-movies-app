@@ -42,17 +42,15 @@ test:
    # unlock screen
    # https://discuss.circleci.com/t/android-test-fails-with-a-failure-to-get-the-focus-of-root-view/139
    - sleep 30
-   - adb shell input keyevent 82
+   - fb-adb shell input keyevent 82
+   - fb-adb rcmd screencap -p > $CIRCLE_ARTIFACTS/screen-$(date +"%T").png
 
    # execute the android tests (instrumentation)
    - (./gradlew connectedAndroidTest -PdisablePreDex):
       timeout: 6000
+   - fb-adb rcmd screencap -p > $CIRCLE_ARTIFACTS/screen-after-$(date +"%T").png
 
-   # take screenshot
-   - wget http://imgur.com/tools/imgurbash.sh
-   - chmod a+x imgurbash.sh
-   - adb shell screencap -p | sed 's/\r$//' > bootscreen.png
-   - ./imgurbash.sh bootscreen.png
+
 
    # copy the build outputs to artifacts
    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
