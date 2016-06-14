@@ -114,6 +114,7 @@ final ESPRESSO_VERSION = '2.2.1'
 final SUPPORT_VERSION = '23.1.1'
 final RETROFIT_VERSION = '2.0.2'
 final OKHTTP_VERSION = '3.2.0'
+final BUTTERKNIFE_VERSION = '8.0.1'
 
 configurations.all {
     resolutionStrategy.force "com.android.support:support-annotations:${SUPPORT_VERSION}"
@@ -158,7 +159,8 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit-mock:${RETROFIT_VERSION}"
     compile "com.squareup.retrofit2:adapter-rxjava:${RETROFIT_VERSION}"
     // Butterknifeer
-    compile "com.jakewharton:butterknife:8.0.1"
+    apt "com.jakewharton:butterknife-compiler:${BUTTERKNIFE_VERSION}"
+    compile "com.jakewharton:butterknife:${BUTTERKNIFE_VERSION}"
     // multidex
     compile "com.android.support:multidex:1.0.0"
 //    compile "com.android.support.test.espresso:espresso-idling-resource:${ESPRESSO_VERSION}"
