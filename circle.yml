@@ -48,6 +48,12 @@ test:
    - (./gradlew connectedAndroidTest -PdisablePreDex):
       timeout: 6000
 
+   # take screenshot
+   - wget http://imgur.com/tools/imgurbash.sh
+   - chmod a+x imgurbash.sh
+   - adb shell screencap -p | sed 's/\r$//' > bootscreen.png
+   - ./imgurbash.sh bootscreen.png
+
    # copy the build outputs to artifacts
    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
 
