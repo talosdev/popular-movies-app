@@ -101,11 +101,6 @@ android {
 Resolves dependency versions across test and production APKs, specifically, transitive
 dependencies. This is required since Espresso internally has a dependency on support-annotations.
 */
-configurations.all {
-    resolutionStrategy.force "com.android.support:support-annotations:23.1.1"
-    resolutionStrategy.force "com.android.support:support-v4:23.1.1"
-
-}
 
 repositories {
     mavenCentral()
@@ -120,16 +115,24 @@ final SUPPORT_VERSION = '23.1.1'
 final RETROFIT_VERSION = '2.0.2'
 final OKHTTP_VERSION = '3.2.0'
 
+configurations.all {
+    resolutionStrategy.force "com.android.support:support-annotations:${SUPPORT_VERSION}"
+    resolutionStrategy.force "com.android.support:support-v4:${SUPPORT_VERSION}"
+}
 
 
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    provided "javax.annotation:jsr250-api:1.0"
+
+    // dagger
     apt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
     compile "com.google.dagger:dagger:${DAGGER_VERSION}"
     androidTestApt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
-    provided "javax.annotation:jsr250-api:1.0"
-    compile "com.android.support:appcompat-v7:23.1.1"
+
+    // support libraries
+    compile "com.android.support:appcompat-v7:${SUPPORT_VERSION}"
     compile "com.android.support:cardview-v7:${SUPPORT_VERSION}"
     compile "com.android.support:support-v4:${SUPPORT_VERSION}"
     compile "com.android.support:design:${SUPPORT_VERSION}"
@@ -158,7 +161,7 @@ dependencies {
     compile "com.jakewharton:butterknife:7.0.1"
     // multidex
     compile "com.android.support:multidex:1.0.0"
-    compile "com.android.support.test.espresso:espresso-idling-resource:${ESPRESSO_VERSION}"
+//    compile "com.android.support.test.espresso:espresso-idling-resource:${ESPRESSO_VERSION}"
     // widgets
     compile("com.github.yasevich:endless-recycler-view:1.1.0") {
     }

@@ -3,6 +3,7 @@ package app.we.go.movies.features.movielist;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -33,6 +34,10 @@ public class MainActivityTest {
             new ActivityTestRule<>(MainActivity.class, true,
                     true); // no intent arguments, so we can launch already
 
+    @After
+    public void tearDown() throws Exception {
+        testRule.getActivity().finish();
+    }
 
     /**
      * A bit redundant... doesn't really test anything useful.

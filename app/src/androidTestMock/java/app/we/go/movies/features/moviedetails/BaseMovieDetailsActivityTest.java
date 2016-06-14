@@ -34,6 +34,6 @@ public abstract class BaseMovieDetailsActivityTest {
 
     @After
     public void tearDown() throws Exception {
-
+        testRule.getActivity().finish();
     }
 }

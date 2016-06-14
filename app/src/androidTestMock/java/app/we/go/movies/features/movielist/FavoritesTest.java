@@ -78,7 +78,7 @@ public class FavoritesTest {
     public void tearDown() throws Exception {
         dao.delete(DummyData.MOVIE_ID_1);
         dao.delete(DummyData.MOVIE_ID_2);
-
+        testRule.getActivity().finish();
     }
 
 
