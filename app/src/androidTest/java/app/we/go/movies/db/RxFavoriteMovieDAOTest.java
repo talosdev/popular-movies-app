@@ -22,6 +22,11 @@ import rx.observers.TestSubscriber;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Test basic crud operations using the {@link RxCupboardFavoriteMovieDAO}.
+ *
+ * Note that this is not an espresso test, so it won't idle-sync automatically.
+ * We explicitly have to call {@link TestSubscriber#awaitTerminalEvent()}.
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class RxFavoriteMovieDAOTest {
@@ -37,6 +42,9 @@ public class RxFavoriteMovieDAOTest {
     RxFavoriteMovieDAO dao;
 
 
+    /**
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
 

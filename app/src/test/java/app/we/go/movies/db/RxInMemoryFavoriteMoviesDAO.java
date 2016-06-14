@@ -10,6 +10,9 @@ import nl.nl2312.rxcupboard.DatabaseChange;
 import rx.Observable;
 
 /**
+ * In-memory implementation of {@link RxFavoriteMovieDAO} that is Android-independent, to be
+ * used in JUnit tests.
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class RxInMemoryFavoriteMoviesDAO implements RxFavoriteMovieDAO {

@@ -34,18 +34,9 @@ public class MockServiceModule {
     }
 
 
-    /**
-     * https://github.com/square/retrofit/issues/1081
-     * <p>
-     * For IdlingResource to work OK we need to do all this....
-     *
-     * @param executor
-     * @return
-     */
     @Provides
     @Singleton
-    public TMDBService provideServiceModule() {
-
+    public TMDBService provideService() {
         return FakeTmdbServiceAsyncFactory.getInstance(false);
     }
 
@@ -87,7 +78,7 @@ public class MockServiceModule {
                         baseUrl("http://example.com").build();
 
                 NetworkBehavior networkBehavior = NetworkBehavior.create();
-                //    networkBehavior.setDelay(30, TimeUnit.SECONDS);
+                // IMPORTANT!!! Network behavior by default uses a non-zero failure percentage
                 networkBehavior.setFailurePercent(0);
                 MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit)
                         .networkBehavior(networkBehavior).build();

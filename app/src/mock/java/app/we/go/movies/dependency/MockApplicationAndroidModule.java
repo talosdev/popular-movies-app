@@ -14,6 +14,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
+ * Mock module that is actually used to force
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 @Module
@@ -24,8 +26,6 @@ public class MockApplicationAndroidModule {
     public MockApplicationAndroidModule(Context context) {
         this.context = context;
     }
-
-
 
     // TODO think about this
     @Provides

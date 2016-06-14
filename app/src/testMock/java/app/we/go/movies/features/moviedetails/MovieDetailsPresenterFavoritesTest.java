@@ -55,8 +55,6 @@ public class MovieDetailsPresenterFavoritesTest extends BasePresenterTest {
 
     @After
     public void tearDown() throws Exception {
-
-
         TestSubscriber<List<FavoriteMovie>> observer = new TestSubscriber();
         dao.get(0, 100).subscribe(observer);
         List<List<FavoriteMovie>> onNextEvents = observer.getOnNextEvents();

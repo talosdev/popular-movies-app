@@ -32,6 +32,8 @@ import static app.we.go.movies.espresso.matchers.Matchers.withDrawable;
 import static app.we.go.movies.espresso.matchers.Matchers.withRecyclerView;
 
 /**
+ * Tests that the favorites list screen is correctly updated when a movie is un-starred.
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class FavoritesTest {
@@ -79,6 +81,13 @@ public class FavoritesTest {
 
     }
 
+
+    /**
+     * Test that when we click on a favorite movie and then go back to the favorites screen,
+     * the list of favorites is correctly updated.
+     *
+     * @throws Exception
+     */
     @Test
     public void testUnfavorite() throws Exception {
         // click the spinner

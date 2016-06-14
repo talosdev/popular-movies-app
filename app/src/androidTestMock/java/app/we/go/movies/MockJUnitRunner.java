@@ -7,16 +7,17 @@ import android.support.test.runner.AndroidJUnitRunner;
 import app.we.go.movies.application.TestMoviesApplication;
 
 /**
+ * Subclass of {@link AndroidJUnitRunner} that uses the {@link TestMoviesApplication}.
+ * <p/>
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class MockJUnitRunner extends AndroidJUnitRunner {
+
     @Override
-    public Application newApplication(
-            ClassLoader cl, String className, Context context)
-            throws InstantiationException,
-            IllegalAccessException,
-            ClassNotFoundException {
-        return super.newApplication(
-                cl, TestMoviesApplication.class.getName(), context);
+    public Application newApplication(ClassLoader cl, String className, Context context)
+            throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+
+        return super.newApplication(cl, TestMoviesApplication.class.getName(), context);
+
     }
 }

@@ -11,9 +11,12 @@ import org.junit.Rule;
 import app.we.go.movies.remote.DummyData;
 
 /**
+ * Base class that launches the {@link MovieDetailsActivity}.
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class BaseMovieDetailsActivityTest {
+public abstract class BaseMovieDetailsActivityTest {
+
     @Rule
     public final ActivityTestRule<MovieDetailsActivity> testRule =
             new ActivityTestRule<>(MovieDetailsActivity.class, true,

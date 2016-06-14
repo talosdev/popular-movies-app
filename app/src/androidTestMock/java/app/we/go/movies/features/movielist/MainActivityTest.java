@@ -22,6 +22,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static app.we.go.movies.espresso.matchers.Matchers.withRecyclerView;
 
 /**
+ * Tests the functionality of the {@link MainActivity} (poster list page).
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class MainActivityTest {
@@ -32,6 +34,10 @@ public class MainActivityTest {
                     true); // no intent arguments, so we can launch already
 
 
+    /**
+     * A bit redundant... doesn't really test anything useful.
+     * @throws Exception
+     */
     @Test
     public void testSpinner() throws Exception {
 

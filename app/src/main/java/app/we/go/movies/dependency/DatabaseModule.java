@@ -1,6 +1,7 @@
 package app.we.go.movies.dependency;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import javax.inject.Named;
@@ -38,12 +39,19 @@ public class DatabaseModule {
         return new CupboardSQLiteOpenHelper(context, database);
     }
 
+
     @Provides
     @Singleton
-    public RxFavoriteMovieDAO provideRxFavoriteMovieDAO(SQLiteOpenHelper sqLiteOpenHelper,
+    public SQLiteDatabase provideSQSqLiteDatabase(SQLiteOpenHelper helper) {
+        return helper.getWritableDatabase();
+    }
+
+    @Provides
+    @Singleton
+    public RxFavoriteMovieDAO provideRxFavoriteMovieDAO(SQLiteDatabase database,
                                                         @Named("observeOn") Scheduler observeOnScheduler,
                                                         @Named("subscribeOn")Scheduler subscribeOnScheduler) {
-        return new RxCupboardFavoriteMovieDAO(sqLiteOpenHelper.getWritableDatabase(),
+        return new RxCupboardFavoriteMovieDAO(database,
                 observeOnScheduler,
                 subscribeOnScheduler);
     }

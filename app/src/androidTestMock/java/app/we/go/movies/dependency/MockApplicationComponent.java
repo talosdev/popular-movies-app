@@ -13,9 +13,12 @@ import dagger.Component;
 @Component(modules = {ApplicationModule.class,
         MockServiceModule.class,
         MockApplicationAndroidModule.class,
-        MockDatabaseModule.class})
+        DatabaseModule.class})
 public interface MockApplicationComponent extends ApplicationComponent {
-    void inject(FavoritesTest favoritesTest);
 
+    // Here we can have inject methods for test, so that the tests can modify the mocked
+    // injected components' behaviour.
+
+    void inject(FavoritesTest favoritesTest);
     void inject(RxFavoriteMovieDAOTest rxCupboardFavoriteMovieDAOTest);
 }
