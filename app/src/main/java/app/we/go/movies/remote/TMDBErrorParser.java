@@ -3,9 +3,9 @@ package app.we.go.movies.remote;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 
-import app.we.go.movies.constants.Tags;
+import app.we.go.framework.log.Tags;
 import app.we.go.movies.model.remote.TMDBError;
-import app.we.go.movies.util.LOG;
+import app.we.go.framework.log.LOG;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;

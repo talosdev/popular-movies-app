@@ -1,15 +1,18 @@
 package app.we.go.movies.dependency;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
-import app.we.go.movies.db.CupboardFavoriteMovieDAO;
 import app.we.go.movies.db.CupboardSQLiteOpenHelper;
-import app.we.go.movies.db.FavoriteMovieDAO;
+import app.we.go.movies.db.RxCupboardFavoriteMovieDAO;
+import app.we.go.movies.db.RxFavoriteMovieDAO;
 import dagger.Module;
 import dagger.Provides;
+import rx.Scheduler;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -23,15 +26,34 @@ public class DatabaseModule {
         this.context = context;
     }
 
+
     @Provides
     @Singleton
-    public SQLiteOpenHelper provideSqLiteOpenHelper() {
-        return new CupboardSQLiteOpenHelper(context, CupboardSQLiteOpenHelper.DATABASE_NAME);
+    @Named("database")
+    public String provideDatabaseName() {
+        return CupboardSQLiteOpenHelper.DATABASE_NAME;
     }
 
-    // NOT A SINGLETON, in order to not maintain a connection to the database always
     @Provides
-    public FavoriteMovieDAO provideFavoriteMovieDAO(SQLiteOpenHelper sqLiteOpenHelper) {
-        return new CupboardFavoriteMovieDAO(sqLiteOpenHelper.getWritableDatabase());
+    public SQLiteOpenHelper provideSqLiteOpenHelper(@Named("database") String database) {
+        return new CupboardSQLiteOpenHelper(context, database);
     }
+
+
+    @Provides
+    @Singleton
+    public SQLiteDatabase provideSQSqLiteDatabase(SQLiteOpenHelper helper) {
+        return helper.getWritableDatabase();
+    }
+
+    @Provides
+    @Singleton
+    public RxFavoriteMovieDAO provideRxFavoriteMovieDAO(SQLiteDatabase database,
+                                                        @Named("observeOn") Scheduler observeOnScheduler,
+                                                        @Named("subscribeOn")Scheduler subscribeOnScheduler) {
+        return new RxCupboardFavoriteMovieDAO(database,
+                observeOnScheduler,
+                subscribeOnScheduler);
+    }
+
 }

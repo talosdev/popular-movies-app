@@ -1,6 +1,5 @@
 package app.we.go.movies.features.moviedetails.tab;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,19 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import javax.inject.Inject;
-
+import app.we.go.framework.log.LOG;
+import app.we.go.framework.log.Tags;
 import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Args;
-import app.we.go.movies.constants.Tags;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.dependency.HasDetailsServiceModule;
 import app.we.go.movies.features.moviedetails.dependency.MovieInfoModule;
 import app.we.go.movies.model.remote.Movie;
-import app.we.go.movies.util.LOG;
-import butterknife.Bind;
+import butterknife.BindView;
 import hugo.weaving.DebugLog;
 
 /**
@@ -29,20 +26,18 @@ import hugo.weaving.DebugLog;
 public class MovieInfoTabFragment extends CacheablePresenterBasedFragment<MovieDetailsContract.MovieInfoPresenter>
         implements MovieDetailsContract.InfoView {
 
-    @Bind(R.id.release_date)
+    @BindView(R.id.release_date)
     TextView releaseDateView;
 
-    @Bind(R.id.vote_average)
+    @BindView(R.id.vote_average)
     TextView voteAverageView;
 
-    @Bind(R.id.vote_count)
+    @BindView(R.id.vote_count)
     TextView voteCountView;
 
-    @Bind(R.id.synopsis)
+    @BindView(R.id.synopsis)
     TextView descriptionView;
 
-    @Inject
-    Context context;
 
     public static MovieInfoTabFragment newInstance(long movieId) {
         MovieInfoTabFragment f = new MovieInfoTabFragment();
@@ -102,7 +97,7 @@ public class MovieInfoTabFragment extends CacheablePresenterBasedFragment<MovieD
     }
 
     @Override
-    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
 //        showError(getContext(), logMessage, resourceId, t);
     }
 

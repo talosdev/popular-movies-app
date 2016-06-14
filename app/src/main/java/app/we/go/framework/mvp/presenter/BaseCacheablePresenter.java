@@ -49,7 +49,7 @@ public abstract class BaseCacheablePresenter<V extends ViewMVP> implements Cache
 
     protected void onCallError(String logMessage, int resourceId, TMDBError error) {
         if (getBoundView() != null) {
-            getBoundView().showError(null, logMessage +
+            getBoundView().showError(logMessage +
                     ": " + error.getStatusCode() + " - " + error.getStatusMessage() , resourceId, null);
         }
     }
@@ -57,7 +57,7 @@ public abstract class BaseCacheablePresenter<V extends ViewMVP> implements Cache
 
     protected void onCallFail(String logMessage, int resourceId, Throwable t) {
         if (getBoundView() != null) {
-            getBoundView().showError(null, logMessage, R.string.error_network, t);
+            getBoundView().showError(logMessage, R.string.error_network, t);
         }
     }
 

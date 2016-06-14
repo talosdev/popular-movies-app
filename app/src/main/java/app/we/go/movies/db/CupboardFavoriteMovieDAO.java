@@ -88,4 +88,5 @@ public class CupboardFavoriteMovieDAO implements FavoriteMovieDAO {
         Handler h = new Handler();
         h.postDelayed(runnable, 10);
     }
+
 }

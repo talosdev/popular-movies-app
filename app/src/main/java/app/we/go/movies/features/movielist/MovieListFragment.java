@@ -1,7 +1,6 @@
 package app.we.go.movies.features.movielist;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,18 +19,18 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import app.we.go.framework.log.LOG;
+import app.we.go.framework.log.Tags;
 import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
-import app.we.go.movies.constants.Tags;
 import app.we.go.movies.features.movielist.dependency.MovieListModule;
 import app.we.go.movies.features.preferences.activity.PreferencesActivity;
 import app.we.go.movies.model.local.MoviePoster;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.remote.URLBuilder;
-import app.we.go.movies.util.LOG;
-import butterknife.Bind;
+import butterknife.BindView;
 import hugo.weaving.DebugLog;
 
 /**
@@ -58,12 +57,9 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
     MovieListContract.Presenter presenter;
 
     @Inject
-    Context context;
-
-    @Inject
     URLBuilder urlBuilder;
 
-    @Bind(R.id.movie_recycler_view)
+    @BindView(R.id.movie_recycler_view)
     EndlessRecyclerView recycler;
 
 
@@ -93,8 +89,9 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
 
     @Override
     protected void injectDependencies(String presenterTag) {
+        sortBy = SortByCriterion.byIndex(getArguments().getInt(SORT_BY));
         MovieApplication.get(getActivity()).getComponent().
-                plus(new MovieListModule(getActivity(), presenterTag)).inject(this);
+                plus(new MovieListModule(getActivity(), sortBy, presenterTag)).inject(this);
     }
 
 
@@ -115,6 +112,8 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
         adapter = new MovieAdapter(getContext(), this, urlBuilder);
         recycler.setAdapter(adapter);
         recycler.setPager(this);
+        recycler.setThreshold(4);
+
 
 
         try {
@@ -125,15 +124,22 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
         }
 
         List<MoviePoster> movies = new ArrayList<>();
-
-        sortBy = SortByCriterion.byIndex(getArguments().getInt(SORT_BY));
-
     }
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(sortBy == SortByCriterion.FAVORITES) {
+            isLoading = true;
+            presenter.getCachedMovies();
+        }
+    }
+
+    @Override
     protected void initViewNoCache() {
-        presenter.loadMovies(sortBy);
+        isLoading = true;
+        presenter.loadMovies();
     }
 
 
@@ -163,6 +169,12 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
     }
 
     @Override
+    public void updateMovieList(List<Movie> cachedMovies) {
+        adapter.clear();
+        adapter.addMovies(cachedMovies);
+    }
+
+    @Override
     public void navigateToMovieDetails(Movie movie) {
         movieSelectedCallback.onMovieSelected(movie);
     }
@@ -175,7 +187,7 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
     @Override
     public void loadNextPage() {
         isLoading = true;
-        presenter.loadMovies(sortBy);
+        presenter.loadMovies();
     }
 
     @Override

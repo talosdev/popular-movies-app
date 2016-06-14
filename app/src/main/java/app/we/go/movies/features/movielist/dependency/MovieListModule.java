@@ -3,10 +3,11 @@ package app.we.go.movies.features.movielist.dependency;
 import android.content.Context;
 
 import app.we.go.framework.mvp.presenter.PresenterCache;
-import app.we.go.movies.db.FavoriteMovieDAO;
+import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.movielist.MovieListContract;
 import app.we.go.movies.features.movielist.MovieListPresenter;
+import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.remote.service.TMDBService;
 import dagger.Module;
 import dagger.Provides;
@@ -19,12 +20,14 @@ public class MovieListModule {
 
 
     private final Context context;
-    private String presenterTag;
+    private final SortByCriterion sortBy;
+    private final String presenterTag;
 
 
-    public MovieListModule(Context context,
-                           String presenterTag) {
+
+    public MovieListModule(Context context, SortByCriterion sortBy, String presenterTag) {
         this.context = context;
+        this.sortBy = sortBy;
         this.presenterTag = presenterTag;
     }
 
@@ -32,6 +35,12 @@ public class MovieListModule {
     @FragmentScope
     public Context provideContext() {
         return context;
+    }
+
+    @Provides
+    @FragmentScope
+    public SortByCriterion provideSortByCriterion() {
+        return sortBy;
     }
 
 
@@ -46,8 +55,11 @@ public class MovieListModule {
     @FragmentScope
     public MovieListPresenter.Factory provideFactory(TMDBService service,
                                                      PresenterCache cache,
-                                                     FavoriteMovieDAO dao) {
-        return new MovieListPresenter.Factory(service, cache, dao);
+                                                     RxFavoriteMovieDAO dao, SortByCriterion sortBy)  {
+
+
+        return new MovieListPresenter.Factory(service, cache,
+                dao, sortBy);
     }
 
 

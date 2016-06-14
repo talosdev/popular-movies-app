@@ -1,4 +1,4 @@
-package app.we.go.movies.util;
+package app.we.go.framework.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

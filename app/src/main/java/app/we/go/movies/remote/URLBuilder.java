@@ -3,13 +3,9 @@ package app.we.go.movies.remote;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import javax.inject.Inject;
 
 import app.we.go.movies.constants.TMDB;
-import app.we.go.movies.model.local.SortByCriterion;
 
 /**
  * Created by apapad on 29/11/15.
@@ -29,33 +25,6 @@ public class URLBuilder {
     }
 
 
-    public static URL buildPopularMoviesURL(SortByCriterion sortBy, int page) throws MalformedURLException {
-        Uri uri = Uri.parse(TMDB.URL_MOVIES).buildUpon().
-                appendQueryParameter(PARAM_SORT_BY, convertSortByCriterionToStringParameter(sortBy)).
-                appendQueryParameter(PARAM_PAGE, page + "").
-                appendQueryParameter(TMDB.PARAM_API_KEY, TMDB.API_KEY).
-                appendQueryParameter(TMDB.PARAM_VOTE_COUNT_MINIMUM, MINIMUM_VOTES + "").build();
-
-        return new URL(uri.toString());
-    }
-
-    /**
-     * Convert the enum value to the parameter value that the API expects
-     *
-     * @param sortBy
-     * @return
-     */
-    private static String convertSortByCriterionToStringParameter(SortByCriterion sortBy) {
-        switch (sortBy) {
-            case POPULARITY:
-                return "popularity.desc";
-            case VOTE:
-                return "vote_average.desc";
-            default:
-                return "";
-        }
-    }
-
     public static String buildBackdropPath(String backdrop, int imageViewWidth) {
         if (backdrop == null || backdrop.equals("") || backdrop.equals("null")) {
             return null;
@@ -67,7 +36,7 @@ public class URLBuilder {
 
 
     /**
-     * Calculates the resolution of the backdrop image to get from the API, taking into account
+     * Calculates the resolution of the backdrop image to check from the API, taking into account
      * the available space in the UI
      *
      * @param imageViewWidth in pixels

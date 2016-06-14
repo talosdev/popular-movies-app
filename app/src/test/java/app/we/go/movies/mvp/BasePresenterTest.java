@@ -1,7 +1,5 @@
 package app.we.go.movies.mvp;
 
-import android.content.Context;
-
 import app.we.go.framework.mvp.view.ViewMVP;
 import app.we.go.movies.R;
 
@@ -16,12 +14,12 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
  */
 public class BasePresenterTest {
     protected void verifyError(ViewMVP view) {
-        verify(view).showError(any(Context.class), any(String.class), eq(R.string.error_generic), isNull(Throwable.class));
+        verify(view).showError(any(String.class), eq(R.string.error_generic), isNull(Throwable.class));
         verifyNoMoreInteractions(view);
     }
 
     protected void verifyFail(ViewMVP view) {
-        verify(view).showError(any(Context.class), any(String.class), eq(R.string.error_network), any(Throwable.class));
+        verify(view).showError(any(String.class), eq(R.string.error_network), any(Throwable.class));
         verifyNoMoreInteractions(view);
     }
 }

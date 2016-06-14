@@ -15,9 +15,9 @@ import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.service.TMDBService;
 
-import static app.we.go.movies.remote.DummyData.DUMMY_MOVIE;
+import static app.we.go.movies.remote.DummyData.DUMMY_MOVIE_1;
 import static app.we.go.movies.remote.DummyData.INEXISTENT_MOVIE_ID;
-import static app.we.go.movies.remote.DummyData.MOVIE_ID;
+import static app.we.go.movies.remote.DummyData.MOVIE_ID_1;
 import static app.we.go.movies.remote.DummyData.MOVIE_ID_CAUSES_SERVER_ERROR;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -71,12 +71,12 @@ public class MovieInfoPresenterTest extends BasePresenterTest {
     @Test
     public void testLoadMovieInfo() throws InterruptedException {
 
-        long movieId = MOVIE_ID;
+        long movieId = MOVIE_ID_1;
         MovieInfoPresenter presenter = getPresenter(movieId);
 
         presenter.loadMovieInfo(movieId);
 
-        verify(view).displayInfo(DUMMY_MOVIE);
+        verify(view).displayInfo(DUMMY_MOVIE_1);
         verify(view).displayFormattedDate(DummyData.MOVIE_RELEASE_DATE_STR);
 
         verifyNoMoreInteractions(view);

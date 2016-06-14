@@ -7,8 +7,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import app.we.go.movies.R;
-import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.model.remote.Movie;
+import app.we.go.movies.remote.DummyData;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -22,6 +22,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static app.we.go.movies.espresso.matchers.Matchers.withRecyclerView;
 
 /**
+ * Tests the functionality of the {@link MainActivity} (poster list page).
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class MainActivityTest {
@@ -31,7 +33,10 @@ public class MainActivityTest {
             new ActivityTestRule<>(MainActivity.class, true,
                     true); // no intent arguments, so we can launch already
 
-
+    /**
+     * A bit redundant... doesn't really test anything useful.
+     * @throws Exception
+     */
     @Test
     public void testSpinner() throws Exception {
 

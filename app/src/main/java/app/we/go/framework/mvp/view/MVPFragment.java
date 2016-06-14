@@ -10,8 +10,8 @@ import android.widget.Toast;
 import javax.inject.Inject;
 
 import app.we.go.framework.mvp.presenter.Presenter;
-import app.we.go.movies.constants.Tags;
-import app.we.go.movies.util.LOG;
+import app.we.go.framework.log.Tags;
+import app.we.go.framework.log.LOG;
 import butterknife.ButterKnife;
 
 /**
@@ -27,6 +27,9 @@ public abstract class MVPFragment<P extends Presenter> extends Fragment
 
     @Inject
     protected P presenter;
+
+    @Inject
+    protected Context context;
 
     /**
      * In this methods, subclasses should handle all the DI work, primarily taking care of
@@ -64,13 +67,12 @@ public abstract class MVPFragment<P extends Presenter> extends Fragment
     /**
      * If there is an exception, logs it.
      * Shows a Toast.
-     * @param context
      * @param logMessage
      * @param resourceId
      * @param t
      */
     @Override
-    public void showError(Context context, String logMessage, int resourceId, @Nullable Throwable t) {
+    public void showError(String logMessage, int resourceId, @Nullable Throwable t) {
         if (t == null) {
             LOG.e(Tags.GEN, logMessage);
         } else {

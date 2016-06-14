@@ -11,7 +11,7 @@ import java.util.List;
 
 import app.we.go.movies.R;
 import app.we.go.movies.model.remote.Video;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -67,10 +67,10 @@ public class VideoArrayAdapter extends ArrayAdapter {
     }
 
     protected static class ViewHolder{
-        @Bind(R.id.videoName)
+        @BindView(R.id.videoName)
         TextView videoName;
 
-        @Bind(R.id.videoDetails)
+        @BindView(R.id.videoDetails)
         TextView videoDetails;
 
         String videoKey;

@@ -25,9 +25,6 @@ public class MovieApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        createApplicationComponent();
-
         initStetho();
 
     }
@@ -68,13 +65,16 @@ public class MovieApplication extends Application {
     }
 
     public ApplicationComponent getComponent() {
+        if (component == null) {
+            createApplicationComponent();
+        }
         return component;
     }
 
 
     /**
      * Static method that can be used by any class that isn't a Context, but
-     * does have access to Context object, in order to get the Application object.
+     * does have access to Context object, in order to check the Application object.
      *
      * @param context
      * @return

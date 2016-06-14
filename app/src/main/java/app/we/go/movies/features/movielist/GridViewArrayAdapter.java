@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import app.we.go.movies.R;
-import app.we.go.movies.constants.Tags;
+import app.we.go.framework.log.Tags;
 import app.we.go.movies.model.local.MoviePoster;
 import app.we.go.movies.remote.URLBuilder;
 

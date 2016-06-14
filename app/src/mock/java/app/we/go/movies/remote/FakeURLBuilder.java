@@ -2,13 +2,6 @@ package app.we.go.movies.remote;
 
 import android.support.annotation.Nullable;
 
-import javax.inject.Singleton;
-
-import app.we.go.movies.db.FavoriteMovieDAO;
-import app.we.go.movies.db.InMemoryFavoriteMoviesDAO;
-import dagger.Module;
-import dagger.Provides;
-
 /**
  * Fake {@link URLBuilder} subclass that can be used for hermetic tests.
  *
@@ -34,17 +27,4 @@ public class FakeURLBuilder extends URLBuilder {
         return "file:///android_asset/poster.jpg";
     }
 
-    /**
-     * Created by Aristides Papadopoulos (github:talosdev).
-     */
-    @Module
-    public static class MockDatabaseModule {
-
-
-        @Provides
-        @Singleton
-        public FavoriteMovieDAO provideFavoriteMovieDAO() {
-            return new InMemoryFavoriteMoviesDAO();
-        }
-    }
 }

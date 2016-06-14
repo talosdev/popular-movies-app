@@ -47,7 +47,7 @@ public class MovieReviewsPresenterTest extends BasePresenterTest {
 
     @Test
     public void testLoadReviews() throws Exception {
-        presenter.loadMovieReviews(DummyData.MOVIE_ID);
+        presenter.loadMovieReviews(DummyData.MOVIE_ID_1);
 
         verify(view).displayReviews(eq(DummyData.REVIEWS.getReviews()));
         verifyNoMoreInteractions(view);

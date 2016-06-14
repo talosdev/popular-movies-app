@@ -1,18 +1,16 @@
 package app.we.go.movies.env;
 
-import android.support.test.runner.AndroidJUnit4;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import app.we.go.movies.BuildConfig;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * This tests that the TMDB api key is defined in a system environment property
+ *
  * Created by apapad on 12/11/15.
  */
-@RunWith(AndroidJUnit4.class)
 public class ApiKeyTest  {
 
 

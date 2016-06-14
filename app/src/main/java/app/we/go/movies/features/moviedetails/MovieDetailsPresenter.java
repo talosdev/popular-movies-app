@@ -5,12 +5,12 @@ import android.support.annotation.NonNull;
 import app.we.go.framework.mvp.presenter.BaseCacheablePresenter;
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.framework.mvp.presenter.PresenterFactory;
+import app.we.go.framework.util.RxUtils;
 import app.we.go.movies.R;
-import app.we.go.movies.db.FavoriteMovieDAO;
+import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.remote.service.TMDBService;
-import app.we.go.movies.util.RxUtils;
 import retrofit2.Response;
 import rx.Observable;
 import rx.Observer;
@@ -24,7 +24,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
     private TMDBService service;
     private Observable<Response<Movie>> observable;
-    private final FavoriteMovieDAO favoriteMovieDAO;
+    private final RxFavoriteMovieDAO favoriteMovieDAO;
 
     // DetailsPresenter holds the "favorite" state
     private boolean isFavorite;
@@ -34,7 +34,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
 
     public MovieDetailsPresenter(TMDBService service, Observable<Response<Movie>> observable,
-                                 FavoriteMovieDAO favoriteMovieDAO,
+                                 RxFavoriteMovieDAO favoriteMovieDAO,
                                  PresenterCache cache,
                                  String tag) {
         super(cache, tag);
@@ -68,7 +68,7 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
                                     populateViews(movie);
                                 } else {
-                                    onCallError("The call to get the movie details was not successful",
+                                    onCallError("The call to check the movie details was not successful",
                                             R.string.error_generic, service.parse(response.errorBody()));
                                 }
                             }
@@ -91,14 +91,33 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
     @Override
     public void checkFavorite(long movieId) {
-        boolean isFavorite = favoriteMovieDAO.get(movieId);
-        this.isFavorite = isFavorite;
-        if (isViewBound()) {
-            getBoundView().toggleFavorite(isFavorite);
-        }
+        Observable<Boolean> favoriteMovieObservable = favoriteMovieDAO.check(movieId);
+        favoriteMovieObservable.
+                subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Boolean isEmpty) {
+                        isFavorite = isEmpty;
+                        getBoundView().toggleFavorite(isFavorite);
+
+                    }
+                });
+
     }
 
-
+    /**
+     * Assumes that {@link #checkFavorite(long)} has been called before, so that the
+     * "favorite" status is correctly reflected in the field's {@link #isFavorite} value.
+     * @param movieId
+     * @param posterPath
+     */
     @Override
     public void onFavoriteClick(long movieId, String posterPath) {
         if (isFavorite) {
@@ -132,11 +151,11 @@ public class MovieDetailsPresenter extends BaseCacheablePresenter<MovieDetailsCo
 
         private TMDBService service;
         private Observable<Response<Movie>> observable;
-        private FavoriteMovieDAO favoriteMovieDAO;
+        private RxFavoriteMovieDAO favoriteMovieDAO;
         private PresenterCache cache;
 
         public Factory(TMDBService service, Observable<Response<Movie>> observable,
-                       FavoriteMovieDAO favoriteMovieDAO,
+                       RxFavoriteMovieDAO favoriteMovieDAO,
                        PresenterCache cache) {
             this.service = service;
 

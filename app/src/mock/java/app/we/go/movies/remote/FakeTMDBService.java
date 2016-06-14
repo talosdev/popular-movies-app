@@ -44,7 +44,7 @@ public class FakeTMDBService implements TMDBService {
         this.transformer = transformer;
 
 
-        // Using the Dagger module to get the same Gson instance as in production code
+        // Using the Dagger module to check the same Gson instance as in production code
         // This is not absolutely necessary though...
         ApplicationModule module = new ApplicationModule();
         Gson gson = module.provideGson();
@@ -60,12 +60,17 @@ public class FakeTMDBService implements TMDBService {
 
     @Override
     public Observable<Response<Movie>> getDetails(@Path("id") long movieId) {
-        if (movieId == DummyData.MOVIE_ID) {
+        if (movieId == DummyData.MOVIE_ID_1) {
             return delegate.
-                    returningResponse(DummyData.DUMMY_MOVIE).
+                    returningResponse(DummyData.DUMMY_MOVIE_1).
                     getDetails(movieId).
                     compose(transformer);
-        } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
+        } else if (movieId == DummyData.MOVIE_ID_2) {
+            return delegate.
+                    returningResponse(DummyData.DUMMY_MOVIE_2).
+                    getDetails(movieId).
+                    compose(transformer);
+        }  else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
             // returningResponse always returns a successful response, so we need to use
             // returning here
             return delegate.
@@ -80,7 +85,12 @@ public class FakeTMDBService implements TMDBService {
 
     @Override
     public Observable<Response<VideoList>> getVideos(@Path("id") long movieId) {
-        if (movieId == DummyData.MOVIE_ID) {
+        if (movieId == DummyData.MOVIE_ID_1) {
+            return delegate.
+                    returningResponse(DummyData.VIDEOS).
+                    getVideos(movieId).
+                    compose(transformer);
+        } else if (movieId == DummyData.MOVIE_ID_2) {
             return delegate.
                     returningResponse(DummyData.VIDEOS).
                     getVideos(movieId).
@@ -100,7 +110,12 @@ public class FakeTMDBService implements TMDBService {
 
     @Override
     public Observable<Response<ReviewList>> getReviews(@Path("id") long movieId) {
-        if (movieId == DummyData.MOVIE_ID) {
+        if (movieId == DummyData.MOVIE_ID_1) {
+            return delegate.
+                    returningResponse(DummyData.REVIEWS).
+                    getReviews(movieId)
+                    .compose(transformer);
+        } else if (movieId == DummyData.MOVIE_ID_2) {
             return delegate.
                     returningResponse(DummyData.REVIEWS).
                     getReviews(movieId)

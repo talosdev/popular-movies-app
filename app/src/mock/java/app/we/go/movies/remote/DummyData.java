@@ -19,13 +19,15 @@ import app.we.go.movies.model.remote.VideoList;
 public class DummyData {
 
     public static final String MOCK_BASE_URL = "http://www.example.com";
-    public static final Movie DUMMY_MOVIE;
+    public static final Movie DUMMY_MOVIE_1;
+    public static final Movie DUMMY_MOVIE_2;
     public static final long INEXISTENT_MOVIE_ID = 9999L;
 
 
     public static final long MOVIE_ID_CAUSES_SERVER_ERROR = 666L;
 
-    public static final long MOVIE_ID = 12345;
+    public static final long MOVIE_ID_1 = 12345;
+    public static final long MOVIE_ID_2 = 99999;
 
     public static final String MOVIE_TITLE = "The Movie";
 
@@ -37,7 +39,8 @@ public class DummyData {
 
     public static final String MOVIE_BACKDROP_PATH = "dummy/movie/backdrop/path";
 
-    public static final String MOVIE_POSTER_PATH = "dummy/movie/poster/path";
+    public static final String MOVIE_POSTER_PATH_1 = "dummy/movie/poster/path";
+    public static final String MOVIE_POSTER_PATH_2 = "dummy/movie/poster/path2";
 
 
     public static final VideoList VIDEOS = new VideoList();
@@ -99,15 +102,18 @@ public class DummyData {
 
 
     static {
-        DUMMY_MOVIE = new Movie();
-        DUMMY_MOVIE.setId(MOVIE_ID);
-        DUMMY_MOVIE.setTitle(MOVIE_TITLE);
-        DUMMY_MOVIE.setOverview(MOVIE_OVERVIEW);
-        DUMMY_MOVIE.setPopularity(7.2f);
-        DUMMY_MOVIE.setVoteCount(MOVIE_VOTES);
-        DUMMY_MOVIE.setVoteAverage(MOVIE_VOTE_AVG);
-        DUMMY_MOVIE.setBackdropPath(MOVIE_BACKDROP_PATH);
+        DUMMY_MOVIE_1 = new Movie();
+        DUMMY_MOVIE_1.setId(MOVIE_ID_1);
+        DUMMY_MOVIE_1.setTitle(MOVIE_TITLE);
+        DUMMY_MOVIE_1.setOverview(MOVIE_OVERVIEW);
+        DUMMY_MOVIE_1.setPopularity(7.2f);
+        DUMMY_MOVIE_1.setVoteCount(MOVIE_VOTES);
+        DUMMY_MOVIE_1.setVoteAverage(MOVIE_VOTE_AVG);
+        DUMMY_MOVIE_1.setBackdropPath(MOVIE_BACKDROP_PATH);
 
+
+        DUMMY_MOVIE_2 = new Movie();
+        DUMMY_MOVIE_2.setId(MOVIE_ID_2);
 
         Calendar cal = GregorianCalendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -117,7 +123,7 @@ public class DummyData {
 
 
 
-        DUMMY_MOVIE.setReleaseDate(MOVIE_RELEASE_DATE);
+        DUMMY_MOVIE_1.setReleaseDate(MOVIE_RELEASE_DATE);
 
 
         List<Video> videos = new ArrayList<>();

@@ -5,22 +5,18 @@ package app.we.go.movies.model.db;
  */
 public class FavoriteMovie {
 
-
+    @SuppressWarnings("unused") //required by cupboard
     private Long _id;
 
     private long movieId;
 
     private String posterPath;
 
-    public FavoriteMovie(long movieId, String posterPath) {
-        this(null, movieId, posterPath);
-    }
 
-    private FavoriteMovie(Long _id, long movieId, String posterPath) {
-        this._id = _id;
+    public FavoriteMovie(long movieId, String posterPath) {
         this.movieId = movieId;
-        this.posterPath = posterPath;
-    }
+        this.posterPath = posterPath;    }
+
 
     public FavoriteMovie() {
     }

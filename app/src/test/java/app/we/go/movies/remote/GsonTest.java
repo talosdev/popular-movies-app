@@ -11,7 +11,7 @@ import app.we.go.movies.TestData;
 import app.we.go.movies.dependency.ApplicationModule;
 import app.we.go.movies.model.remote.Movie;
 import app.we.go.movies.model.remote.MovieList;
-import app.we.go.movies.util.StringUtils;
+import app.we.go.framework.util.StringUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

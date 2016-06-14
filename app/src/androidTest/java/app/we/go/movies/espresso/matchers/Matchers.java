@@ -13,7 +13,7 @@ import org.hamcrest.TypeSafeMatcher;
 public class Matchers {
 
     /**
-     * Checks that
+     * Checks that a ListView has the expected number of items.
      *
      * Taken from
      * http://stackoverflow.com/a/30361345/5758378

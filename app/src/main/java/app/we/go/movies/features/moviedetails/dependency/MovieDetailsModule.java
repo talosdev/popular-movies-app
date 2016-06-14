@@ -1,7 +1,7 @@
 package app.we.go.movies.features.moviedetails.dependency;
 
 import app.we.go.framework.mvp.presenter.PresenterCache;
-import app.we.go.movies.db.FavoriteMovieDAO;
+import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.dependency.FragmentScope;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.MovieDetailsPresenter;
@@ -37,7 +37,7 @@ public class MovieDetailsModule {
     public MovieDetailsPresenter.Factory provideDetailsPresenterFactory(
             TMDBService service,
             Observable<Response<Movie>> observable,
-            FavoriteMovieDAO favoriteMovieDAO,
+            RxFavoriteMovieDAO favoriteMovieDAO,
             PresenterCache cache) {
         return new MovieDetailsPresenter.Factory(service, observable, favoriteMovieDAO, cache);
     }

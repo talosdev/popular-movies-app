@@ -21,7 +21,7 @@ public class SharedPreferencesHelper {
     public SharedPreferencesHelper(Context context) {
         this.context = context;
         /** TODO
-         * Is this the best way to get SharedPrefs?
+         * Is this the best way to check SharedPrefs?
          */
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }

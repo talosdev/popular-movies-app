@@ -8,8 +8,8 @@ import java.util.UUID;
 
 import app.we.go.framework.mvp.MVP;
 import app.we.go.framework.mvp.presenter.CacheablePresenter;
-import app.we.go.movies.constants.Tags;
-import app.we.go.movies.util.LOG;
+import app.we.go.framework.log.Tags;
+import app.we.go.framework.log.LOG;
 import hugo.weaving.DebugLog;
 
 /**
@@ -20,7 +20,7 @@ import hugo.weaving.DebugLog;
  * to decide when it has to remove the presenter from the cache.
  *
  * The main idea is that the class holds the actual's presenter's tag as instance state and
- * tries to get it from cache and reconnect to it, if it is available.
+ * tries to check it from cache and reconnect to it, if it is available.
  *
  *
  * Created by Aristides Papadopoulos (github:talosdev).

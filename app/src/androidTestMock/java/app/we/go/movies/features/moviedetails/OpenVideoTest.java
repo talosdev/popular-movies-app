@@ -45,6 +45,7 @@ public class OpenVideoTest extends BaseMovieDetailsActivityTest {
         Intents.init();
 
         URLBuilder urlBuilder = new URLBuilder();
+
         onView(withId(R.id.details_pager)).perform(swipeLeft());
         onView(withId(R.id.details_pager)).perform(swipeLeft());
 
@@ -54,6 +55,7 @@ public class OpenVideoTest extends BaseMovieDetailsActivityTest {
                 atPosition(i).
                 onChildView(withId(R.id.videoDetails)).
                 perform(click());
+
         intended(allOf(
                 hasAction(Intent.ACTION_VIEW),
                 hasData(urlBuilder.buildYoutubeUri(DummyData.VIDEO_KEYS[i]))));
