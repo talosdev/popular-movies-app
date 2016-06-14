@@ -12,7 +12,7 @@ import java.util.List;
 
 import app.we.go.movies.R;
 import app.we.go.movies.model.remote.Review;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -55,10 +55,10 @@ public class ReviewsArrayAdapter extends ArrayAdapter<Review> {
     }
 
     protected static class ViewHolder{
-        @Bind(R.id.reviewAuthor)
+        @BindView(R.id.reviewAuthor)
         protected TextView reviewAuthor;
 
-        @Bind(R.id.reviewContent)
+        @BindView(R.id.reviewContent)
         protected TextView reviewContent;
 
         public ViewHolder(View rowView) {

@@ -10,7 +10,7 @@ import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.features.moviedetails.dependency.DetailsServiceModule;
 import app.we.go.movies.features.moviedetails.dependency.HasDetailsServiceModule;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
@@ -21,7 +21,7 @@ public class MovieDetailsActivity extends BaseActivity implements HasDetailsServ
 
 
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
 

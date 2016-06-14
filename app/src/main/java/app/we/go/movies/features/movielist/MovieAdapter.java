@@ -13,11 +13,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.we.go.movies.R;
 import app.we.go.framework.log.Tags;
-import app.we.go.movies.remote.URLBuilder;
+import app.we.go.movies.R;
 import app.we.go.movies.model.remote.Movie;
-import butterknife.Bind;
+import app.we.go.movies.remote.URLBuilder;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -124,7 +124,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
 }
 class MovieHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.image)
+    @BindView(R.id.image)
     ImageView image;
 
 

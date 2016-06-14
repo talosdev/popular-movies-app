@@ -158,7 +158,7 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit-mock:${RETROFIT_VERSION}"
     compile "com.squareup.retrofit2:adapter-rxjava:${RETROFIT_VERSION}"
     // Butterknifeer
-    compile "com.jakewharton:butterknife:7.0.1"
+    compile "com.jakewharton:butterknife:8.0.1"
     // multidex
     compile "com.android.support:multidex:1.0.0"
 //    compile "com.android.support.test.espresso:espresso-idling-resource:${ESPRESSO_VERSION}"
@@ -189,6 +189,24 @@ dependencies {
 }
 
 
+
+// Grant animation permissions to avoid test failure because of ui sync.
+task grantAnimationPermissions(type: Exec, dependsOn: 'installMockDebug') {
+    group = 'test'
+    description = 'Grant permissions for testing.'
+
+    def absolutePath = file('..') // Get project absolute path
+    commandLine "$absolutePath/set_animation_permissions.sh app.we.go.movies".split(" ")
+}
+
+// Source: http://stackoverflow.com/q/29908110/112705
+afterEvaluate {
+    tasks.each { task ->
+        if (task.name.startsWith('assembleMockAndroidTest')) {
+            task.dependsOn grantAnimationPermissions
+        }
+    }
+}
 
 
 

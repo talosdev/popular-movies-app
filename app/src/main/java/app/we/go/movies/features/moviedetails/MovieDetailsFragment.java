@@ -16,18 +16,18 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import app.we.go.framework.log.LOG;
+import app.we.go.framework.log.Tags;
 import app.we.go.framework.mvp.view.CacheablePresenterBasedFragment;
 import app.we.go.movies.R;
 import app.we.go.movies.application.MovieApplication;
 import app.we.go.movies.constants.Args;
-import app.we.go.framework.log.Tags;
 import app.we.go.movies.features.moviedetails.dependency.HasDetailsServiceModule;
 import app.we.go.movies.features.moviedetails.dependency.MovieDetailsModule;
 import app.we.go.movies.features.moviedetails.tab.MovieDetailsPagerAdapter;
 import app.we.go.movies.remote.URLBuilder;
-import app.we.go.framework.log.LOG;
-import butterknife.Bind;
 import butterknife.BindDrawable;
+import butterknife.BindView;
 import hugo.weaving.DebugLog;
 
 /**
@@ -46,13 +46,13 @@ public class MovieDetailsFragment extends CacheablePresenterBasedFragment<MovieD
     @BindDrawable(R.drawable.ic_favorite_border_blue_24dp)
     Drawable icon_favorite_unselected;
 
-    @Bind(R.id.imageView)
+    @BindView(R.id.imageView)
     ImageView imageView;
 
-    @Bind(R.id.movieTitle)
+    @BindView(R.id.movieTitle)
     TextView titleView;
 
-    @Bind(R.id.details_pager)
+    @BindView(R.id.details_pager)
     ViewPager pager;
 
 

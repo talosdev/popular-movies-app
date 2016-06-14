@@ -44,6 +44,10 @@ test:
    - sleep 30
    - fb-adb shell input keyevent 82
    - fb-adb rcmd screencap -p > $CIRCLE_ARTIFACTS/screen-$(date +"%T").png
+   - fb-adb shell svc power stayon true
+   - fb-adb shell settings put global window_animation_scale 0
+   - fb-adb shell settings put global transition_animation_scale 0
+   - fb-adb shell settings put global animator_duration_scale 0
 
    # execute the android tests (instrumentation)
    - (./gradlew connectedAndroidTest -PdisablePreDex):

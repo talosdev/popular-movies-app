@@ -21,7 +21,7 @@ import app.we.go.movies.constants.Args;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.dependency.MovieVideosModule;
 import app.we.go.movies.model.remote.Video;
-import butterknife.Bind;
+import butterknife.BindView;
 import hugo.weaving.DebugLog;
 
 /**
@@ -33,10 +33,10 @@ public class VideosTabFragment extends CacheablePresenterBasedFragment<MovieDeta
         VideoArrayAdapter.VideoClickListener{
 
 
-    @Bind(R.id.videos_list)
+    @BindView(R.id.videos_list)
     ListView listView;
 
-    @Bind(R.id.videos_list_empty)
+    @BindView(R.id.videos_list_empty)
     TextView emptyView;
 
     private ArrayAdapter<Video> adapter;

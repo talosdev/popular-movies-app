@@ -19,7 +19,7 @@ import app.we.go.movies.constants.Args;
 import app.we.go.movies.features.moviedetails.MovieDetailsContract;
 import app.we.go.movies.features.moviedetails.dependency.MovieReviewsModule;
 import app.we.go.movies.model.remote.Review;
-import butterknife.Bind;
+import butterknife.BindView;
 import hugo.weaving.DebugLog;
 
 /**
@@ -29,10 +29,10 @@ public class MovieReviewsTabFragment extends CacheablePresenterBasedFragment<Mov
         implements MovieDetailsContract.ReviewsView {
 
 
-    @Bind(R.id.reviews_list)
+    @BindView(R.id.reviews_list)
     ListView listView;
 
-    @Bind(R.id.reviews_list_empty)
+    @BindView(R.id.reviews_list_empty)
     TextView emptyView;
 
     private ArrayAdapter<Review> adapter;

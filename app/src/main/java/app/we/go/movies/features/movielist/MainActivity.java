@@ -10,14 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
+import app.we.go.framework.log.Tags;
 import app.we.go.framework.mvp.BaseActivity;
 import app.we.go.movies.R;
-import app.we.go.framework.log.Tags;
 import app.we.go.movies.features.moviedetails.MovieDetailsActivity;
 import app.we.go.movies.features.moviedetails.MovieDetailsFragment;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.model.remote.Movie;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import hugo.weaving.DebugLog;
 
@@ -26,11 +26,11 @@ public class MainActivity extends BaseActivity implements MovieListFragment.Movi
 
     private boolean twoPane;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
 
-    @Bind(R.id.sort_by_spinner)
+    @BindView(R.id.sort_by_spinner)
     Spinner spinner;
 
 
