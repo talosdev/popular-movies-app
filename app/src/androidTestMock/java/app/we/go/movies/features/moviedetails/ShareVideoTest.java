@@ -10,9 +10,9 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 
 import app.we.go.movies.R;
+import app.we.go.movies.model.remote.Video;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.URLBuilder;
-import app.we.go.movies.model.remote.Video;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;

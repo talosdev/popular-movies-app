@@ -1,5 +1,6 @@
 package app.we.go.movies.features.moviedetails;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
@@ -12,7 +13,7 @@ import app.we.go.movies.remote.DummyData;
 
 /**
  * Base class that launches the {@link MovieDetailsActivity}.
- *
+ * <p>
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public abstract class BaseMovieDetailsActivityTest {
@@ -34,6 +35,9 @@ public abstract class BaseMovieDetailsActivityTest {
 
     @After
     public void tearDown() throws Exception {
-        testRule.getActivity().finish();
+        Activity activity = testRule.getActivity();
+        if (activity != null) {
+            activity.finish();
+        }
     }
 }
