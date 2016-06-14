@@ -1,11 +1,9 @@
 package app.we.go.movies.features.moviedetails;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -33,11 +31,4 @@ public abstract class BaseMovieDetailsActivityTest {
         testRule.launchActivity(intent);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        Activity activity = testRule.getActivity();
-        if (activity != null) {
-            activity.finish();
-        }
-    }
 }

@@ -5,7 +5,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -72,15 +71,6 @@ public class FavoritesTest {
         dao.put(fm2);
 
     }
-
-
-    @After
-    public void tearDown() throws Exception {
-        dao.delete(DummyData.MOVIE_ID_1);
-        dao.delete(DummyData.MOVIE_ID_2);
-        testRule.getActivity().finish();
-    }
-
 
     /**
      * Test that when we click on a favorite movie and then go back to the favorites screen,

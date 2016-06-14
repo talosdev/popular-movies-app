@@ -115,6 +115,7 @@ final SUPPORT_VERSION = '23.1.1'
 final RETROFIT_VERSION = '2.0.2'
 final OKHTTP_VERSION = '3.2.0'
 final BUTTERKNIFE_VERSION = '8.0.1'
+final ASSERTJ_VERSION = '1.1.1'
 
 configurations.all {
     resolutionStrategy.force "com.android.support:support-annotations:${SUPPORT_VERSION}"
@@ -174,7 +175,7 @@ dependencies {
     androidTestCompile "com.android.support:support-v4:${SUPPORT_VERSION}"
     androidTestCompile "com.android.support.test:runner:${RUNNER_VERSION}"
     androidTestCompile "com.android.support.test:rules:${RUNNER_VERSION}"
-    androidTestCompile "com.squareup.assertj:assertj-android:1.1.1"
+    androidTestCompile "com.squareup.assertj:assertj-android:${ASSERTJ_VERSION}"
     // espresso
     androidTestCompile "com.android.support.test.espresso:espresso-core:${ESPRESSO_VERSION}"
     androidTestCompile("com.android.support.test.espresso:espresso-contrib:${ESPRESSO_VERSION}") {
@@ -184,30 +185,10 @@ dependencies {
     }
     androidTestCompile "com.android.support.test.espresso:espresso-idling-resource:${ESPRESSO_VERSION}"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:${ESPRESSO_VERSION}"
-    testCompile("com.squareup.assertj:assertj-android:1.1.1") {
+    testCompile("com.squareup.assertj:assertj-android:${ASSERTJ_VERSION}") {
         exclude module: 'support-annotations'
     }
     //   apt 'org.parceler:parceler:1.0.4'
-}
-
-
-
-// Grant animation permissions to avoid test failure because of ui sync.
-task grantAnimationPermissions(type: Exec, dependsOn: 'installMockDebug') {
-    group = 'test'
-    description = 'Grant permissions for testing.'
-
-    def absolutePath = file('..') // Get project absolute path
-    commandLine "$absolutePath/set_animation_permissions.sh app.we.go.movies".split(" ")
-}
-
-// Source: http://stackoverflow.com/q/29908110/112705
-afterEvaluate {
-    tasks.each { task ->
-        if (task.name.startsWith('assembleMockAndroidTest')) {
-            task.dependsOn grantAnimationPermissions
-        }
-    }
 }
 
 

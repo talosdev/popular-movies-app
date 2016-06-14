@@ -3,13 +3,12 @@ package app.we.go.movies.features.movielist;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 
-import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 
 import app.we.go.movies.R;
-import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.model.remote.Movie;
+import app.we.go.movies.remote.DummyData;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -33,11 +32,6 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> testRule =
             new ActivityTestRule<>(MainActivity.class, true,
                     true); // no intent arguments, so we can launch already
-
-    @After
-    public void tearDown() throws Exception {
-        testRule.getActivity().finish();
-    }
 
     /**
      * A bit redundant... doesn't really test anything useful.
