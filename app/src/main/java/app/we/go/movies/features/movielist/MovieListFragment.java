@@ -124,10 +124,17 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
         }
 
         List<MoviePoster> movies = new ArrayList<>();
-
-
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(sortBy == SortByCriterion.FAVORITES) {
+            isLoading = true;
+            presenter.getCachedMovies();
+        }
+    }
 
     @Override
     protected void initViewNoCache() {
@@ -159,6 +166,12 @@ public class MovieListFragment extends CacheablePresenterBasedFragment<MovieList
         isLoading = false;
 
         adapter.addMovies(movies);
+    }
+
+    @Override
+    public void updateMovieList(List<Movie> cachedMovies) {
+        adapter.clear();
+        adapter.addMovies(cachedMovies);
     }
 
     @Override

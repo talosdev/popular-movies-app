@@ -15,11 +15,14 @@ public interface MovieListContract {
     interface View extends ViewMVP {
 
         void showMovieList(List<Movie> movies);
+        void updateMovieList(List<Movie> cachedMovies);
+
         void navigateToMovieDetails(Movie movie);
     }
     interface Presenter extends CacheablePresenter<View> {
 
         void loadMovies();
+        void getCachedMovies();
         void openMovieDetails(Movie movie);
     }
 }

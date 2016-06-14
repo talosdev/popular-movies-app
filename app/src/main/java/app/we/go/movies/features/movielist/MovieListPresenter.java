@@ -212,6 +212,13 @@ public class MovieListPresenter extends BaseCacheablePresenter<MovieListContract
 
     }
 
+    @Override
+    public void getCachedMovies() {
+        if (isViewBound()) {
+            getBoundView().updateMovieList(cachedMovies);
+        }
+    }
+
 
     @Override
     public void openMovieDetails(Movie movie) {
