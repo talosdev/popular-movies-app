@@ -54,11 +54,15 @@ public class RxFavoriteMovieDAOTest {
                 MovieApplication.get(context).getComponent()).
                 inject(this);
 
-        assertNumRows(0L);
+        cleanUpDatabase();
     }
 
     @After
     public void tearDown() throws Exception {
+        cleanUpDatabase();
+    }
+
+    private void cleanUpDatabase() {
         db.execSQL("delete from " + TABLE_NAME + ";");
         assertNumRows(0L);
     }
