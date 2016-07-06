@@ -59,7 +59,6 @@ public class ServiceModule {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(apiKeyInterceptor);
 
-
         // add logging as last interceptor
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
@@ -74,8 +73,7 @@ public class ServiceModule {
     // can be shared between prod and mock
     @Provides
     @Singleton
-    @Named("async")
-    public Observable.Transformer<Response<?>, Response<?>> provideAsyncTransformer(
+    public Observable.Transformer<Response<?>, Response<?>> provideSchedulersTransformer(
             @Named("observeOn") final Scheduler observeOnScheduler,
             @Named("subscribeOn") final Scheduler subscribeOnOnScheduler) {
         return new Observable.Transformer<Response<?>, Response<?>>() {
@@ -101,7 +99,7 @@ public class ServiceModule {
     @Named("transformer")
     public CallAdapter.Factory provideCallAdapterFactory(
             @Named("rx") final CallAdapter.Factory rxFactory,
-            @Named("async") final Observable.Transformer<Response<?>, Response<?>> transformer) {
+            final Observable.Transformer<Response<?>, Response<?>> transformer) {
         return new CallAdapter.Factory() {
             @Override
             public CallAdapter<Observable<Response<?>>> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
