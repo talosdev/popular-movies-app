@@ -6,6 +6,7 @@ import android.support.annotation.VisibleForTesting;
 
 import com.facebook.stetho.Stetho;
 
+import app.we.go.framework.log.LOG;
 import app.we.go.movies.dependency.ApplicationAndroidModule;
 import app.we.go.movies.dependency.ApplicationComponent;
 import app.we.go.movies.dependency.ApplicationModule;
@@ -26,6 +27,7 @@ public class MovieApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initStetho();
+        LOG.enable();
 
     }
 

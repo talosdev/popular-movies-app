@@ -31,4 +31,6 @@ public abstract class BaseMovieDetailsActivityTest {
         testRule.launchActivity(intent);
     }
 
+
+
 }
