@@ -11,8 +11,6 @@ import app.we.go.movies.remote.TMDBErrorParser;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
-import rx.Observable.Transformer;
-import rx.Scheduler;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -26,41 +24,28 @@ public class TMDBServiceImpl implements TMDBService {
     private final TMDBRetrofitService retrofitService;
 
     private final TMDBErrorParser errorParser;
-    private final Transformer transformer;
 
     public TMDBServiceImpl(TMDBRetrofitService retrofitService,
-                           TMDBErrorParser errorParser,
-                           final Scheduler observeOnScheduler,
-                           final Scheduler subscribeOnScheduler) {
+                           TMDBErrorParser errorParser) {
         this.retrofitService = retrofitService;
         this.errorParser = errorParser;
-        this.transformer = new Transformer<Response<?>, Response<?>>() {
 
-            @Override
-            public Observable<Response<?>> call(Observable<Response<?>> obs) {
-                return obs.
-                        observeOn(observeOnScheduler).
-                        subscribeOn(subscribeOnScheduler);
-            }
-        };
+
     }
 
     @Override
     public Observable<Response<Movie>> getDetails(long movieId) {
-        return retrofitService.getDetails(movieId).
-                compose(transformer);
+        return retrofitService.getDetails(movieId);
     }
 
     @Override
     public Observable<Response<VideoList>> getVideos(long movieId) {
-        return retrofitService.getVideos(movieId).
-                compose(transformer);
+        return retrofitService.getVideos(movieId);
     }
 
     @Override
     public Observable<Response<ReviewList>> getReviews(long movieId) {
-        return retrofitService.getReviews(movieId).
-                compose(transformer);
+        return retrofitService.getReviews(movieId);
     }
 
 
@@ -72,8 +57,7 @@ public class TMDBServiceImpl implements TMDBService {
         return retrofitService.getMovies(
                 convertSortByCriterionToStringParameter(sortBy),
                 page,
-                MINIMUM_VOTES).
-                compose(transformer);
+                MINIMUM_VOTES);
     }
 
     @Override
