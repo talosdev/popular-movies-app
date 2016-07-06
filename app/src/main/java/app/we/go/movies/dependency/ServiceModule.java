@@ -22,8 +22,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -46,9 +44,6 @@ public class ServiceModule {
     public CallAdapter.Factory provideCallAdapterFactory() {
         return RxJavaCallAdapterFactory.create();
     }
-
-
-
 
 
     @Provides
