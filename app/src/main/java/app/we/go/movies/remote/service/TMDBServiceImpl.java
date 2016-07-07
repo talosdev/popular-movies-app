@@ -13,6 +13,9 @@ import retrofit2.Response;
 import rx.Observable;
 
 /**
+ * A wrapper around {@link TMDBService} that actually encapsulates a {@link TMDBErrorParser}, so
+ * that clients of the service can readily have access to it. It's debatable whether it's worth it...
+ *
  * Created by Aristides Papadopoulos (github:talosdev).
  */
 public class TMDBServiceImpl implements TMDBService {
@@ -29,8 +32,6 @@ public class TMDBServiceImpl implements TMDBService {
                            TMDBErrorParser errorParser) {
         this.retrofitService = retrofitService;
         this.errorParser = errorParser;
-
-
     }
 
     @Override
