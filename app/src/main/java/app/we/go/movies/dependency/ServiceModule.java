@@ -27,7 +27,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
-import rx.Scheduler;
 
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
@@ -70,21 +69,7 @@ public class ServiceModule {
         return httpClient.build();
     }
 
-    // can be shared between prod and mock
-    @Provides
-    @Singleton
-    public Observable.Transformer<Response<?>, Response<?>> provideSchedulersTransformer(
-            @Named("observeOn") final Scheduler observeOnScheduler,
-            @Named("subscribeOn") final Scheduler subscribeOnOnScheduler) {
-        return new Observable.Transformer<Response<?>, Response<?>>() {
-            @Override
-            public Observable<Response<?>> call(Observable<Response<?>> responseObservable) {
-                return responseObservable.
-                        observeOn(observeOnScheduler).
-                        subscribeOn(subscribeOnOnScheduler);
-            }
-        };
-    }
+
 
 
     /**

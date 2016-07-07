@@ -8,10 +8,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.inject.Inject;
+
 import app.we.go.framework.mvp.presenter.PresenterCache;
-import app.we.go.movies.dependency.MockServiceModule;
+import app.we.go.movies.features.BasePresenterTest;
 import app.we.go.movies.helpers.SharedPreferencesHelper;
-import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.service.TMDBService;
 
@@ -38,17 +39,19 @@ public class MovieInfoPresenterTest extends BasePresenterTest {
     @Mock
     PresenterCache cache;
 
-    private TMDBService service;
+    @Inject
+    TMDBService service;
 
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         MockitoAnnotations.initMocks(this);
+
+        component.inject(this);
 
         // setup SharedPreferences mock
         when(sharedPreferencesHelper.formatDate(DummyData.MOVIE_RELEASE_DATE)).thenReturn(DummyData.MOVIE_RELEASE_DATE_STR);
-
-        service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
 
     }
 

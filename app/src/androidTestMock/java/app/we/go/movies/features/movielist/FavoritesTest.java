@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import app.we.go.movies.R;
 import app.we.go.movies.application.TestMoviesApplication;
 import app.we.go.movies.db.RxFavoriteMovieDAO;
-import app.we.go.movies.dependency.MockApplicationComponent;
+import app.we.go.movies.dependency.AndroidTestApplicationComponent;
 import app.we.go.movies.model.db.FavoriteMovie;
 import app.we.go.movies.remote.DummyData;
 
@@ -53,7 +53,7 @@ public class FavoritesTest {
 
         TestMoviesApplication app
                 = (TestMoviesApplication) instrumentation.getTargetContext().getApplicationContext();
-        MockApplicationComponent component = (MockApplicationComponent) app.getComponent();
+        AndroidTestApplicationComponent component = (AndroidTestApplicationComponent) app.getComponent();
         component.inject(this);
 
 

@@ -15,15 +15,17 @@ import app.we.go.movies.model.remote.MovieList;
 import app.we.go.movies.model.remote.ReviewList;
 import app.we.go.movies.model.remote.TMDBError;
 import app.we.go.movies.model.remote.VideoList;
+import app.we.go.movies.remote.service.API;
+import app.we.go.movies.remote.service.TMDBRetrofitService;
 import app.we.go.movies.remote.service.TMDBService;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.mock.BehaviorDelegate;
 import retrofit2.mock.Calls;
 import rx.Observable;
-import rx.Observable.Transformer;
 
 
 /**
@@ -31,17 +33,14 @@ import rx.Observable.Transformer;
  * <p>
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class FakeTMDBService implements TMDBService {
+public class FakeTMDBService implements TMDBRetrofitService {
 
     private final ResponseBody errorBody;
 
     private final BehaviorDelegate<TMDBService> delegate;
-    private final Transformer transformer;
 
-    public FakeTMDBService(BehaviorDelegate<TMDBService> delegate,
-                           Transformer<Response<?>, Response<?>> transformer) {
+    public FakeTMDBService(BehaviorDelegate<TMDBService> delegate) {
         this.delegate = delegate;
-        this.transformer = transformer;
 
 
         // Using the Dagger module to check the same Gson instance as in production code
@@ -63,20 +62,17 @@ public class FakeTMDBService implements TMDBService {
         if (movieId == DummyData.MOVIE_ID_1) {
             return delegate.
                     returningResponse(DummyData.DUMMY_MOVIE_1).
-                    getDetails(movieId).
-                    compose(transformer);
+                    getDetails(movieId);
         } else if (movieId == DummyData.MOVIE_ID_2) {
             return delegate.
                     returningResponse(DummyData.DUMMY_MOVIE_2).
-                    getDetails(movieId).
-                    compose(transformer);
+                    getDetails(movieId);
         }  else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
             // returningResponse always returns a successful response, so we need to use
             // returning here
             return delegate.
                     returning(Calls.response(Response.error(404, errorBody))).
-                    getDetails(movieId).
-                    compose(transformer);
+                    getDetails(movieId);
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
@@ -88,18 +84,15 @@ public class FakeTMDBService implements TMDBService {
         if (movieId == DummyData.MOVIE_ID_1) {
             return delegate.
                     returningResponse(DummyData.VIDEOS).
-                    getVideos(movieId).
-                    compose(transformer);
+                    getVideos(movieId);
         } else if (movieId == DummyData.MOVIE_ID_2) {
             return delegate.
                     returningResponse(DummyData.VIDEOS).
-                    getVideos(movieId).
-                    compose(transformer);
+                    getVideos(movieId);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
             return delegate.
                     returning(Calls.response(Response.error(404, errorBody))).
-                    getVideos(movieId).
-                    compose(transformer);
+                    getVideos(movieId);
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
@@ -113,60 +106,48 @@ public class FakeTMDBService implements TMDBService {
         if (movieId == DummyData.MOVIE_ID_1) {
             return delegate.
                     returningResponse(DummyData.REVIEWS).
-                    getReviews(movieId)
-                    .compose(transformer);
+                    getReviews(movieId);
         } else if (movieId == DummyData.MOVIE_ID_2) {
             return delegate.
                     returningResponse(DummyData.REVIEWS).
-                    getReviews(movieId)
-                    .compose(transformer);
+                    getReviews(movieId);
         } else if (movieId == DummyData.INEXISTENT_MOVIE_ID) {
             return delegate.
                     returning(Calls.response(Response.error(404, errorBody))).
-                    getReviews(movieId).
-                    compose(transformer);
+                    getReviews(movieId);
         } else if (movieId == DummyData.MOVIE_ID_CAUSES_SERVER_ERROR) {
             return Observable.error(new IOException("Error contacting server"));
         }
         throw new IllegalArgumentException("Method is not prepared to accept input value " + movieId);
     }
 
+
     @Override
-    public Observable<Response<MovieList>> getMovies(SortByCriterion sortBy, int page) {
-        switch (sortBy) {
+    public Observable<Response<MovieList>> getMovies(@Query("sort_by") String sortBy, @Query("page") int page, @Query("vote_count.gte") int minVotes) {
+       SortByCriterion sortByCriterion = API.stringToSortByCriterion(sortBy);
+
+        switch (sortByCriterion) {
             case POPULARITY:
                 if (page == 1) {
                     return delegate.
                             returningResponse(DummyData.MOVIE_LIST_POPULAR_1).
-                            getMovies(sortBy, page).
-                            compose(transformer);
+                            getMovies(sortByCriterion, page);
                 } else if (page == 2) {
                     return delegate.
                             returningResponse(DummyData.MOVIE_LIST_POPULAR_2).
-                            getMovies(sortBy, page).
-                            compose(transformer);
+                            getMovies(sortByCriterion, page);
                 }
             case VOTE:
                 return delegate.
                         returningResponse(DummyData.MOVIE_LIST_VOTES).
-                        getMovies(sortBy, page).
-                        compose(transformer);
+                        getMovies(sortByCriterion, page);
             case FAVORITES:
                 return delegate.
                         returningResponse(DummyData.MOVIE_LIST_FAVORITES).
-                        getMovies(sortBy, page).
-                        compose(transformer);
+                        getMovies(sortByCriterion, page);
         }
-
 
         return null;
     }
-
-    @Override
-    public TMDBError parse(ResponseBody responseBody) {
-        return new TMDBError();
-    }
-
-
 }
 

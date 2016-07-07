@@ -55,7 +55,7 @@ public class TMDBServiceImpl implements TMDBService {
             throw new IllegalArgumentException("TMDB API defines that page should be greater than 0");
         }
         return retrofitService.getMovies(
-                convertSortByCriterionToStringParameter(sortBy),
+                API.sortByCriterionToString(sortBy),
                 page,
                 MINIMUM_VOTES);
     }
@@ -66,20 +66,5 @@ public class TMDBServiceImpl implements TMDBService {
     }
 
 
-    /**
-     * Convert the enum value to the parameter value that the API expects
-     *
-     * @param sortBy
-     * @return
-     */
-    private static String convertSortByCriterionToStringParameter(SortByCriterion sortBy) {
-        switch (sortBy) {
-            case POPULARITY:
-                return "popularity.desc";
-            case VOTE:
-                return "vote_average.desc";
-            default:
-                return "";
-        }
-    }
+
 }

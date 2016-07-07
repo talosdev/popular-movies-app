@@ -6,9 +6,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.inject.Inject;
+
 import app.we.go.framework.mvp.presenter.PresenterCache;
-import app.we.go.movies.dependency.MockServiceModule;
-import app.we.go.movies.mvp.BasePresenterTest;
+import app.we.go.movies.features.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.service.TMDBService;
 
@@ -30,11 +31,15 @@ public class MovieReviewsPresenterTest extends BasePresenterTest {
 
     MovieReviewsPresenter presenter;
 
+    @Inject
+    TMDBService service;
+
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         MockitoAnnotations.initMocks(this);
 
-        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
+        component.inject(this);
 
         presenter = new MovieReviewsPresenter(service, cache, "TAG");
         presenter.bindView(view);

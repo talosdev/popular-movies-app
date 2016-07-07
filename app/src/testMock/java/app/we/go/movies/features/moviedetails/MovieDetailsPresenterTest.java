@@ -8,12 +8,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.inject.Inject;
+
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.db.RxInMemoryFavoriteMoviesDAO;
-import app.we.go.movies.dependency.MockServiceModule;
+import app.we.go.movies.features.BasePresenterTest;
 import app.we.go.movies.model.db.FavoriteMovie;
-import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.service.TMDBService;
 
 import static app.we.go.movies.remote.DummyData.INEXISTENT_MOVIE_ID;
@@ -40,14 +41,17 @@ public class MovieDetailsPresenterTest extends BasePresenterTest {
     @Mock
     PresenterCache cache;
 
-    private TMDBService service;
+
+    @Inject
+    TMDBService service;
 
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         MockitoAnnotations.initMocks(this);
 
-        service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
+        component.inject(this);
 
         FavoriteMovie fm = new FavoriteMovie(MOVIE_ID_1, MOVIE_POSTER_PATH_1);
         dao.put(fm);

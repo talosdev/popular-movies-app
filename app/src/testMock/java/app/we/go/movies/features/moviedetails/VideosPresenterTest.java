@@ -8,12 +8,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.inject.Inject;
+
 import app.we.go.framework.mvp.presenter.PresenterCache;
-import app.we.go.movies.dependency.MockServiceModule;
-import app.we.go.movies.mvp.BasePresenterTest;
+import app.we.go.movies.features.BasePresenterTest;
 import app.we.go.movies.remote.DummyData;
-import app.we.go.movies.remote.service.TMDBService;
 import app.we.go.movies.remote.URLBuilder;
+import app.we.go.movies.remote.service.TMDBService;
 
 import static app.we.go.movies.remote.DummyData.MOVIE_ID_CAUSES_SERVER_ERROR;
 import static org.mockito.Matchers.eq;
@@ -44,13 +45,18 @@ public class VideosPresenterTest extends BasePresenterTest {
 
     MovieVideosPresenter presenter;
 
+
+    @Inject
+    TMDBService service;
+
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         MockitoAnnotations.initMocks(this);
 
-        when(urlBuilder.buildYoutubeUri(VIDEO_KEY)).thenReturn(uri);
+        component.inject(this);
 
-        TMDBService service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
+        when(urlBuilder.buildYoutubeUri(VIDEO_KEY)).thenReturn(uri);
 
         presenter = new MovieVideosPresenter(service, urlBuilder, cache, "TAG");
         presenter.bindView(view);

@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 import app.we.go.movies.TestData;
 import app.we.go.movies.application.MovieApplication;
-import app.we.go.movies.dependency.MockApplicationComponent;
+import app.we.go.movies.dependency.AndroidTestApplicationComponent;
 import app.we.go.movies.model.db.FavoriteMovie;
 import rx.observers.TestSubscriber;
 
@@ -50,7 +50,7 @@ public class RxFavoriteMovieDAOTest {
 
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        ((MockApplicationComponent)
+        ((AndroidTestApplicationComponent)
                 MovieApplication.get(context).getComponent()).
                 inject(this);
 

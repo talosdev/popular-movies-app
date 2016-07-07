@@ -23,6 +23,7 @@ import dagger.Component;
 
 @Singleton
 @Component(modules = {ApplicationModule.class,
+        SchedulersModule.class,
         ServiceModule.class,
         ApplicationAndroidModule.class,
         DatabaseModule.class})

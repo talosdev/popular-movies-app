@@ -6,10 +6,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.inject.Inject;
+
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.db.RxInMemoryFavoriteMoviesDAO;
-import app.we.go.movies.dependency.MockServiceModule;
+import app.we.go.movies.features.BasePresenterTest;
 import app.we.go.movies.model.local.SortByCriterion;
 import app.we.go.movies.remote.DummyData;
 import app.we.go.movies.remote.service.TMDBService;
@@ -21,7 +23,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 /**
  * Created by Aristides Papadopoulos (github:talosdev).
  */
-public class MovieListPresenterTest {
+public class MovieListPresenterTest extends BasePresenterTest {
 
     @Mock
     MovieListContract.View view;
@@ -32,14 +34,16 @@ public class MovieListPresenterTest {
     RxFavoriteMovieDAO dao = new RxInMemoryFavoriteMoviesDAO();
 
     MovieListPresenter presenter;
+
+    @Inject
     TMDBService service;
 
     @Before
     public void setUp() throws Exception {
-
+        super.setUp();
         MockitoAnnotations.initMocks(this);
 
-        service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
+        component.inject(this);
 
         presenter = new MovieListPresenter(service,
                 dao,

@@ -10,12 +10,13 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import app.we.go.framework.mvp.presenter.PresenterCache;
 import app.we.go.movies.db.RxFavoriteMovieDAO;
 import app.we.go.movies.db.RxInMemoryFavoriteMoviesDAO;
-import app.we.go.movies.dependency.MockServiceModule;
+import app.we.go.movies.features.BasePresenterTest;
 import app.we.go.movies.model.db.FavoriteMovie;
-import app.we.go.movies.mvp.BasePresenterTest;
 import app.we.go.movies.remote.service.TMDBService;
 import rx.observers.TestSubscriber;
 
@@ -39,14 +40,16 @@ public class MovieDetailsPresenterFavoritesTest extends BasePresenterTest {
     @Mock
     PresenterCache cache;
 
-    private TMDBService service;
+    @Inject
+    TMDBService service;
 
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         MockitoAnnotations.initMocks(this);
 
-        service = MockServiceModule.FakeTmdbServiceAsyncFactory.getInstance(true);
+        component.inject(this);
 
         // reset the dao for every test
         dao = new RxInMemoryFavoriteMoviesDAO();

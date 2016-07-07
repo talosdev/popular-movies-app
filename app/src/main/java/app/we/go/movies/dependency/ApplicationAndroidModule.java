@@ -32,20 +32,6 @@ public class ApplicationAndroidModule {
         return new SharedPreferencesHelper(context);
     }
 
-    @Provides
-    @Singleton
-    @Named("observeOn")
-    public Scheduler provideObserveOnScheduler() {
-        return AndroidSchedulers.mainThread();
-    }
-
-    @Provides
-    @Singleton
-    @Named("subscribeOn")
-    public Scheduler provideSubscribeOnScheduler() {
-        return Schedulers.io();
-    }
-
 
 
 
